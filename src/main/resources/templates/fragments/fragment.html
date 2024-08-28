@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fragment</title>
+</head>
+<body>
+<!-- Header Fragment -->
+<div th:fragment="header">
+    <header>
+        <div class="flex-container">
+            <div class="header" style="border: 1px solid gray">
+                <div class="flex-container1">
+                    <i class='bx bxs-car'></i>
+                    <div style="font-size: xx-large; color: white">Rent a car today!</div>
+                </div>
+                <div class="flex-container2">
+                    <div class="divider"></div>
+                    <a href="#">About Us</a>
+                    <div class="divider"></div>
+                    <div class="select-menu">
+                        <div class="select-btn">
+                            <div class="icon-container">
+                                <i class="fa-solid fa-user-circle" style="font-size: 35px"></i>
+                                <i class='bx bxs-down-arrow' style="padding-right: 5px; font-size: 20px;"></i>
+                            </div>
+                        </div>
+                        <ul class="options">
+                            <li class="option" data-value="#">
+                                    <span class="option-text">
+                                        <a href="#" style="color: black">My Profile</a>
+                                    </span>
+                            </li>
+                            <li class="option" data-value="#">
+                                    <span class="option-text">
+                                        <a href="#" style="color: black">My Bookings</a>
+                                    </span>
+                            </li>
+                            <li class="option" data-value="#">
+                                    <span class="option-text">
+                                        <a href="#" style="color: black">My Wallet</a>
+                                    </span>
+                            </li>
+                            <hr>
+                            <li class="option" data-value="login.html">
+                                    <span class="option-text">
+                                        <a href="#" style="color: black">Logout</a>
+                                    </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>
+
+<!-- Footer Fragment -->
+<div th:fragment="footer">
+    <div class="footer">
+        <div class="footer-section">
+            <h4>RENT CARS</h4>
+            <ul>
+                <li><a href="#">Search Cars and Rates</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>CUSTOMER ACCESS</h4>
+            <ul>
+                <li><a href="#">Manage My Booking</a></li>
+                <li><a href="#">My Wallet</a></li>
+                <li><a href="#">My Car</a></li>
+                <li><a href="#">Log In</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>JOIN US</h4>
+            <ul>
+                <li><a href="#">New User Sign Up</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

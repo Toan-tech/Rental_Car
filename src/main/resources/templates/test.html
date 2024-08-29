@@ -11,7 +11,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+          rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css" rel="stylesheet">
     <style>
         .header {
@@ -200,31 +201,19 @@
             color: #6c757d;
         }
 
-        .box-shadow {
-            border: 1px solid #ddd;  /* Viền mỏng xung quanh mỗi khung */
-            padding: 15px;           /* Khoảng cách giữa nội dung và viền */
-            border-radius: 8px;      /* Làm tròn góc khung */
-            background-color: #f9f9f9; /* Màu nền nhạt */
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
+        .option1 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            margin: 10px 10px;
         }
 
-        .location-box img {
-            border-radius: 5px;
-            width: 100%;
-            height: auto;
+        .option1:hover {
+            background-color: #f2f2f2;
+            transform: scale(1.1);
         }
-
-        .location-box h4 {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .location-box p {
-            font-size: 14px;
-            color: gray;
-        }
-
     </style>
 </head>
 <body>
@@ -244,8 +233,9 @@
                         <div class="select-btn">
                             <div class="icon-container">
                                 <i class="fa-solid fa-user-circle" style="font-size: 35px"></i>
-                                <span th:text="'Welcome, '  + ${}" style="color: white">Welcome</span>
-                                <i class='bx bxs-down-arrow' style="padding-right: 5px; padding-left: 15px; font-size: 20px;"></i>
+                                <span style="color: white">Welcome</span>
+                                <i class='bx bxs-down-arrow'
+                                   style="padding-right: 5px; padding-left: 15px; font-size: 20px;"></i>
                             </div>
                         </div>
                         <ul class="options">
@@ -277,198 +267,159 @@
         </div>
     </header>
 </div>
-</div>
-
 <main>
     <section>
-        <div style="display: flex;">
-            <div class="col-md-6 bg-dark text-white p-4" style="flex: 1;">
-                <h2>Looking for a vehicle? You’re at the right place.</h2>
-                <p style="padding: 10px; color: white">We have a large selection of locally owned cars available for you to choose from. Rental plans are
-                    customised to suit your needs.</p>
-                <p style="padding: 10px; color: white">With over 300 cars located nationwide we will have something for you.</p>
-            </div>
-            <div class="col-md-6 bg-light p-4" style="flex: 1; margin: 20px">
-                <h3>Find the ideal car rental for your trip</h3>
-                <form>
-                    <div class="form-group">
-                        <label for="pickupLocation">Pick-up Location</label>
-                        <input type="text" class="form-control" id="pickupLocation" placeholder="Enter your location">
-                    </div>
-                    <div class="form-group">
-                        <label for="pickupDate">Pick-up Date and Time</label>
-                        <div style="display: flex; gap: 10px;">
-                            <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" id="pickupDate" placeholder="DD/MM/YYYY">
-                                <i class='bx bx-calendar' style="font-size: 20px;" onclick="$('#pickupDate').datepicker('show');"></i>
-                            </div>
-                            <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" id="pickupTime" placeholder="HH:MM">
-                                <i class='bx bx-time' style="font-size: 20px;" onclick="$('#pickupTime').timepicker('show');"></i>
-                            </div>
+        <nav aria-label="breadcrumb" style="padding: 10px;">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Search Results</li>
+            </ol>
+        </nav>
+    </section>
+    <div style="background-color: #343a40; padding: 30px 0;">
+        <!-- Form Section -->
+        <section class="container bg-dark text-light p-4" style="border-radius: 8px;">
+            <form>
+                <div class="form-group">
+                    <label for="pickupLocation">PICK-UP LOCATION</label>
+                    <input type="text" class="form-control" id="pickupLocation" placeholder="Enter your location">
+                </div>
+                <div class="form-group">
+                    <label for="pickupDate" style="margin-top: 10px">PICK-UP DATE AND TIME</label>
+                    <div style="display: flex; gap: 10px;">
+                        <div class="input-wrapper" style="flex: 1">
+                            <input class="form-control" id="pickupDate" placeholder="DD /MM / YYYY">
+                            <i class='bx bx-calendar' style="font-size: 20px;"
+                               onclick="$('#pickupDate').datepicker('show');"></i>
+                        </div>
+                        <div class="input-wrapper" style="flex: 1">
+                            <input class="form-control" id="pickupTime" placeholder="HH:MM">
+                            <i class='bx bx-time' style="font-size: 20px;"
+                               onclick="$('#pickupTime').timepicker('show');"></i>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="dropoffDate">Drop-off Date and Time</label>
-                        <div style="display: flex; gap: 10px;">
-                            <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" id="dropoffDate" placeholder="DD/MM/YYYY">
-                                <i class='bx bx-calendar' style="font-size: 20px;" onclick="$('#dropoffDate').datepicker('show');"></i>
-                            </div>
-                            <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" id="dropoffTime" placeholder="HH:MM">
-                                <i class='bx bx-time' style="font-size: 20px;" onclick="$('#dropoffTime').timepicker('show');"></i>
-                            </div>
+                </div>
+                <div class="form-group">
+                    <label for="dropoffDate" style="margin-top: 10px">DROP-OFF DATE AND TIME</label>
+                    <div style="display: flex; gap: 10px;">
+                        <div class="input-wrapper" style="flex: 1">
+                            <input class="form-control" id="dropoffDate" placeholder="DD /MM / YYYY">
+                            <i class='bx bx-calendar' style="font-size: 20px;"
+                               onclick="$('#dropoffDate').datepicker('show');"></i>
+                        </div>
+                        <div class="input-wrapper" style="flex: 1">
+                            <input class="form-control" id="dropoffTime" placeholder="HH:MM">
+                            <i class='bx bx-time' style="font-size: 20px;"
+                               onclick="$('#dropoffTime').timepicker('show');"></i>
                         </div>
                     </div>
+                </div>
 
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </form>
-            </div>
-        </div>
-    </section>
-    <section class="container mt-5" style="margin-bottom: 20px">
-        <h1 class="text-center mb-4" style="font-size: 40px; padding-bottom: 20px">Why us?</h1>
-        <div class="row text-center d-flex align-items-stretch">
-            <div class="col-md-3 d-flex">
-                <div class="card p-3 border-0 flex-fill">
-                    <div class="icon mb-3">
-                        <i class='bx bx-dollar-circle' style="font-size: 48px;"></i>
-                    </div>
-                    <h5>Save money</h5>
-                    <p>We have no setup or registration fees. You are only charged when you rent a car. So get started for FREE!</p>
+                <div style="text-align: center;">
+                    <button type="submit" class="btn btn-primary btn-lg" style="width: 30%; margin-top: 20px">SEARCH
+                    </button>
                 </div>
-            </div>
-            <div class="col-md-3 d-flex">
-                <div class="card p-3 border-0 flex-fill">
-                    <div class="icon mb-3">
-                        <i class='bx bx-car' style="font-size: 48px;"></i>
-                    </div>
-                    <h5>Convenient</h5>
-                    <p>We have a large selection of privately owned cars to suit your needs throughout the country.</p>
-                </div>
-            </div>
-            <div class="col-md-3 d-flex">
-                <div class="card p-3 border-0 flex-fill">
-                    <div class="icon mb-3">
-                        <i class='bx bx-shield-alt-2' style="font-size: 48px;"></i>
-                    </div>
-                    <h5>Legal and insurance</h5>
-                    <p>We fully cover all rentals and even provide roadside assistance. Our rating system and extended member profile checks provide safety.</p>
-                </div>
-            </div>
-            <div class="col-md-3 d-flex">
-                <div class="card p-3 border-0 flex-fill">
-                    <div class="icon mb-3">
-                        <i class='bx bx-support' style="font-size: 48px;"></i>
-                    </div>
-                    <h5>24/7 support</h5>
-                    <p>Our team is ready to support you all along the way with our 24/7 hotline and services.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <div style="background-color: grey; padding: 30px 0; margin-bottom: 20px">
-        <section class="container">
-            <h1 class="text-center mb-4" style="font-size: 40px; padding-bottom: 20px">What people say?</h1>
-            <div class="row">
-                <div class="col-md-6 mb-4 d-flex">
-                    <div class="card p-3 border-0 flex-fill">
-                        <div class="d-flex">
-                            <div class="icon mr-3">
-                                <i class="fa fa-user-circle" style="font-size: 50px;"></i>
-                            </div>
-                            <div>
-                                <p>Review content goes here. This is a placeholder for the first review.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4 d-flex">
-                    <div class="card p-3 border-0 flex-fill">
-                        <div class="d-flex">
-                            <div class="icon mr-3">
-                                <i class="fa fa-user-circle" style="font-size: 50px;"></i>
-                            </div>
-                            <div>
-                                <p>Review content goes here. This is a placeholder for the second review.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4 d-flex">
-                    <div class="card p-3 border-0 flex-fill">
-                        <div class="d-flex">
-                            <div class="icon mr-3">
-                                <i class="fa fa-user-circle" style="font-size: 50px;"></i>
-                            </div>
-                            <div>
-                                <p>Review content goes here. This is a placeholder for the third review.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4 d-flex">
-                    <div class="card p-3 border-0 flex-fill">
-                        <div class="d-flex">
-                            <div class="icon mr-3">
-                                <i class="fa fa-user-circle" style="font-size: 50px;"></i>
-                            </div>
-                            <div>
-                                <p>Review content goes here. This is a placeholder for the fourth review.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </form>
         </section>
     </div>
-    <section class="container py-5">
-        <h2 class="text-center mb-4" style="font-size: 40px; padding-bottom: 20px">Where to find us?</h2>
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="location-box text-center box-shadow">
-                    <img src="path-to-image1.jpg" class="img-fluid" alt="Hanoi">
-                    <h4>Hanoi</h4>
-                    <p>80+ cars</p>
+    <<!-- Search Results Section -->
+    <section class="container mt-4">
+        <h2>Search Results</h2>
+        <div class="d-flex justify-content-between align-items-center">
+            <p class="mb-0">There're 10 cars that are available for you!</p>
+            <div>
+                <div class="d-flex">
+                    <div class="option1" data-value="#">
+                        <i class='bx bxs-grid' style="font-size: 30px;"></i>
+                    </div>
+                    <div class="option1" data-value="#">
+                        <i class='bx bx-list-ul' style="font-size: 30px;"></i>
+                    </div>
                 </div>
+                <select class="form-select d-inline-block" style="width: auto; margin-bottom: 10px">
+                    <option>Newest to Latest</option>
+                    <option>Oldest to Newest</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                </select>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="location-box text-center box-shadow">
-                    <img src="path-to-image2.jpg" class="img-fluid" alt="Ho Chi Minh City">
-                    <h4>Ho Chi Minh City</h4>
-                    <p>100+ cars</p>
+        </div>
+
+
+        <!-- Car Listing Card 1 -->
+        <div class="card mb-4">
+            <div class="row no-gutters">
+                <div class="col-md-4 d-flex align-items-center">
+                    <img src="path/to/image1.png" class="card-img" alt="Car Image">
                 </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="location-box text-center box-shadow">
-                    <img src="path-to-image3.jpg" class="img-fluid" alt="Da Nang - Hoi An">
-                    <h4>Da Nang - Hoi An</h4>
-                    <p>90+ cars</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="location-box text-center box-shadow">
-                    <img src="path-to-image4.jpg" class="img-fluid" alt="Nha Trang">
-                    <h4>Nha Trang</h4>
-                    <p>50+ cars</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="location-box text-center box-shadow">
-                    <img src="path-to-image5.jpg" class="img-fluid" alt="Da Lat">
-                    <h4>Da Lat</h4>
-                    <p>80+ cars</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="location-box text-center box-shadow">
-                    <img src="path-to-image6.jpg" class="img-fluid" alt="Quang Ninh">
-                    <h4>Quang Ninh</h4>
-                    <p>70+ cars</p>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">Nissan Navara El 2017</h5>
+                        <p class="card-text">
+                            <strong>Ratings:</strong>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span>(No ratings yet)</span>
+                        </p>
+                        <p class="card-text">
+                            <strong>No. of rides:</strong> 0<br>
+                            <strong>Price:</strong> 900k/day<br>
+                            <strong>Locations:</strong> Cau Giay, Hanoi<br>
+                            <strong>Status:</strong> <span class="text-success">Available</span>
+                        </p>
+                        <a href="#" class="btn btn-primary">Rent now</a>
+                        <a href="#" class="btn btn-secondary">View details</a>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Car Listing Card 2 -->
+        <div class="card mb-4">
+            <div class="row no-gutters">
+                <div class="col-md-4 d-flex align-items-center">
+                    <img src="path/to/image2.png" class="card-img" alt="Car Image">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">Nissan Navara El 2017</h5>
+                        <p class="card-text">
+                            <strong>Ratings:</strong>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span>(No ratings yet)</span>
+                        </p>
+                        <p class="card-text">
+                            <strong>No. of rides:</strong> 0<br>
+                            <strong>Price:</strong> 900k/day<br>
+                            <strong>Locations:</strong> Cau Giay, Hanoi<br>
+                            <strong>Status:</strong> <span class="text-success">Available</span>
+                        </p>
+                        <a href="#" class="btn btn-primary">Rent now</a>
+                        <a href="#" class="btn btn-secondary">View details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" href="#"><<</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                <li class="page-item"><a class="page-link" href="#">....</a></li>
+                <li class="page-item"><a class="page-link" href="#">>></a></li>
+            </ul>
+        </nav>
     </section>
 </main>
 
@@ -570,6 +521,24 @@
             }
 
             optionMenu.classList.remove("active");
+        });
+    });
+</script>
+<script>
+    // Lấy tất cả các phần tử với lớp .option1
+    const optionElements = document.querySelectorAll(".option1");
+
+    // Thêm sự kiện click cho từng phần tử
+    optionElements.forEach(option => {
+        option.addEventListener("click", () => {
+            // Lấy giá trị data-value của phần tử được nhấn
+            let value = option.getAttribute("data-value");
+            if (value) {
+                // Chuyển hướng đến URL hoặc giá trị data-value
+                location.href = value;
+            }
+            // Thay đổi lớp active của phần tử được nhấn
+            option.classList.toggle("active");
         });
     });
 </script>

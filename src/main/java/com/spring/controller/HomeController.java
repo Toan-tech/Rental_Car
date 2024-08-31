@@ -8,6 +8,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
     @GetMapping(value ={ "/"})
     public String home(Model model) {
-        return "layout/Thumbview";
+        return "layout/customer/ViewDetails_BasicInformation";
+    }
+
+    @GetMapping(value ={ "/1"})
+    public String home1(Model model) {
+        return "layout/customer/ViewDetails_Details";
+    }
+
+    @GetMapping(value ={ "/2"})
+    public String home2(Model model) {
+        return "layout/customer/ViewDetails_Term";
     }
 }

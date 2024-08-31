@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
     @GetMapping(value ={ "/"})
     public String home(Model model) {
-        return "layout/customer/ViewDetails_BasicInformation";
+        return "layout/customer/OverView";
     }
 
     @GetMapping(value ={ "/1"})

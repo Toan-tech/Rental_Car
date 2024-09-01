@@ -102,14 +102,14 @@
         <!-- Tabs for navigation -->
         <ul class="nav nav-tabs" id="carDetailsTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" href="#" style="background-color: #007bff"><span
-                        style="color: white; font-size: 1.2em">Step 1: Booking Information</span></a>
+                <a class="nav-link disabled" href="#"><span style="font-size: 1.2em">Step 1: Booking Information</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled" href="#"><span style="font-size: 1.2em">Step 2: Payment</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" href="#"><span style="font-size: 1.2em">Step 3: Finish</span></a>
+                <a class="nav-link active" href="#" style="background-color: #007bff"><span
+                        style="color: white; font-size: 1.2em">Step 3: Finish</span></a>
             </li>
         </ul>
         <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
@@ -163,111 +163,20 @@
                 </div>
             </div>
             <hr>
+
             <div class="container mt-4">
-                <!-- Form for Renter's Information and Driver's Information -->
                 <div class="row">
-                    <!-- Renter's Information -->
-                    <div class="col-md-6">
-                        <h3>Renter's Information</h3>
-                        <form>
-                            <div class="form-group" style="margin-top: 77px">
-                                <label for="renterName">Full Name: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="renterName" placeholder="Full Name">
-                            </div>
-                            <div class="form-group">
-                                <label for="renterDob">Date of birth: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="renterDob" placeholder="dd/mm/yyyy">
-                            </div>
-                            <div class="form-group">
-                                <label for="renterPhone">Phone number: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="renterPhone" placeholder="Phone number">
-                            </div>
-                            <div class="form-group">
-                                <label for="renterEmail">Email address:</label>
-                                <input type="email" class="form-control" id="renterEmail" placeholder="Email address">
-                            </div>
-                            <div class="form-group">
-                                <label for="renterId">National ID No.: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="renterId" placeholder="National ID No.">
-                            </div>
-                            <div class="form-group">
-                                <label for="renterLicense">Driving license:</label>
-                                <input type="file" class="form-control-file" id="renterLicense">
-                            </div>
-                            <div class="form-group">
-                                <label>Address:</label>
-                                <select class="form-control mb-2">
-                                    <option>City/Province</option>
-                                </select>
-                                <select class="form-control mb-2">
-                                    <option>District</option>
-                                </select>
-                                <select class="form-control mb-2">
-                                    <option>Ward</option>
-                                </select>
-                                <input type="text" class="form-control" placeholder="House number, Street">
-                            </div>
-                        </form>
-                    </div>
+                    <div class="col-md-12 text-center">
+                        <p style="font-size: 20px; color: black"><strong>You've successfully booked Nissan Navara El 2017 from 13/02/2022 - 12:00 PM to
+                            23/02/2022 - 14:00 PM.</strong></p>
+                        <p style="font-size: 20px; color: black">Your booking number is: <strong>012345</strong></p>
+                        <p style="font-size: 20px; color: black">Our operator will contact you with further guidance about pickup.</p>
 
-                    <!-- Driver's Information -->
-                    <div class="col-md-6">
-                        <h3>Driver's Information</h3>
-                        <form>
-                            <div class="form-group" style="margin-top: 0px">
-                                <label>
-                                    <input type="checkbox" id="differentDriver">
-                                    <span style="font-size: 20px">Different than Renter's information</span>
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <label for="driverName">Full Name: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="driverName" placeholder="Full Name">
-                            </div>
-                            <div class="form-group">
-                                <label for="driverDob">Date of birth: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="driverDob" placeholder="dd/mm/yyyy">
-                            </div>
-                            <div class="form-group">
-                                <label for="driverPhone">Phone number: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="driverPhone" placeholder="Phone number">
-                            </div>
-                            <div class="form-group">
-                                <label for="driverEmail">Email address:</label>
-                                <input type="email" class="form-control" id="driverEmail" placeholder="Email address">
-                            </div>
-                            <div class="form-group">
-                                <label for="driverId">National ID No.: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="driverId" placeholder="National ID No.">
-                            </div>
-                            <div class="form-group">
-                                <label for="driverLicense">Driving license:</label>
-                                <input type="file" class="form-control-file" id="driverLicense">
-                            </div>
-                            <div class="form-group">
-                                <label>Address:</label>
-                                <select class="form-control mb-2">
-                                    <option>City/Province</option>
-                                </select>
-                                <select class="form-control mb-2">
-                                    <option>District</option>
-                                </select>
-                                <select class="form-control mb-2">
-                                    <option>Ward</option>
-                                </select>
-                                <input type="text" class="form-control" placeholder="House number, Street">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Buttons -->
-                <div class="row">
-                    <div class="col-md-12 text-right" style="margin-top: 10px">
-                        <button type="button" class="btn btn-secondary" style="padding: 9px"><span
-                                style="font-size: 1.5em">Cancel</span></button>
-                        <button type="submit" class="btn btn-primary" style="padding: 9px"><span
-                                style="font-size: 1.5em">Next</span></button>
+                        <div class="mt-4">
+                            <a href="#" class="btn btn-link" style="text-decoration: underline"><span style="font-size: 20px; padding: 5px">Go to homepage</span></a>
+                            <a href="#" class="btn btn-secondary"><span style="font-size: 20px; padding: 5px">Book another car</span></a>
+                            <a href="#" class="btn btn-primary" style="margin-left: 20px"><span style="font-size: 20px; padding: 5px">View Booking</span></a>
+                        </div>
                     </div>
                 </div>
             </div>

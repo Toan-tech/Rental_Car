@@ -76,40 +76,23 @@
         <nav aria-label="breadcrumb" style="padding: 10px;">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Search Results</a></li>
+                <li class="breadcrumb-item"><a href="#">My Bookings</a></li>
+                <li class="breadcrumb-item"><a href="#">Booking details</a></li>
             </ol>
         </nav>
     </section>
-    <div style="background-color: #333333; padding: 30px; color: white; display: flex">
-        <!-- Booking Details -->
-        <div class="card-body">
-            <h1 class="card-title" style="margin-bottom: 40px">Booking Details</h1>
-            <ul style="margin-left: 120px">
-                <li><strong style="font-size: x-large">Pick-up location: </strong><span style="font-size: 1.2em">Trung Kinh, Cau Giay, Ha Noi</span>
-                </li>
-                <li style="margin-top: 20px"><strong style="font-size: x-large">Pick up date and time: </strong><span
-                        style="font-size: 1.2em">13/02/2022 - 12:00 PM</span></li>
-                <li style="margin-top: 20px"><strong style="font-size: x-large">Return date and time: </strong><span
-                        style="font-size: 1.2em">23/02/2022 - 14:00 PM</span></li>
-            </ul>
-        </div>
-        <div class="option" data-value="#" style="background-color: #333333; padding-top: 30px;">
-            <i class="fa-solid fa-pen-to-square" style="font-size: 40px"></i>
-            <span style="font-size: 30px; margin-left: 10px">Change Details</span>
-        </div>
-    </div>
     <section class="container mt-4" style="margin-top: 10px; margin-bottom: 10px">
         <!-- Tabs for navigation -->
         <ul class="nav nav-tabs" id="carDetailsTab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" href="#" style="background-color: #007bff"><span
-                        style="color: white; font-size: 1.2em">Step 1: Booking Information</span></a>
+                        style="color: white; font-size: 1.2em">Booking Information</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" href="#"><span style="font-size: 1.2em">Step 2: Payment</span></a>
+                <a class="nav-link disabled" href="#"><span style="font-size: 1.2em">Car Information</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" href="#"><span style="font-size: 1.2em">Step 3: Finish</span></a>
+                <a class="nav-link disabled" href="#"><span style="font-size: 1.2em">Payment Information</span></a>
             </li>
         </ul>
         <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
@@ -118,30 +101,29 @@
                     <!-- Car Information -->
                     <div class="col-md-6 d-flex">
                         <div class="card w-100">
-                            <div class="row g-0">
-                                <div>
+                            <div class="row g-0" style="margin: 10px">
+                                <div style="margin-left: 20px">
                                     <img src="https://s3.cloud.cmctelecom.vn/nhattao1/2017/03/8062309_9889e4939ea64ed184fcc96158b76133.jpg"
                                          class="d-block w-100 img-custom" alt="Image 1"
                                          style="max-width: 90%; margin-left:16px; margin-top:20px; margin-right:10px">
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h3 class="card-title" style="margin-bottom: 20px">Nissan Navara El 2017</h3>
-                                        <p class="card-text">
-                                            <strong>Ratings:</strong>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="1"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="2"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="3"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="4"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="5"></span>
-                                            <span class="no-ratings-text" data-card="1">(No ratings yet)</span>
-                                        </p>
-                                        <p class="card-text"><strong>No. of rides:</strong> 0</p>
-                                        <p class="card-text"><strong>Price:</strong> 900k/day</p>
-                                        <p class="card-text"><strong>Locations:</strong> Cau Giay, Hanoi</p>
-                                        <p class="card-text"><strong>Status:</strong> <span class="text-success">Available</span>
-                                        </p>
-                                    </div>
+                                <div class="card-body">
+                                    <h2 class="card-title" style="padding-top: 40px">Nissan Navara El 2017</h2>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item" style="color: black"><strong>From: </strong> 13/02/2022 - 12:00 PM</li>
+                                        <li class="list-inline-item" style="color: black; margin-left: 20px"><strong>To: </strong> 23/02/2022 - 14:00 PM</li>
+                                    </ul>
+                                    <p class="card-text">
+                                        <strong style="color: black">Number of days: </strong><span
+                                            style="margin-left: 17px; color: black"><strong>10 days</strong></span><br>
+                                        <strong style="color: black">Base price: </strong><br>
+                                        <strong style="color: black">Total: </strong><br>
+                                        <strong style="color: black">Deposit: </strong><br>
+                                        <strong style="color: black">Booking No: </strong><span
+                                            style="margin-left: 57px; color: black"><strong>0123456</strong></span><br>
+                                        <strong style="color: black">Booking status:</strong> <span class="text-success"
+                                                                                                    style="margin-left: 30px">Confirmed</span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -264,10 +246,10 @@
                 <!-- Buttons -->
                 <div class="row">
                     <div class="col-md-12 text-right" style="margin-top: 10px">
-                        <button type="button" class="btn btn-secondary" style="padding: 9px"><span
-                                style="font-size: 1.5em">Cancel</span></button>
-                        <button type="submit" class="btn btn-primary" style="padding: 9px"><span
-                                style="font-size: 1.5em">Next</span></button>
+                        <button type="button" class="btn btn-secondary" style="padding: 10px 20px 10px 20px"><span
+                                style="font-size: 1.5em">Discard</span></button>
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 35px 10px 35px"><span
+                                style="font-size: 1.5em">Save</span></button>
                     </div>
                 </div>
             </div>

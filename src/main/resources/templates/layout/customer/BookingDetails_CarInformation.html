@@ -8,12 +8,10 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
-          rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" th:href="@{css/header.css}">
     <style>
         .input-wrapper i {
@@ -64,11 +62,11 @@
         <nav aria-label="breadcrumb" style="padding: 10px;">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Search Results</a></li>
-                <li class="breadcrumb-item"><a href="#">Car Details</a></li>
+                <li class="breadcrumb-item"><a href="#">My Bookings</a></li>
+                <li class="breadcrumb-item"><a href="#">Booking details</a></li>
             </ol>
         </nav>
-        <h1 style="padding-left: 20px;">Car Details</h1>
+        <h1 style="padding-left: 20px;">Booking Details</h1>
     </section>
     <section class="container mt-4">
         <div class="card mb-4">
@@ -107,8 +105,12 @@
                     <div class="card-body">
                         <h2 class="card-title" style="padding-top: 40px">Nissan Navara El 2017</h2>
                         <ul class="list-inline">
-                            <li class="list-inline-item" style="color: black"><strong>From: </strong> 13/02/2022 - 12:00 PM</li>
-                            <li class="list-inline-item" style="color: black; margin-left: 20px"><strong>To: </strong> 23/02/2022 - 14:00 PM</li>
+                            <li class="list-inline-item" style="color: black"><strong>From: </strong> 13/02/2022 - 12:00
+                                PM
+                            </li>
+                            <li class="list-inline-item" style="color: black; margin-left: 20px"><strong>To: </strong>
+                                23/02/2022 - 14:00 PM
+                            </li>
                         </ul>
                         <p class="card-text">
                             <strong style="color: black">Number of days: </strong><span
@@ -131,25 +133,24 @@
             </div>
         </div>
     </section>
-    <!-- Section for Car Details -->
+    <!-- Section for Booking Details -->
     <section class="container mt-4" style="margin-top: 10px; margin-bottom: 10px">
         <!-- Tabs for navigation -->
-        <ul class="nav nav-tabs" id="carDetailsTab" role="tablist">
+        <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" href="/templates/layout/customer/ViewDetails_BasicInformation">Basic
-                    Information</a>
+                <a class="nav-link" href="#"><span style="font-size: 1.2em">Booking Information</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/templates/layout/customer/ViewDetails_Details">Details</a>
+                <a class="nav-link active" href="#"><span style="font-size: 1.2em">Car Information</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/templates/layout/customer/ViewDetails_Term">Terms of use</a>
+                <a class="nav-link" href="#"><span style="font-size: 1.2em">Payment Information</span></a>
             </li>
         </ul>
         <!-- Tab content -->
-        <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
-            <div class="tab-pane fade show active" id="basic-info" role="tabpanel" aria-labelledby="basic-info-tab">
-                <div class="row">
+        <div class="tab-content p-3 border border-top-0" id="BookingDetailsTabContent">
+            <div class="tab-pane fade show active" id="booking-info" role="tabpanel" aria-labelledby="booking-info-tab">
+                <div class="row" style="margin-top: 20px">
                     <div class="col-md-6">
                         <p><strong>License plate:</strong></p>
                         <p><strong>Brand name:</strong></p>
@@ -166,12 +167,13 @@
                 </div>
 
                 <!-- Documents Table -->
-                <table class="table table-bordered mt-3">
+                <table class="table table-bordered mt-3" style="margin-bottom: 40px">
                     <thead>
                     <tr>
                         <th>No</th>
                         <th>Name</th>
                         <th>Note</th>
+                        <th>Link</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -179,136 +181,150 @@
                         <td>1</td>
                         <td>Registration paper</td>
                         <td>Verified</td>
+                        <td><a href="#" style="text-decoration: underline">File1.PDF</a></td>
                     </tr>
                     <tr>
                         <td>2</td>
                         <td>Certificate of Inspection</td>
                         <td>Verified</td>
+                        <td><a href="#" style="text-decoration: underline">File2.PDF</a></td>
                     </tr>
                     <tr>
                         <td>3</td>
                         <td>Insurance</td>
                         <td>Not available</td>
+                        <td>Not Available</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <!-- Other tabs content can go here -->
-            <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
+            <hr>
+            <div class="container mt-4">
+                <!-- Mileage -->
                 <div class="row mt-4">
                     <div class="col-12">
-                        <h4>Mileage:</h4>
-                        <p>Fuel consumption: 18 liter/100 km</p>
+                        <h3>Mileage:</h3>
                     </div>
                 </div>
-
+                <!-- Fuel consumption -->
+                <div class="row mt-6" style="margin-top: 20px">
+                    <div class="col-12 d-flex">
+                        <h3>Fuel consumption:</h3>
+                        <p style="color: black; margin-top: 4px; margin-left: 10px">18 liter/100 km</p>
+                    </div>
+                </div>
                 <!-- Address -->
                 <div class="row mt-3">
-                    <div class="col-12">
-                        <h4>Address:</h4>
-                        <p>Note: Full address will be available after you've paid the deposit to rent.</p>
+                    <div class="col-12 d-flex">
+                        <h3>Address:</h3>
+                        <p style="color: black; margin-top: 4px; margin-left: 10px">128 Trung Kinh, Yen Hoa, Cau Giay,
+                            Ha Noi</p>
                     </div>
                 </div>
-
                 <!-- Description -->
                 <div class="row mt-3">
                     <div class="col-12">
-                        <h4>Description:</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                        <h3>Description:</h3>
+                        <p style="color: black; margin-top: 20px; margin-left: 10px; margin-bottom: 20px">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                             labore
                             et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
                             nisi ut
                             aliquip ex ea commodo consequat.</p>
                     </div>
                 </div>
-
+                <!-- Additional functions -->
                 <div style="margin-top: 15px">
-                    <h4>Additional functions:</h4>
-                    <!-- Additional functions -->
+                    <h3>Additional functions:</h3>
                     <div class="row" style="margin-top: 20px">
                         <div class="col-md-4">
-                            <div class="form-check">
-                                <i class='bx bx-bluetooth'></i>
-                                <span class="form-check-label" for="bluetooth">Bluetooth</span>
+                            <div class="form-check" style="margin-bottom: 20px">
+                                <i class='bx bx-bluetooth' style="font-size: 24px; margin-right: 10px;"></i>
+                                <span class="form-check-label" for="bluetooth" style="font-size: 20px;">Bluetooth</span>
                                 <input class="form-check-input" type="checkbox" id="bluetooth"
-                                       style="margin-left: 130px">
+                                       style="margin-left: 20px; margin-top: 9px; transform: scale(1.5);">
                             </div>
-                            <div class="form-check">
-                                <i class='bx bx-map-alt'></i>
-                                <label class="form-check-label" for="gps">GPS</label>
-                                <input class="form-check-input" type="checkbox" id="gps" style="margin-left: 130px">
+                            <div class="form-check" style="margin-bottom: 20px">
+                                <i class='bx bx-map-alt' style="font-size: 24px; margin-right: 10px;"></i>
+                                <label class="form-check-label" for="gps" style="font-size: 20px;">GPS</label>
+                                <input class="form-check-input" type="checkbox" id="gps"
+                                       style="margin-left: 64px; transform: scale(1.5); margin-top: 9px">
                             </div>
-                            <div class="form-check">
-                                <i class='bx bx-camera'></i>
-                                <label class="form-check-label" for="camera">Camera</label>
-                                <input class="form-check-input" type="checkbox" id="camera" style="margin-left: 130px">
+                            <div class="form-check" style="margin-bottom: 20px">
+                                <i class='bx bx-camera' style="font-size: 24px; margin-right: 10px;"></i>
+                                <label class="form-check-label" for="camera" style="font-size: 20px;">Camera</label>
+                                <input class="form-check-input" type="checkbox" id="camera"
+                                       style="margin-left: 32px; transform: scale(1.5); margin-top: 10px">
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-check">
-                                <i class='bx bx-sun'></i>
-                                <label class="form-check-label" for="sunroof">Sun roof</label>
-                                <input class="form-check-input" type="checkbox" id="sunroof" style="margin-left: 135px">
+                            <div class="form-check" style="margin-bottom: 20px">
+                                <i class='bx bx-sun' style="font-size: 24px; margin-right: 10px;"></i>
+                                <label class="form-check-label" for="sunroof" style="font-size: 20px;">Sun roof</label>
+                                <input class="form-check-input" type="checkbox" id="sunroof"
+                                       style="margin-left: 35px; transform: scale(1.5); margin-top: 9px">
                             </div>
-                            <div class="form-check">
-                                <i class='bx bx-lock-open-alt'></i>
-                                <label class="form-check-label" for="childlock">Child lock</label>
+                            <div class="form-check" style="margin-bottom: 20px">
+                                <i class='bx bx-lock-open-alt' style="font-size: 24px; margin-right: 10px;"></i>
+                                <label class="form-check-label" for="childlock" style="font-size: 20px;">Child
+                                    lock</label>
                                 <input class="form-check-input" type="checkbox" id="childlock"
-                                       style="margin-left: 135px">
+                                       style="margin-left: 25px; transform: scale(1.5); margin-top: 9px">
                             </div>
-                            <div class="form-check">
-                                <i class="fa-solid fa-child-reaching"></i>
-                                <label class="form-check-label" for="childseat">Child seat</label>
+                            <div class="form-check" style="margin-bottom: 20px">
+                                <i class="fa-solid fa-child-reaching" style="font-size: 24px; margin-right: 10px;  margin-left: 3px"></i>
+                                <label class="form-check-label" for="childseat" style="font-size: 20px;">Child
+                                    seat</label>
                                 <input class="form-check-input" type="checkbox" id="childseat"
-                                       style="margin-left: 135px">
+                                       style="margin-left: 27px; transform: scale(1.5); margin-top: 10px">
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-check">
-                                <i class='bx bx-disc'></i>
-                                <label class="form-check-label" for="dvd">DVD</label>
-                                <input class="form-check-input" type="checkbox" id="dvd" style="margin-left: 100px">
+                            <div class="form-check" style="margin-bottom: 20px">
+                                <i class='bx bx-disc' style="font-size: 24px; margin-right: 10px;"></i>
+                                <label class="form-check-label" for="dvd" style="font-size: 20px;">DVD</label>
+                                <input class="form-check-input" type="checkbox" id="dvd"
+                                       style="margin-left: 30px; transform: scale(1.5); margin-top: 9px">
                             </div>
-                            <div class="form-check">
-                                <i class="fa-brands fa-usb"></i>
-                                <label class="form-check-label" for="usb">USB</label>
-                                <input class="form-check-input" type="checkbox" id="usb" style="margin-left: 100px">
+                            <div class="form-check" style="margin-bottom: 20px">
+                                <i class="fa-brands fa-usb" style="font-size: 24px; margin-right: 10px;"></i>
+                                <label class="form-check-label" for="usb" style="font-size: 20px;">USB</label>
+                                <input class="form-check-input" type="checkbox" id="usb"
+                                       style="margin-left: 29px; transform: scale(1.5); margin-top: 9px">
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="terms" role="tabpanel" aria-labelledby="terms-tab">
+                <hr>
                 <div class="row">
-                    <div class="col-md-12">
-                        <label class="form-label" style="font-size: 1.5rem; font-weight: bold;">Terms of use</label>
-                        <div class="form-check" style="margin-left: 50px; margin-bottom: 20px">
-                            <input class="form-check-input" type="checkbox" id="noSmoking"
-                                   style="transform: scale(1.5); margin-top: 9px">
-                            <span class="form-check-label" for="noSmoking" style="font-size: 1.25rem">
-                                No smoking
-                            </span>
+                    <h3 class="form-label" style="margin-bottom: 20px; margin-left: 10px; margin-top: 20px">Terms of use</h3>
+                    <div class="col-md-12 d-flex">
+                        <div class="col-md-6">
+                            <div class="form-check" style="margin-left: 50px; margin-bottom: 20px">
+                                <input class="form-check-input" type="checkbox" id="noSmoking"
+                                       style="transform: scale(1.5); margin-top: 9px">
+                                <span class="form-check-label" for="noSmoking"
+                                      style="font-size: 1.25rem; margin-left: 20px">No smoking</span>
+                            </div>
+                            <div class="form-check" style="margin-left: 50px; margin-bottom: 20px">
+                                <input class="form-check-input" type="checkbox" id="noPet"
+                                       style="transform: scale(1.5); margin-top: 10px">
+                                <span class="form-check-label" for="noPet"
+                                      style="font-size: 1.25rem; margin-left: 20px">No pet</span>
+                            </div>
                         </div>
-                        <div class="form-check" style="margin-left: 50px; margin-bottom: 20px">
-                            <input class="form-check-input" type="checkbox" id="noPet"
-                                   style="transform: scale(1.5); margin-top: 10px">
-                            <span class="form-check-label" for="noPet" style="font-size: 1.25rem">
-                                No pet
-                            </span>
-                        </div>
-                        <div class="form-check" style="margin-left: 50px; margin-bottom: 20px">
-                            <input class="form-check-input" type="checkbox" id="noFood"
-                                   style="transform: scale(1.5); margin-top: 9px">
-                            <span class="form-check-label" for="noFood" style="font-size: 1.25rem">
-                                No food in car
-                            </span>
-                        </div>
-                        <div class="form-check" style="margin-left: 50px;">
-                            <input class="form-check-input" type="checkbox" id="other"
-                                   style="transform: scale(1.5); margin-top: 9px">
-                            <span class="form-check-label" for="other" style="font-size: 1.25rem">
-                                Other
-                            </span>
+                        <div class="col-md-6">
+                            <div class="form-check" style="margin-left: 50px; margin-bottom: 20px">
+                                <input class="form-check-input" type="checkbox" id="noFood"
+                                       style="transform: scale(1.5); margin-top: 9px">
+                                <span class="form-check-label" for="noFood"
+                                      style="font-size: 1.25rem; margin-left: 20px">No food in car</span>
+                            </div>
+                            <div class="form-check" style="margin-left: 50px;">
+                                <input class="form-check-input" type="checkbox" id="other"
+                                       style="transform: scale(1.5); margin-top: 9px">
+                                <span class="form-check-label" for="other"
+                                      style="font-size: 1.25rem; margin-left: 20px">Other</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -316,10 +332,8 @@
         </div>
     </section>
 </main>
-
 <!-- Include Footer Fragment -->
 <div th:replace="fragments/fragment :: footer"></div>
-
 <script>
     const optionMenu = document.querySelector(".select-menu"),
         selectBtn = optionMenu.querySelector(".select-btn"),

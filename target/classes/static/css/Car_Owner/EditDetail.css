@@ -1,0 +1,342 @@
+p {
+    font-weight: bold;
+}
+small {
+    font-weight: bold;
+    font-size: 12px;
+}
+.carousel-inner img {
+    width: 100%;
+    height: 400px;
+}
+.image-container {
+    margin: auto;
+    width: 80%;
+}
+.carousel-indicators {
+    bottom: -40px;
+}
+.carousel-indicators li {
+    background-color: black;
+}
+.car-name {
+    font-size: 24px;
+}
+.status {
+    color: green;
+}
+table {
+    width: 100%;
+}
+tr td:nth-child(1) {
+    width: 40%;
+}
+.star {
+    margin-bottom: 0;
+}
+.fa-angle-right, .fa-angle-left {
+    font-size: 36px;
+    color: black;
+}
+.deposit {
+    width: 180px;
+    margin-bottom: 16px;
+}
+.info {
+    background-color: #eeeeee;
+}
+
+/*info-container, info-title*/
+/*Basic information*/
+.info-title {
+    background-color: #eeeeee;
+    margin-left: -5.5px;
+    border: 1px solid black;
+    border-radius: 0;
+}
+.info-title:nth-of-type(1){
+    margin-left: 0;
+    border-bottom: none;
+}
+.info-title-container {
+    position: relative;
+    bottom: -5.7px;
+    padding-bottom: 4.5px;
+    background-color: white;
+    display: inline-block;
+    margin-left: 50px;
+}
+.info-container {
+    border: 1px solid black;
+    margin: 0;
+    padding: 16px 50px;
+}
+.info-container td {
+    padding: 10px 0;
+}
+.info-container tr td:nth-of-type(1){
+    font-weight: bold;
+    width: 50%;
+}
+tr th:nth-of-type(1){
+    width: 50%;
+}
+.table-active th:nth-of-type(1){
+    width: 20px;
+}
+.document tr td:nth-of-type(1){
+    width: 20px;
+    text-align: center;
+}
+.document tr td{
+    padding: 12px;
+}
+
+/*Detail*/
+label {
+    display: block;
+    font-weight: bold;
+}
+sup {
+    color: red;
+}
+.edit-detail {
+    margin-left: 5%;
+}
+.edit-detail>p {
+    font-weight: normal;
+}
+.edit-detail .form-group .btn {
+    background-color: #eeeeee;
+    padding: 0.375rem 0.75rem;
+    border: none;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.form-group .mileage {
+    width: 30%;
+}
+.form-group {
+    width: 80%;
+    margin-top: 32px;
+}
+.col-sm-6 .fuel-consumption {
+    display: inline-block;
+    width: 15%;
+    margin-right: 3%;
+    margin-left: 0;
+}
+.input-group {
+    width: 100%;
+}
+input, select {
+    margin-left: 5%;
+}
+.form-control {
+    width: 95%;
+}
+.form-check label {
+    font-weight: normal;
+    display: inline-block;
+    width: 60%;
+}
+.form-check-input {
+    margin-left: 1%;
+}
+.form-check-container {
+    width: 80%;
+    background-color: white;
+    border-radius: 5px;
+    padding: 5%;
+    margin: auto;
+    margin-top: 8px;
+}
+.button-container {
+    text-align: center;
+    margin-bottom: 16px;
+    margin-left: -5%;
+}
+@media (max-width: 1400px) {
+    .form-check label {
+        width: 80%;
+    }
+}
+
+@media (max-width: 850px){
+    .form-check {
+        padding-left: 0;
+    }
+}
+@media (max-width: 750px) {
+    .form-check label {
+        width: 60%;
+    }
+}
+@media (max-width: 650px) {
+    .form-check label {
+        width: 80%;
+    }
+}
+@media (max-width: 576px){
+    .col-sm-6 .fuel-consumption {
+        margin-left: 5%;
+    }
+    textarea {
+        margin-left: 5%;
+    }
+    .form-check-container {
+        padding-bottom: 0;
+    }
+}
+/*Images*/
+.images {
+    width: 80%;
+    height: 200px;
+    background-color: black;
+}
+/*Upload*/
+.upload-file {
+    width: 80%;
+    height: 200px;
+    border: 1px dashed #000000;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+.upload-file i {
+    font-size: 50px;
+}
+.upload-file p {
+    font-weight: normal;
+    margin: 0;
+    font-size: 14px;
+}
+.upload-file p:nth-of-type(1){
+    margin-top: 5px;
+}
+.upload-file p:nth-of-type(3){
+    color: #5285d2;
+    text-decoration: underline;
+}
+.upload-file:hover {
+    cursor: pointer;
+}
+.upload-container{
+    margin-left: 5%;
+}
+.row .col-sm-6:nth-of-type(1) .upload-container, .row .col-sm-6:nth-of-type(2) .upload-container  {
+    margin-top: 0;
+}
+.row .col-sm-6:nth-of-type(3) .upload-container, .row .col-sm-6:nth-of-type(4) .upload-container  {
+    margin-top: 24px;
+}
+.dragover {
+    width: 100%;
+}
+@media (max-width: 576px) {
+    .row .col-sm-6:nth-of-type(2) .upload-container  {
+        margin-top: 24px;
+    }
+}
+
+/*Pricing*/
+label {
+    font-weight: bold;
+}
+
+span {
+    font-weight: bold;
+}
+
+form > .form-group:nth-of-type(1) .form-control {
+    display: inline-block;
+}
+
+form > .form-group:nth-of-type(2) .form-control {
+    display: inline-block;
+}
+
+.form-group {
+    margin-top: 32px;
+}
+.price {
+    margin-left: 5%;
+}
+
+.price .deposit-base-price-container {
+    display: flex;
+    width: 50%;
+    padding-left: 0;
+}
+
+.label-container {
+    width: 60%;
+}
+
+.label-container > label {
+    line-height: 38px;
+}
+
+.input-container {
+    display: flex;
+    width: 40%;
+}
+
+.base-price-input, .deposit-input {
+    width: 60%;
+}
+
+.input-container > span {
+    line-height: 38px;
+    margin-left: 10px;
+}
+
+.form-check .form-check-label {
+    font-weight: normal;
+}
+
+.price .row {
+    padding-left: 5%;
+}
+
+.price .form-check-input {
+    margin-left: -1.25rem;
+}
+
+.price .form-control {
+    width: 100%;
+}
+
+@media (max-width: 1100px) {
+    .price .label-container {
+        width: 50%;
+    }
+
+    .price .input-container {
+        width: 50%;
+    }
+}
+
+
+
+@media (max-width: 1100px) {
+    .detail, .deposit {
+        width: 100%;
+    }
+}
+
+@media (max-width: 770px) {
+    .detail, .deposit {
+        width: 150px;
+    }
+    .detail {
+        margin-bottom: 0;
+    }
+    .page-control {
+        padding:0 5%;
+    }
+}

@@ -1,0 +1,97 @@
+.note {
+    color: red;
+    font-weight: normal;
+    margin-left: calc(5% + 15px);
+}
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+form > .row:nth-of-type(1) {
+    padding-left: 5%;
+}
+.form-group sup {
+    color: red;
+}
+.basic .form-group {
+    margin-top: 0;
+}
+.form-group label, .form-group p {
+    font-weight: bold;
+}
+.basic .form-control {
+    width: 40%;
+}
+.form-group .btn {
+    background-color: #eeeeee;
+    border: 1px solid #000000;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.form-group .btn:nth-of-type(2){
+    margin-left: -5px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.form-group .btn:nth-of-type(1){
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.basic .btn:hover {
+    background-color: #b4c2e1;
+}
+.basic .form-group .chosen {
+    background-color: #85a3da;
+}
+
+.document {
+    font-size: 24px;
+    margin-left: -5%;
+    font-weight: bold;
+}
+.basic .row+p {
+    font-weight: normal;
+}
+
+/*Upload*/
+.upload-file {
+    width: 200px;
+    height: 200px;
+    border: 1px dashed #000000;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+.upload-file i {
+    font-size: 50px;
+}
+.upload-file p {
+    font-weight: normal;
+    margin: 0;
+    font-size: 14px;
+}
+.upload-file p:nth-of-type(1){
+    margin-top: 5px;
+}
+.upload-file p:nth-of-type(3){
+    color: #5285d2;
+    text-decoration: underline;
+}
+.upload-file:hover {
+    cursor: pointer;
+}
+
+form > div:nth-of-type(2){
+    padding-left: 5%;
+}
+
+/*Dragover-Dragleave*/
+.dragover {
+    width: 300px;
+    height: 300px;
+    color: #eeeeee;
+}

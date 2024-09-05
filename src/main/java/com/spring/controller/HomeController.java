@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
-    @GetMapping(value ={ "/"})
-    public String home(Model model) {
-        return "layout/Homepage_LoggedIn_CarOwner";
-    }
+
 }
+

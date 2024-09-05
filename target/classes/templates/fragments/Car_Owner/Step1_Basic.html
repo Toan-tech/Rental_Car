@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{css/Car_Owner/Step1_Basic.css}">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/2465434fef.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <form action="#" class="basic">
+        <p class="note mt-3">Note: Please check your information carefully, you'll not be able to change the basic
+            details of your car, which is based on the registration information</p>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="license">License plate: <sup>*</sup></label>
+                <input type="text" class="form-control" id="license">
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label for="color">Color: <sup>*</sup></label>
+                <select name="" id="color" class="form-control">
+                    <option value="">Choose color</option>
+                    <option value="">Black</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="brand">Brand name: <sup>*</sup></label>
+                <select name="" id="brand" class="form-control">
+                    <option value="">Choose brand</option>
+                    <option value="">Audi</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="model">Model: <sup>*</sup></label>
+                <select name="" id="model" class="form-control">
+                    <option value="">Choose model</option>
+                    <option value="">Audi A1</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="product-year">Production year: <sup>*</sup></label>
+                <select name="" id="product-year" class="form-control">
+                    <option value="">Choose year</option>
+                    <option value="">2022</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="seat-number">No. of seats: <sup>*</sup></label>
+                <select name="" id="seat-number" class="form-control">
+                    <option value="">Choose No. of seats</option>
+                    <option value="">4</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-6">
+                <p>Transmission: <sup>*</sup></p>
+                <span class="btn automatic">Automatic</span>
+                <span class="btn manual">Manual</span>
+            </div>
+            <div class="form-group col-sm-6">
+                <p>Fuel: <sup>*</sup></p>
+                <span class="btn gasoline">Gasoline</span>
+                <span class="btn diesel">Diesel</span>
+            </div>
+        </div>
+        <div>
+            <p class="document">Documents</p>
+            <div class="row">
+                <div class="form-group col-md-6 col-lg-4">
+                    <p>Registration paper: <sup>*</sup></p>
+                    <input type="file" style="display: none" class="upload-default">
+                    <div class="upload-file">
+                        <i class="fa-solid fa-upload"></i>
+                        <p>Drag and drop</p>
+                        <p>OR</p>
+                        <p>Select file</p>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-lg-4">
+                    <p>Certificate of inspection: <sup>*</sup></p>
+                    <input type="file" style="display: none" class="upload-default">
+                    <div class="upload-file">
+                        <i class="fa-solid fa-upload"></i>
+                        <p>Drag and drop</p>
+                        <p>OR</p>
+                        <p>Select file</p>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-lg-4">
+                    <p>Insurance: <sup>*</sup></p>
+                    <input type="file" style="display: none" class="upload-default">
+                    <div class="upload-file">
+                        <i class="fa-solid fa-upload"></i>
+                        <p>Drag and drop</p>
+                        <p>OR</p>
+                        <p>Select file</p>
+                    </div>
+                </div>
+            </div>
+            <p>File type: doc, .docx, .pdf, .jpg , .jpeg , .png</p>
+        </div>
+    </form>
+    <script th:src="@{js/Car_Owner/Step1_Basic.js}"></script>
+
+</body>
+</html>

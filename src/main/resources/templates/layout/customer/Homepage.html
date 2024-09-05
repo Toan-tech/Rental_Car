@@ -103,39 +103,50 @@
             </div>
             <div class="col-md-6 bg-light p-4" style="flex: 1; margin: 20px">
                 <h3>Find the ideal car rental for your trip</h3>
-                <form>
+                <form id="contentForm" th:action="@{/Homepage}" method="post" th:object="${booking}">
+                    <!-- Error Message -->
+                    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                        <span th:text="${errorMessage}"></span>
+                    </div>
                     <div class="form-group">
                         <label for="pickupLocation">Pick-up Location</label>
-                        <input type="text" class="form-control" id="pickupLocation" placeholder="Enter your location">
+                        <input type="text" class="form-control" id="pickupLocation" placeholder="Enter your location" th:field="*{driverInfo}" required>
                     </div>
+
+                    <!-- Pick-up Date and Time -->
                     <div class="form-group">
                         <label for="pickupDate">Pick-up Date and Time</label>
                         <div style="display: flex; gap: 10px;">
                             <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" id="pickupDate" placeholder="DD/MM/YYYY">
+                                <input class="form-control" id="pickupDate" placeholder="DD/MM/YYYY" required>
                                 <i class='bx bx-calendar' style="font-size: 20px;" onclick="$('#pickupDate').datepicker('show');"></i>
                             </div>
                             <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" id="pickupTime" placeholder="HH:MM">
+                                <input class="form-control" id="pickupTime" placeholder="HH:MM" required>
                                 <i class='bx bx-time' style="font-size: 20px;" onclick="$('#pickupTime').timepicker('show');"></i>
                             </div>
                         </div>
+                        <!-- Hidden input for startDateTime -->
+                        <input type="hidden" th:field="*{startDateTime}" id="startDateTime">
                     </div>
+
+                    <!-- Drop-off Date and Time -->
                     <div class="form-group">
                         <label for="dropoffDate">Drop-off Date and Time</label>
                         <div style="display: flex; gap: 10px;">
                             <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" id="dropoffDate" placeholder="DD/MM/YYYY">
+                                <input class="form-control" id="dropoffDate" placeholder="DD/MM/YYYY" required>
                                 <i class='bx bx-calendar' style="font-size: 20px;" onclick="$('#dropoffDate').datepicker('show');"></i>
                             </div>
                             <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" id="dropoffTime" placeholder="HH:MM">
+                                <input class="form-control" id="dropoffTime" placeholder="HH:MM" required>
                                 <i class='bx bx-time' style="font-size: 20px;" onclick="$('#dropoffTime').timepicker('show');"></i>
                             </div>
                         </div>
+                        <!-- Hidden input for endDateTime -->
+                        <input type="hidden" th:field="*{endDateTime}" id="endDateTime">
                     </div>
-
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="submit" class="btn btn-primary" onclick="combineDateTime()">Search</button>
                 </form>
             </div>
         </div>
@@ -362,6 +373,25 @@
             optionMenu.classList.remove("active");
         });
     });
+</script>
+<script>
+    function combineDateTime() {
+        // Get pickup date and time
+        var pickupDate = document.getElementById('pickupDate').value;
+        var pickupTime = document.getElementById('pickupTime').value;
+
+        // Combine into startDateTime
+        var startDateTime = pickupDate + ',' + pickupTime;
+        document.getElementById('startDateTime').value = startDateTime;
+
+        // Get dropoff date and time
+        var dropoffDate = document.getElementById('dropoffDate').value;
+        var dropoffTime = document.getElementById('dropoffTime').value;
+
+        // Combine into endDateTime
+        var endDateTime = dropoffDate + ',' + dropoffTime;
+        document.getElementById('endDateTime').value = endDateTime;
+    }
 </script>
 </body>
 </html>

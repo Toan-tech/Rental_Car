@@ -1,6 +1,7 @@
 package com.spring.controller;
 
 import com.spring.entities.Booking;
+import com.spring.entities.RatingStar;
 import com.spring.repository.SearchRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -14,8 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -33,11 +34,22 @@ public class CustomerController {
     @Transactional
     @PostMapping("/Homepage")
     public String searchBookings(@ModelAttribute("booking") Booking booking, Model model) {
-        List<Booking> bookings = searchBookings(booking, Sort.by(Sort.Direction.DESC, "startDateTime"));
+        List<Booking> bookings = searchRepository.searchBooking(
+                booking.getDriverInfo(),
+                booking.getStartDateTime(),
+                booking.getEndDateTime()
+        );
+
         if (bookings.isEmpty()) {
             model.addAttribute("errorMessage", "No cars match your credentials, please try again.");
             return "layout/customer/Homepage";
         }
+
+        if (booking.getEndDateTime().isBefore(booking.getStartDateTime())) {
+            model.addAttribute("errorMessage", "Drop-off date time must be later than pick-up date time, please try again.");
+            return "layout/customer/Homepage";
+        }
+
         model.addAttribute("bookings", bookings);
         return "layout/customer/ThumbView";
     }
@@ -47,79 +59,61 @@ public class CustomerController {
     public String searchThumbView(
             @ModelAttribute("booking") @Valid Booking booking,
             @RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
+            @RequestParam(defaultValue = "3") int pageSizeDefault,
             @RequestParam(value = "sortOption", required = false) String sortOption,
-            BindingResult result, Model model) {
-
-        Page<Booking> page = getPaginatedBookings(pageNumber, sortOption);
-
-        model.addAttribute("pageNums", getPageNumbers(page));
-        model.addAttribute("page", page);
-        return processSearch(booking, sortOption, result, model, "layout/customer/ThumbView");
-    }
-
-    @GetMapping("/ListView")
-    public String listViewDetails(Model model) {
-        model.addAttribute("booking", new Booking());
-        return "layout/customer/ListView";
-    }
-
-    @Transactional
-    @RequestMapping(value = "/ListView", method = {RequestMethod.POST, RequestMethod.GET})
-    public String searchListView(
-            @ModelAttribute("booking") @Valid Booking booking,
-            @RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
-            @RequestParam(value = "sortOption", required = false) String sortOption,
-            BindingResult result, Model model) {
-
-        Page<Booking> page = getPaginatedBookings(pageNumber, sortOption);
-
-        model.addAttribute("pageNums", getPageNumbers(page));
-        model.addAttribute("page", page);
-        return processSearch(booking, sortOption, result, model, "layout/customer/ListView");
-    }
-
-    private Page<Booking> getPaginatedBookings(Integer pageNumber, String sortOption) {
-        int pageSize = 3;
-        Sort sort = searchRepository.getSortOption(sortOption);
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
-        return searchRepository.findAll(pageable);
-    }
-
-    private List<Integer> getPageNumbers(Page<Booking> page) {
-        List<Integer> pageNums = new ArrayList<>();
-        for (int i = 1; i <= page.getTotalPages(); i++) {
-            pageNums.add(i);
-        }
-        return pageNums;
-    }
-
-    private String processSearch(Booking booking, String sortOption, BindingResult result, Model model, String viewName) {
+            BindingResult result,
+            Model model
+    ) {
         if (result.hasErrors()) {
-            return viewName;
+            return "layout/customer/Homepage";
         }
 
-        if (booking.getEndDateTime().isBefore(booking.getStartDateTime())) {
-            result.rejectValue("endDateTime", "error.booking", "Drop-off date and time must be later than pick-up date and time");
-            return viewName;
-        }
+        Sort sort = searchRepository.getSortOption(sortOption);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSizeDefault, sort);
 
-        List<Booking> bookings = searchBookings(booking, searchRepository.getSortOption(sortOption));
-        model.addAttribute("carCount", bookings.size());
-        model.addAttribute("bookings", bookings);
-
-        return viewName;
-    }
-
-    private List<Booking> searchBookings(Booking booking, Sort sort) {
+        Page<Booking> page = null;
         if (booking.getDriverInfo() == null || booking.getDriverInfo().isBlank()) {
-            return searchRepository.findAll();
+            page = searchRepository.findAll(pageable);
         } else {
-            return searchRepository.findDriverInfo(
+            page = searchRepository.findDriverInfo(
                     booking.getDriverInfo(),
                     booking.getStartDateTime(),
                     booking.getEndDateTime(),
-                    sort
+                    pageable
             );
         }
+
+        int completedRides = (int) page.getContent().stream()
+                .filter(b -> "Completed".equals(b.getStatus()))
+                .count();
+
+        int starRating = 0;
+        if (!page.getContent().isEmpty() && page.getContent().getFirst().getFeedback() != null) {
+            RatingStar feedback = page.getContent().getFirst().getFeedback().getRatings();
+            starRating = switch (feedback) {
+                case one_star -> 1;
+                case two_stars -> 2;
+                case three_stars -> 3;
+                case four_stars -> 4;
+                case five_stars -> 5;
+                default -> 0;
+            };
+        }
+
+        List<Integer> pageSizes = Arrays.asList(3, 6, 9, 12, 15);
+
+        int totalPages = page.getTotalPages();
+        List<Integer> pageNums = new ArrayList<>();
+        for (int i = 1; i <= totalPages; i++) {
+            pageNums.add(i);
+        }
+
+        model.addAttribute("pageSizes", pageSizes);
+        model.addAttribute("feedback", starRating);
+        model.addAttribute("count", completedRides);
+        model.addAttribute("pageNums", pageNums);
+        model.addAttribute("pageSize", pageSizeDefault);
+        model.addAttribute("page", page);
+        return "layout/customer/ThumbView";
     }
 }

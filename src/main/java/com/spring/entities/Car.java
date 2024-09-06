@@ -74,6 +74,10 @@ public class Car {
     @Column(name = "Images", nullable = false)
     private String images;
 
+    @Column(name = "Status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CarStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_owner_id", nullable = false)
     private CarOwner carOwner;

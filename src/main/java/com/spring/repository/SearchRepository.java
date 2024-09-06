@@ -20,10 +20,16 @@ public interface SearchRepository extends JpaRepository<Booking, Integer> {
 
     @Query("SELECT b FROM Booking b WHERE b.driverInfo LIKE %:driverInfo% " +
             "AND b.startDateTime >= :startDate AND b.endDateTime <= :endDate")
-    List<Booking> findDriverInfo(@Param("driverInfo") String driverInfo,
+    List<Booking> searchBooking(@Param("driverInfo") String driverInfo,
+                                 @Param("startDate") LocalDateTime startDate,
+                                 @Param("endDate") LocalDateTime endDate);
+
+    @Query("SELECT b FROM Booking b WHERE b.driverInfo LIKE %:driverInfo% " +
+            "AND b.startDateTime >= :startDate AND b.endDateTime <= :endDate")
+    Page<Booking> findDriverInfo(@Param("driverInfo") String driverInfo,
                                  @Param("startDate") LocalDateTime startDate,
                                  @Param("endDate") LocalDateTime endDate,
-                                 Sort sort);
+                                 Pageable pageable);
 
     // Helper method to get sorting option
     default Sort getSortOption(String sortOption) {

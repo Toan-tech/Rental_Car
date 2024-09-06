@@ -26,16 +26,16 @@ public class Booking {
 
     @Column(name = "Start_Date_Time", nullable = false)
     @DateTimeFormat(pattern = "dd/MM/yyyy,HH:mm")
-    @NotNull(message = "Pick-up date and time are required")
+    @NotNull(message = "“Please enter pick up date and time")
     private LocalDateTime startDateTime;
 
     @Column(name = "End_Date_Time", nullable = false)
     @DateTimeFormat(pattern = "dd/MM/yyyy,HH:mm")
-    @NotNull(message = "Drop-off date and time are required")
+    @NotNull(message = "Please enter drop-off date and time")
     private LocalDateTime endDateTime;
 
     @Column(name = "Driver_Info", nullable = false)
-    @NotBlank(message = "Pick-up location is required")
+    @NotBlank(message = "Please enter location")
     private String driverInfo;
 
     @Column(name = "Payment_Method", nullable = false)

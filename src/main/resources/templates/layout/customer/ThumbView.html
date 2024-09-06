@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +25,7 @@
             right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            pointer-events: none; /* Prevent the icon from interfering with input */
+            pointer-events: none;
             color: #333;
         }
 
@@ -33,19 +33,8 @@
             padding-right: 40px;
         }
 
-        .icon {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f8f9fa;
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            margin: 0 auto;
-        }
-
         .card {
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         h5 {
@@ -56,27 +45,6 @@
         p {
             font-size: 20px;
             color: #6c757d;
-        }
-
-        .option1 {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-            margin: 10px 10px;
-        }
-
-        .option1:hover {
-            background-color: #f2f2f2;
-            transform: scale(1.1);
-        }
-
-        .custom-img {
-            height: 400px;
-            width: 100%;
-            object-fit: cover;
-            border: 2px solid black;
         }
 
         .img-custom {
@@ -94,7 +62,7 @@
         }
 
         .number-input {
-            width: 50px; /* Chiều rộng của ô nhập liệu */
+            width: 50px;
             text-align: center;
             border: 1px solid #000;
             border-right: none;
@@ -111,17 +79,6 @@
             font-size: 25px;
             margin-bottom: 15px;
         }
-
-        .star-rating {
-            font-size: 1.5em;
-            color: #ddd;
-            cursor: pointer;
-        }
-
-        .star-rating.checked {
-            color: gold;
-        }
-
     </style>
 </head>
 <body>
@@ -164,17 +121,17 @@
                     <input type="hidden" th:field="*{startDateTime}" id="startDateTime">
                 </div>
                 <div class="form-group">
-                    <label for="dropoffDate" style="margin-top: 10px">DROP-OFF DATE AND TIME</label>
+                    <label for="dropOffDate" style="margin-top: 10px">DROP-OFF DATE AND TIME</label>
                     <div style="display: flex; gap: 10px;">
                         <div class="input-wrapper" style="flex: 1">
-                            <input class="form-control" id="dropoffDate" placeholder="DD/MM/YYYY" required>
+                            <input class="form-control" id="dropOffDate" placeholder="DD/MM/YYYY" required>
                             <i class='bx bx-calendar' style="font-size: 20px;"
-                               onclick="$('#dropoffDate').datepicker('show');"></i>
+                               onclick="$('#dropOffDate').datepicker('show');"></i>
                         </div>
                         <div class="input-wrapper" style="flex: 1">
-                            <input class="form-control" id="dropoffTime" placeholder="HH:MM" required>
+                            <input class="form-control" id="dropOffTime" placeholder="HH:MM" required>
                             <i class='bx bx-time' style="font-size: 20px;"
-                               onclick="$('#dropoffTime').timepicker('show');"></i>
+                               onclick="$('#dropOffTime').timepicker('show');"></i>
                         </div>
                     </div>
                     <!-- Hidden input for endDateTime -->
@@ -212,8 +169,6 @@
                 </select>
             </div>
         </div>
-
-        <!-- Car Listing Card 1 -->
         <div class="card mb-4">
             <div class="row no-gutters">
                 <!-- Carousel -->
@@ -246,39 +201,58 @@
                         <li data-target="#imageCarousel1" data-slide-to="2"></li>
                     </ol>
                 </div>
-                <div class="col-md-6">
-                    <div class="card-body">
-                        <h2 class="card-title" style="padding-top: 40px">Nissan Navara El 2017</h2>
-                        <p class="card-text">
-                            <strong>Ratings:</strong>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="1"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="2"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="3"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="4"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="5"></span>
-                            <span class="no-ratings-text" data-card="1">(No ratings yet)</span>
-                        </p>
-                        <p class="card-text">
-                            <strong>No. of rides:</strong> 0<br>
-                            <strong>Price:</strong> 900k/day<br>
-                            <strong>Locations:</strong> Cau Giay, Hanoi<br>
-                            <strong>Status:</strong> <span class="text-success">Available</span>
-                        </p>
-                        <a href="#" class="btn btn-primary" style="margin-right: 10px; padding: 10px"><span
-                                style="font-size: 19px">Rent now</span></a>
-                        <a href="#" class="btn btn-primary" style="padding: 10px"><span style="font-size: 19px">View details</span></a>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <div th:each="booking : ${bookings}">
+                    <div class="col-md-12">
+                        <div class="card-body">
+                            <h2 class="card-title" style="padding-top: 40px"
+                                th:text="${booking.car.name} + ${booking.car.model}">Car Name</h2>
+                            <div class="card-text" style="margin-bottom: 10px">
+                                <strong style="font-size: 20px; color: #6c757d">Ratings:</strong>
+                                <div style="font-size: 18px; margin-left: 50px; margin-top: 10px; color: #6c757d">
+                                    <!-- Loop through 1 to 5 stars -->
+                                    <span class="fa" th:classappend="${feedback >= 1 ? 'fa-star' : 'fa-star-o'}"
+                                          data-card="1" data-rating="1"></span>
+                                    <span class="fa" th:classappend="${feedback >= 2 ? 'fa-star' : 'fa-star-o'}"
+                                          data-card="1" data-rating="2"></span>
+                                    <span class="fa" th:classappend="${feedback >= 3 ? 'fa-star' : 'fa-star-o'}"
+                                          data-card="1" data-rating="3"></span>
+                                    <span class="fa" th:classappend="${feedback >= 4 ? 'fa-star' : 'fa-star-o'}"
+                                          data-card="1" data-rating="4"></span>
+                                    <span class="fa" th:classappend="${feedback >= 5 ? 'fa-star' : 'fa-star-o'}"
+                                          data-card="1" data-rating="5"></span>
 
-        <div class="list-group">
-            <div th:each="booking : ${bookings}">
-                <div class="list-group-item">
-                    <h5 th:text="${booking.car.name}">Driver Info</h5>
-                    <h5 th:text="${booking.car.basePrice}">Price</h5>
-                    <h5 th:text="${booking.driverInfo}">Locations</h5>
-                    <h5 th:text="${booking.status}">Status</h5>
+                                    <!-- Display message if no ratings are available -->
+                                    <span class="no-ratings-text" th:if="${feedback == 0}" th:text="'(No ratings yet)'">(No ratings yet)</span>
+                                </div>
+                            </div>
+                            <div class="card-text">
+                                <div>
+                                    <strong style="font-size: 20px; color: #6c757d">No. of rides: </strong>
+                                    <span th:text="${count}" style="margin-left: 10px;">0</span><br>
+                                </div>
+                                <div>
+                                    <strong style="font-size: 20px; color: #6c757d">Price: </strong>
+                                    <span th:if="${booking?.car != null}"
+                                          th:text="${booking.car.basePrice}" style="margin-left: 10px">N/A</span><br>
+                                </div>
+                                <div>
+                                    <strong style="font-size: 20px; color: #6c757d">Locations: </strong>
+                                    <span th:if="${booking != null}"
+                                          th:text="${booking.driverInfo}" style="margin-left: 10px">Unknown</span><br>
+                                </div>
+                                <div>
+                                    <strong style="font-size: 20px; color: #6c757d">Status: </strong>
+                                    <span class="text-success" th:text="${booking.car.status}"
+                                          style="margin-left: 10px">Status</span>
+                                </div>
+                            </div>
+                            <a href="#" class="btn btn-primary"
+                               style="margin-right: 10px; padding: 10px; margin-top: 10px"><span
+                                    style="font-size: 19px">Rent now</span></a>
+                            <a href="#" class="btn btn-primary" style="padding: 10px ; margin-top: 10px"><span
+                                    style="font-size: 19px">View details</span></a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -303,9 +277,7 @@
                         <!-- Other pages -->
                         <th:block th:if="${pageNum != (page.getNumber() + 1)}">
                             <li class="page-item">
-                                <a class="page-link"
-                                   th:href="@{/ThumbView(page=${pageNum}, keyword=${param.keyword}, sortOption=${param.sortOption})}"
-                                   th:text="${pageNum}"></a>
+                                <a class="page-link" th:href="@{/ThumbView(page=${pageNum})}" th:text="${pageNum}"></a>
                             </li>
                         </th:block>
                     </th:block>
@@ -319,11 +291,17 @@
         </div>
 
         <!--   Item per page    -->
-        <div class="items-per-page">
-            <input type="number" id="itemsPerPage" name="itemsPerPage" value="2" min="1" max="10" class="number-input"
-                   style="border: 1px solid black">
-            <label for="itemsPerPage" style="margin-left: 10px">per page</label>
-        </div>
+        <form id="itemsPerPageForm" method="get" action="/ThumbView">
+            <!--   Item per page    -->
+            <div class="items-per-page">
+                <select id="itemsPerPage" name="size" th:value="${pageSize}" class="size-select"
+                        style="border: 1px solid black">
+                    <option th:each="s : ${pageSizes}" th:value="${s}" th:text="${s}" th:selected="${s == pageSize}"
+                            style="border: 1px solid black"></option>
+                </select>
+                <label for="itemsPerPage" style="margin-left: 10px">per page</label>
+            </div>
+        </form>
     </section>
 </main>
 
@@ -340,7 +318,7 @@
             todayHighlight: true
         });
 
-        $('#dropoffDate').datepicker({
+        $('#dropOffDate').datepicker({
             format: 'dd/mm/yyyy',
             autoclose: true,
             todayHighlight: true
@@ -349,7 +327,7 @@
         // Initialize timepickers
         $('#pickupTime').timepicker({
             timeFormat: 'HH:mm',
-            interval: 30, // Cách nhau 30 phút
+            interval: 30,
             minTime: '00:00am',
             maxTime: '11:59pm',
             defaultTime: 'HH:mm',
@@ -359,9 +337,9 @@
             scrollbar: true
         });
 
-        $('#dropoffTime').timepicker({
+        $('#dropOffTime').timepicker({
             timeFormat: 'HH:mm',
-            interval: 30, // Cách nhau 30 phút
+            interval: 30,
             minTime: '00:00am',
             maxTime: '11:59pm',
             defaultTime: 'HH:mm',
@@ -392,8 +370,7 @@
 
     options.forEach(option => {
         option.addEventListener("click", () => {
-            let selectedOption = option.querySelector(".option-text").innerText;
-            sBtn_text.innerText = selectedOption;
+            sBtn_text.innerText = option.querySelector(".option-text").innerText;
 
             // Change the page location based on the selected option
             let value = option.getAttribute("data-value");
@@ -406,12 +383,16 @@
     });
 </script>
 <script>
+    function changePageSize() {
+        document.getElementById('itemsPerPageForm').submit();
+    }
+
     document.getElementById('itemsPerPage').addEventListener('change', function () {
         let itemsPerPage = parseInt(this.value);
         let cards = document.querySelectorAll('#cardContainer .card');
 
         // Hide all cards initially
-        cards.forEach((card, index) => {
+        cards.forEach((card) => {
             card.style.display = 'none';
         });
 
@@ -427,46 +408,49 @@
 <script>
     document.querySelectorAll('.star-rating').forEach(function (star) {
         star.addEventListener('click', function () {
-            var card = this.getAttribute('data-card');
-            var rating = parseInt(this.getAttribute('data-rating'));
+            const card = this.getAttribute('data-card');
+            const rating = parseInt(this.getAttribute('data-rating'));
 
-            // Xóa lớp 'checked' của tất cả ngôi sao trong card hiện tại
+            // Remove 'checked' class from all stars in the current card
             document.querySelectorAll('.star-rating[data-card="' + card + '"]').forEach(function (star) {
-                star.classList.remove('checked');
+                star.classList.remove('fa-star');  // Unchecked star
+                star.classList.add('fa-star-o');  // Empty star
             });
 
-            // Thêm lớp 'checked' cho các ngôi sao đến ngôi sao được chọn trong card hiện tại
+            // Add 'checked' class to stars up to the selected rating in the current card
             for (var i = 1; i <= rating; i++) {
-                document.querySelector('.star-rating[data-card="' + card + '"][data-rating="' + i + '"]').classList.add('checked');
+                document.querySelector('.star-rating[data-card="' + card + '"][data-rating="' + i + '"]')
+                    .classList.remove('fa-star-o');  // Empty star
+                document.querySelector('.star-rating[data-card="' + card + '"][data-rating="' + i + '"]')
+                    .classList.add('fa-star');  // Filled star
             }
 
-            // Ẩn hoặc hiện thẻ (No ratings yet)
-            var noRatingsText = document.querySelector('.no-ratings-text[data-card="' + card + '"]');
+            // Hide or show the (No ratings yet) message
+            const noRatingsText = document.querySelector('.no-ratings-text[data-card="' + card + '"]');
             if (rating > 0) {
-                noRatingsText.style.display = 'none';
+                noRatingsText.style.display = 'none';  // Hide (No ratings yet) if any star is selected
             } else {
-                noRatingsText.style.display = 'inline';
+                noRatingsText.style.display = 'inline';  // Show (No ratings yet) if no star is selected
             }
         });
     });
 </script>
+
 <script>
     function combineDateTime() {
         // Get pickup date and time
-        var pickupDate = document.getElementById('pickupDate').value;
-        var pickupTime = document.getElementById('pickupTime').value;
+        const pickupDate = document.getElementById('pickupDate').value;
+        const pickupTime = document.getElementById('pickupTime').value;
 
         // Combine into startDateTime
-        var startDateTime = pickupDate + ',' + pickupTime;
-        document.getElementById('startDateTime').value = startDateTime;
+        document.getElementById('startDateTime').value = pickupDate + ',' + pickupTime;
 
         // Get dropoff date and time
-        var dropoffDate = document.getElementById('dropoffDate').value;
-        var dropoffTime = document.getElementById('dropoffTime').value;
+        var dropOffDate = document.getElementById('dropOffDate').value;
+        var dropOffTime = document.getElementById('dropOffTime').value;
 
         // Combine into endDateTime
-        var endDateTime = dropoffDate + ',' + dropoffTime;
-        document.getElementById('endDateTime').value = endDateTime;
+        document.getElementById('endDateTime').value = dropOffDate + ',' + dropOffTime;
     }
 </script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

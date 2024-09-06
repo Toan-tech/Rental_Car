@@ -7,7 +7,7 @@
     <!-- Configuration for DataSource -->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="user" value="sa"/>
-        <property name="password" value="kinhart822"/>
+        <property name="password" value="11235813"/>
         <property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
         <property name="jdbcUrl" value="jdbc:sqlserver://localhost:1433;database=CarRental;encrypt=true;trustServerCertificate=true"/>
     </bean>

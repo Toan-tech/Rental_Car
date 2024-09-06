@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wallet Withdraw</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+  <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{css/header.css}">
+
+
+  <link rel="stylesheet" href="../../static/css/topUpAndWithdraw.css">
+
+
+</head>
+<body>
+    <div class="top-up">
+      <p>Withdraw</p>
+      <p>Your current balance is 1,500,000.Please select the amount to withdraw from your wallet</p>
+
+      <select>
+          <option>2,000,000</option>
+          <option>5,000,000</option>
+          <option>10,000,000</option>
+          <option>All balance</option>
+      </select>
+    </div>
+
+    <div class="key">
+        <button class="key1">Cancel</button>
+        <button class="key2">OK</button>
+    </div>
+
+
+
+</body>
+</html>

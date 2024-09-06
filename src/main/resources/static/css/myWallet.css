@@ -1,0 +1,50 @@
+.line0 {
+    position: relative;
+    left: 20px;
+}
+
+.line1 {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+.keysubmit{
+    position: relative;
+    right: 18%;
+}
+.line2 {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+.line3 {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content:flex-end;
+}
+div.money{
+    height: 50px;
+    color: #2bc02b;
+    font-size: 35px;
+    position: relative;
+    left: 30px;
+}
+
+input {
+    width: 150px;
+    padding: 8px;
+}
+input.withdraw{
+    background: #c0a983;
+}
+input.topup {
+    background: #2bc02b;
+}
+input.search {
+    background: #007bff;
+    color: white;
+    position: relative;
+    right: 10%;
+}
+
+

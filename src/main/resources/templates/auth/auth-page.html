@@ -312,7 +312,7 @@
                     <p>I have read and agree with the</p>
                     <a href="#" class="terms">Terms and Conditions</a>
                 </div>
-                <button type="submit" class="btn">
+                <button type="submit" id="sign-up-btn" class="btn" disabled>
                     <i class='bx bxs-user-plus' style="font-size: 1.5em"></i>SIGN UP
                 </button>
             </form>
@@ -322,5 +322,35 @@
         </div>
     </div>
 </div>
+
+<script>
+    function validateForm() {
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('signup-email').value;
+        const phone = document.getElementById('phone').value;
+        const password = document.getElementById('password1').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        const role = document.querySelector('input[name="role"]:checked');
+        const terms = document.getElementById('terms').checked;
+
+
+        const allFieldsFilled = name && email && phone && password && confirmPassword && role && terms;
+        const passwordsMatch = password === confirmPassword;
+
+
+        document.getElementById('sign-up-btn').disabled = !(allFieldsFilled && passwordsMatch);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        document.querySelectorAll('.form-group input').forEach(function(input) {
+            input.addEventListener('input', validateForm);
+        });
+
+        document.getElementById('terms').addEventListener('change', validateForm);
+    });
+</script>
+
 </body>
 </html>

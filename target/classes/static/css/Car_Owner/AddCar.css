@@ -126,6 +126,9 @@ a:hover {
 .next {
     margin-left: 3%;
 }
+.uploaded-file {
+    font-weight: normal;
+}
 @media (max-width: 900px){
     .arrow-steps .step {
         font-size: 10px;
@@ -154,4 +157,357 @@ a:hover {
     .arrow-steps {
         margin-left: 7%;
     }
+}
+
+/*Step1_Basic*/
+.note {
+    color: red;
+    font-weight: normal;
+    margin-left: calc(5% + 15px);
+}
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+form > .row:nth-of-type(1) {
+    padding-left: 5%;
+}
+.form-group sup {
+    color: red;
+}
+.basic .form-group {
+    margin-top: 0;
+}
+.form-group label, .form-group p {
+    font-weight: bold;
+}
+.basic .form-control {
+    width: 40%;
+}
+.form-group .btn {
+    background-color: #eeeeee;
+    border: 1px solid #000000;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.form-group .btn:nth-of-type(2){
+    margin-left: -5px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.form-group .btn:nth-of-type(1){
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-left: 5%;
+}
+.basic .btn:hover {
+    background-color: #b4c2e1;
+}
+.basic .form-group .chosen {
+    background-color: #85a3da;
+}
+
+.document {
+    font-size: 24px;
+    font-weight: bold;
+}
+.basic .row+p {
+    font-weight: normal;
+}
+
+/*Upload*/
+.upload-file, .upload-image-container {
+    width: 80%;
+    height: 200px;
+    border: 1px dashed #000000;
+    border-radius: 5px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.image-upload-file {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+.upload-file i, .image-upload-file i {
+    font-size: 50px;
+}
+.upload-file p, .image-upload-file p {
+    font-weight: normal;
+    margin: 0;
+    font-size: 14px;
+}
+.image-uploaded-file {
+    font-weight: normal;
+}
+.upload-file p:nth-of-type(1), .image-upload-file p:nth-of-type(1) {
+    margin-top: 5px;
+}
+.upload-file p:nth-of-type(3), .image-upload-file p:nth-of-type(3) {
+    color: #5285d2;
+    text-decoration: underline;
+}
+.upload-file:hover, .image-upload-file:hover, .uploaded-image:hover {
+    cursor: pointer;
+}
+.remove-image-button, .remove-document-button {
+    line-height: 8.4px;
+    border-radius: 5px;
+    padding: 5px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid gray;
+}
+.errorMessage, .documentErrorMessage {
+    color: red;
+    font-weight: normal;
+}
+
+
+form > div:nth-of-type(2){
+    padding-left: 5%;
+}
+
+/*Dragover-Dragleave*/
+.dragover {
+    width: 300px;
+    height: 300px;
+    color: #eeeeee;
+}
+
+/*Step2_Details*/
+label {
+    display: block;
+    font-weight: bold;
+}
+
+sup {
+    color: red;
+}
+.form-check label {
+    font-weight: normal;
+}
+
+.form-group .mileage {
+    width: 30%;
+}
+.detail .form-group .btn {
+    background-color: #eeeeee;
+    padding: 0.375rem 0.75rem;
+    border: none;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.detail .row:nth-of-type(1) {
+    padding-left: 0;
+}
+.detail .add-function {
+    padding-left: 0;
+}
+.form-group {
+    width: 80%;
+    margin-top: 32px;
+}
+.col-sm-6 .fuel-consumption {
+    display: inline-block;
+    width: 15%;
+    margin-right: 3%;
+    margin-left: 0;
+}
+.input-group {
+    width: 100%;
+}
+input, select {
+    margin-left: 5%;
+}
+.form-control {
+    width: 95%;
+}
+.form-check label {
+    display: inline-block;
+    width: 80%;
+}
+.form-check-input {
+    margin-left: 1%;
+}
+.form-check-container {
+    width: 80%;
+    background-color: white;
+    border-radius: 5px;
+    padding: 5%;
+    margin: auto;
+    margin-top: 8px;
+}
+@media (max-width: 850px){
+    .form-check {
+        padding-left: 0;
+    }
+}
+@media (max-width: 576px){
+    .col-sm-6 .fuel-consumption {
+        margin-left: 5%;
+    }
+    textarea {
+        margin-left: 5%;
+    }
+}
+/*Upload*/
+
+.upload-container{
+    margin-left: 5%;
+}
+.row .col-sm-6:nth-of-type(1) .upload-container, .row .col-sm-6:nth-of-type(2) .upload-container  {
+    margin-top: 0;
+}
+.row .col-sm-6:nth-of-type(3) .upload-container, .row .col-sm-6:nth-of-type(4) .upload-container  {
+    margin-top: 24px;
+}
+.detail>p:nth-of-type(n+1){
+    font-weight: normal;
+    margin-bottom: 0;
+    font-size: 14px;
+    margin-left: 2%;
+}
+.dragover {
+    width: 100%;
+}
+.uploaded-image {
+    width: 100%;
+    height: 200px;
+}
+.uploaded-image img {
+    width: 100%;
+    height: 100%;
+}
+@media (max-width: 576px) {
+    .row .col-sm-6:nth-of-type(2) .upload-container  {
+        margin-top: 24px;
+    }
+}
+
+/*Step3_Pricing*/
+label {
+    font-weight: bold;
+}
+
+span {
+    font-weight: bold;
+}
+
+form > .form-group:nth-of-type(1) .form-control {
+    display: inline-block;
+}
+
+form > .form-group:nth-of-type(2) .form-control {
+    display: inline-block;
+}
+
+.form-group {
+    margin-top: 32px;
+}
+.price {
+    margin-left: 5%;
+}
+
+.price .deposit-base-price-container {
+    display: flex;
+    width: 50%;
+    padding-left: 0;
+}
+
+.label-container {
+    width: 60%;
+}
+
+.label-container > label {
+    line-height: 38px;
+}
+
+.input-container {
+    display: flex;
+    width: 40%;
+}
+
+.base-price-input, .deposit-input {
+    width: 60%;
+}
+
+.input-container > span {
+    line-height: 38px;
+    margin-left: 10px;
+}
+
+.form-check .form-check-label {
+    font-weight: normal;
+}
+
+.price .row {
+    padding-left: 5%;
+}
+
+.price .form-check-input {
+    margin-left: -1.25rem;
+}
+
+.price .form-control {
+    width: 100%;
+}
+
+@media (max-width: 1100px) {
+    .price .label-container {
+        width: 50%;
+    }
+
+    .price .input-container {
+        width: 50%;
+    }
+}
+
+/*Step4_Finish*/
+.step4 p {
+    font-weight: bold;
+}
+.step4 .preview-title{
+    font-size: 24px;
+    margin-left: 5%;
+}
+small {
+    font-weight: bold;
+    font-size: 12px;
+}
+.carousel-inner img {
+    width: 100%;
+    height: 400px;
+}
+.image-container {
+    margin: auto;
+    width: 80%;
+}
+.carousel-indicators {
+    bottom: -50px;
+}
+.carousel-indicators li {
+    background-color: black;
+}
+.car-name {
+    font-size: 24px;
+}
+.status {
+    color: green;
+}
+table {
+    width: 100%;
+}
+tr td:nth-child(1) {
+    width: 30%;
+}
+.star {
+    margin-bottom: 0;
 }

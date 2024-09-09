@@ -47,6 +47,13 @@ tr td:nth-child(1) {
 .info {
     background-color: #eeeeee;
 }
+input {
+    margin-left: 0;
+}
+input+span {
+    font-weight: normal;
+    margin-left: 5px;
+}
 
 /*module*/
 .module {

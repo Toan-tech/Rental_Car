@@ -7,10 +7,16 @@ jQuery(document).ready(function () {
     var stepThree = jQuery(".step3")
     var stepFour = jQuery(".step4")
 
+    // Validation
+    // Step1
+    var removeDocumentButton
+
+
+    // Arrow flow
     back.css("display", "none");
-    next.bind("click", function () {
+    next.on("click", function () {
         jQuery.each(steps, function (i) {
-            if (i >= 0 && i < 3){
+            if (i >= 0 && i < 3) {
                 back.css("display", "inline-block");
                 if (jQuery(steps[i]).hasClass("current") && !jQuery(steps[i]).hasClass("done")) {
                     jQuery(steps[i + 1]).addClass("current");
@@ -30,10 +36,9 @@ jQuery(document).ready(function () {
             } else {
                 return false;
             }
-
         })
     });
-    back.bind("click", function () {
+    back.on("click", function () {
         jQuery.each(steps, function (i) {
             if (jQuery(steps[i]).hasClass("done") && jQuery(steps[i + 1]).hasClass("current")) {
                 jQuery(steps[i + 1]).removeClass("current");
@@ -53,5 +58,4 @@ jQuery(document).ready(function () {
             }
         })
     });
-
 })

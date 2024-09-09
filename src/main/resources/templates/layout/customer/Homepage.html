@@ -118,11 +118,11 @@
                         <label for="pickupDate">Pick-up Date and Time</label>
                         <div style="display: flex; gap: 10px;">
                             <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" id="pickupDate" placeholder="DD/MM/YYYY" required>
+                                <input class="form-control" id="pickupDate" placeholder="DD/MM/YYYY" readonly required>
                                 <i class='bx bx-calendar' style="font-size: 20px;" onclick="$('#pickupDate').datepicker('show');"></i>
                             </div>
                             <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" id="pickupTime" placeholder="HH:MM" required>
+                                <input class="form-control" id="pickupTime" placeholder="HH:MM" readonly required>
                                 <i class='bx bx-time' style="font-size: 20px;" onclick="$('#pickupTime').timepicker('show');"></i>
                             </div>
                         </div>
@@ -135,18 +135,22 @@
                         <label for="dropoffDate">Drop-off Date and Time</label>
                         <div style="display: flex; gap: 10px;">
                             <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" id="dropoffDate" placeholder="DD/MM/YYYY" required>
+                                <input class="form-control" id="dropoffDate" placeholder="DD/MM/YYYY" readonly required>
                                 <i class='bx bx-calendar' style="font-size: 20px;" onclick="$('#dropoffDate').datepicker('show');"></i>
                             </div>
                             <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" id="dropoffTime" placeholder="HH:MM" required>
+                                <input class="form-control" id="dropoffTime" placeholder="HH:MM" readonly required>
                                 <i class='bx bx-time' style="font-size: 20px;" onclick="$('#dropoffTime').timepicker('show');"></i>
                             </div>
                         </div>
                         <!-- Hidden input for endDateTime -->
                         <input type="hidden" th:field="*{endDateTime}" id="endDateTime">
                     </div>
-                    <button type="submit" class="btn btn-primary" onclick="combineDateTime()">Search</button>
+
+                    <!-- Error message area -->
+                    <div id="errorMessage" style="color: red; display: none; margin-top: 10px; margin-bottom: 15px"></div>
+
+                    <button type="submit" class="btn btn-primary" onclick="return validateForm()">Search</button>
                 </form>
             </div>
         </div>
@@ -381,16 +385,38 @@
         var pickupTime = document.getElementById('pickupTime').value;
 
         // Combine into startDateTime
-        var startDateTime = pickupDate + ',' + pickupTime;
-        document.getElementById('startDateTime').value = startDateTime;
+        document.getElementById('startDateTime').value = pickupDate + ',' + pickupTime;
 
         // Get dropoff date and time
         var dropoffDate = document.getElementById('dropoffDate').value;
         var dropoffTime = document.getElementById('dropoffTime').value;
 
         // Combine into endDateTime
-        var endDateTime = dropoffDate + ',' + dropoffTime;
-        document.getElementById('endDateTime').value = endDateTime;
+        document.getElementById('endDateTime').value = dropoffDate + ',' + dropoffTime;
+    }
+    function validateForm() {
+        // Get values from inputs
+        var pickupDate = document.getElementById('pickupDate').value;
+        var pickupTime = document.getElementById('pickupTime').value;
+        var dropoffDate = document.getElementById('dropoffDate').value;
+        var dropoffTime = document.getElementById('dropoffTime').value;
+
+        // Error message element
+        var errorMessage = document.getElementById('errorMessage');
+
+        // Check if any fields are empty
+        if (!pickupDate || !pickupTime || !dropoffDate || !dropoffTime) {
+            errorMessage.innerHTML = "Please fill in all fields !";
+            errorMessage.style.display = "block";
+            return false; // Prevent form submission
+        }
+
+        // Hide the error message if everything is filled
+        errorMessage.style.display = "none";
+
+        // Combine date and time before submission
+        combineDateTime();
+        return true; // Allow form submission
     }
 </script>
 </body>

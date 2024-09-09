@@ -29,7 +29,7 @@ public class Booking {
     @NotNull(message = "“Please enter pick up date and time")
     private LocalDateTime startDateTime;
 
-    @Column(name = "End_Date_Time", nullable = false)
+    @Column(name = "End_Date_Time")
     @DateTimeFormat(pattern = "dd/MM/yyyy,HH:mm")
     @NotNull(message = "Please enter drop-off date and time")
     private LocalDateTime endDateTime;

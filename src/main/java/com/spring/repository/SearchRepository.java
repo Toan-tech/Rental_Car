@@ -1,6 +1,9 @@
 package com.spring.repository;
 
 import com.spring.entities.Booking;
+import com.spring.entities.BookingStatus;
+import com.spring.entities.FeedBack;
+import com.spring.entities.RatingStar;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,6 +33,8 @@ public interface SearchRepository extends JpaRepository<Booking, Integer> {
                                  @Param("startDate") LocalDateTime startDate,
                                  @Param("endDate") LocalDateTime endDate,
                                  Pageable pageable);
+
+    Page<Booking> findByStatus(BookingStatus status, Pageable pageable);
 
     // Helper method to get sorting option
     default Sort getSortOption(String sortOption) {

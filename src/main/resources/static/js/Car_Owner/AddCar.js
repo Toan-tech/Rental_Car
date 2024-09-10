@@ -107,7 +107,7 @@ jQuery(document).ready(function () {
         })
     })
 
-    // Validate
+    // Validate step1_basic
     var license = jQuery("#license");
     var licenseWarning = jQuery("#license-warning");
     var color = jQuery("#color");
@@ -116,7 +116,7 @@ jQuery(document).ready(function () {
     var brandWarning = jQuery("#brand-warning");
     var model = jQuery("#model");
     var modelWarning = jQuery("#model-warning");
-    var productionYear = jQuery("#production-year");
+    var productionYear = jQuery("#product-year");
     var productionYearWarning = jQuery("#production-year-warning");
     var seatNumber = jQuery("#seat-number");
     var seatNumberWarning = jQuery("#seat-number-warning");
@@ -129,135 +129,25 @@ jQuery(document).ready(function () {
     var insuranceWarning = jQuery("#insurance-warning");
     var licenseValidate, colorValidate, brandValidate, modelValidate, productionYearValidate,
         seatNumberValidate, transmissionValidate, fuelValidate, registrationValidate, certificateValidate,
-        insuranceValidate, stepBasicValidated = false;
+        insuranceValidate, stepBasicValidated;
 
     function validateStepBasic() {
-        // license validate
-        if (license.val() == "") {
-            licenseWarning.text("");
-            licenseWarning.text("*License is required");
-            licenseValidate = false;
-        } else if (license.val() != "") {
-            let licenseData = new FormData();
-            let licenseName = license.val().split("/").pop();
-            licenseData.append("license", licenseName);
-            jQuery.ajax({
-                url: "http://localhost:8080/mycar/validatelicense",
-                type: "POST",
-                data: licenseData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    if (response == true) {
-                        licenseWarning.text("");
-                        licenseValidate = true;
-                    } else {
-                        licenseWarning.text("");
-                        licenseWarning.text("*Your license is not match. Check again!");
-                        licenseValidate = false;
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.error("Error: ", textStatus, errorThrown);
-                }
-            })
-        }
+        licenseValidate = validateValue(license, licenseWarning);
+        colorValidate = validateValue(color, colorWarning);
+        brandValidate = validateValue(brand, brandWarning);
+        modelValidate = validateValue(model, modelWarning);
+        productionYearValidate = validateValue(productionYear, productionYearWarning);
+        seatNumberValidate = validateValue(seatNumber, seatNumberWarning);
+        transmissionValidate = validateValue(transmission, transmissionWarning, );
+        fuelValidate = validateValue(fuel, fuelWarning);
+        registrationValidate = validateFile(file1, registrationWarning);
+        certificateValidate = validateFile(file2, certificateWarning);
+        insuranceValidate = validateFile(file3, insuranceWarning);
 
-        // color validate
-        if (color.val() == "") {
-            colorWarning.text("*Color is required");
-            colorValidate = false;
-        } else {
-            colorWarning.text("");
-            colorValidate = true;
-        }
-
-        // brand validate
-        if (brand.val() == "") {
-            brandWarning.text("*Brand is required");
-            brandValidate = false;
-        } else {
-            brandWarning.text("");
-            brandValidate = true;
-        }
-
-        // model validate
-        if (model.val() == "") {
-            modelWarning.text("*Model is required");
-            modelValidate = false;
-        } else {
-            modelWarning.text("");
-            modelValidate = true;
-        }
-
-        // production Year validate
-        if (productionYear.val() == "") {
-            productionYearWarning.text("*Product year is required");
-            productionYearValidate = false;
-        } else {
-            productionYearWarning.text("");
-            productionYearValidate = true;
-        }
-
-        // Seat Number validate
-        if (seatNumber.val() == "") {
-            seatNumberWarning.text("*Seat Number is required");
-            seatNumberValidate = false;
-        } else {
-            seatNumberWarning.text("");
-            seatNumberValidate = true;
-        }
-
-        // Transmission validate
-        if (transmission.val() == "") {
-            transmissionWarning.text("*Transmission is required");
-            transmissionValidate = false;
-        } else {
-            transmissionWarning.text("");
-            transmissionValidate = true;
-        }
-
-        // Fuel validate
-        if (fuel.val() == "") {
-            fuelWarning.text("*Fuel is required");
-            fuelValidate = false;
-        } else {
-            fuelWarning.text("");
-            fuelValidate = true;
-        }
-
-        // Registration validate
-        if (file1 == undefined) {
-            registrationWarning.text("*Registration is required");
-            registrationValidate = false;
-        } else {
-            registrationWarning.text("");
-            registrationValidate = true;
-        }
-
-        // Certificate validate
-        if (file2 == undefined) {
-            certificateWarning.text("*Certificate is required");
-            certificateValidate = false;
-        } else {
-            certificateWarning.text("");
-            certificateValidate = true;
-        }
-
-        // Insurance validate
-        if (file3 == undefined) {
-            insuranceWarning.text("*Insurance is required");
-            insuranceValidate = false;
-        } else {
-            insuranceWarning.text("");
-            insuranceValidate = true;
-        }
-
-        if (
-            licenseValidate == false || colorValidate == false || brandValidate == false || modelValidate == false
-            || productionYearValidate == false || seatNumberValidate == false || transmissionValidate == false
-            || fuelValidate == false || registrationValidate == false || certificateValidate == false
-            || insuranceValidate == false
+        if (licenseValidate == false || colorValidate == false || brandValidate == false
+        || modelValidate == false || productionYearValidate == false || seatNumberValidate == false
+            || transmissionValidate == false || fuelValidate == false || registrationValidate == false ||
+            certificateValidate == false || insuranceValidate == false
         ) {
             stepBasicValidated = false;
         } else {
@@ -388,6 +278,15 @@ jQuery(document).ready(function () {
 //Xóa file đã tải lên
     removeImageButton.each(function (index) {
         jQuery(this).click(function () {
+            if (index == 0) {
+                file4 = undefined;
+            } else if (index == 1) {
+                file5 = undefined;
+            } else if (index == 2) {
+                file6 = undefined;
+            } else if (index = 3) {
+                file7 = undefined;
+            }
 
             let removeImageUrl = jQuery(previewImage[index]).attr("src");
             slideNumber = slideNumber - 1;
@@ -439,35 +338,98 @@ jQuery(document).ready(function () {
         }
     }
 
+    // validation Step2_detail
+    var mileage = jQuery("#mileage");
+    var mileageWarning = jQuery("#mileage-warning");
+    var city = jQuery("#city");
+    var cityWarning = jQuery("#city-warning");
+    var district = jQuery("#district");
+    var districtWarning = jQuery("#district-warning");
+    var ward = jQuery("#ward");
+    var wardWarning = jQuery("#ward-warning");
+    var frontImageWarning = jQuery("#front-image-warning");
+    var backImageWarning = jQuery("#back-image-warning");
+    var leftImageWarning = jQuery("#left-image-warning");
+    var rightImageWarning = jQuery("#right-image-warning");
+    var mileageValidate, cityValidate, districtValidate, wardValidate, frontImageValidate,
+        backImageValidate, leftImageValidate, rightImageValidate, stepDetailValidated;
+
+    function validateStepDetail() {
+        mileageValidate = validateValue(mileage, mileageWarning);
+        cityValidate = validateValue(city, cityWarning);
+        districtValidate = validateValue(district, districtWarning);
+        wardValidate = validateValue(ward, wardWarning);
+        frontImageValidate = validateFile(file4, frontImageWarning);
+        backImageValidate = validateFile(file5, backImageWarning);
+        leftImageValidate = validateFile(file6, leftImageWarning);
+        rightImageValidate = validateFile(file7, rightImageWarning);
+
+        if (mileageValidate == false || cityValidate == false || districtValidate == false || wardValidate == false
+            || backImageValidate == false || leftImageValidate == false || rightImageValidate == false || frontImageValidate == false
+        ) {
+            stepDetailValidated = false;
+        } else {
+            stepDetailValidated = true;
+        }
+    }
+
+    function validateValue(dom, domWarning) {
+        let validate;
+        if (dom.val() == "") {
+            domWarning.css("display", "block");
+            validate = false;
+        } else {
+            domWarning.css("display", "none");
+            validate = true;
+        }
+        return validate;
+    }
+
+    function validateFile(file, domWarning) {
+        let validate;
+        if (file == undefined) {
+            domWarning.css("display", "block");
+            validate = false;
+        } else {
+            domWarning.css("display", "none");
+            validate = true;
+        }
+        return validate;
+    }
+
+
     // Arrow flow
     back.css("display", "none");
     next.on("click", function () {
         jQuery.each(steps, function (i) {
-                back.css("display", "inline-block");
-                if (jQuery(steps[i]).hasClass("current") && !jQuery(steps[i]).hasClass("done")) {
-                    if (i == 0) {
-                        validateStepBasic();
-                        if (stepBasicValidated == true) {
-                            jQuery(steps[i + 1]).addClass("current");
-                            jQuery(steps[i]).removeClass("current").addClass("done");
-                            stepOne.css("display", "none");
-                            stepTwo.css("display", "block");
-                        }
-                    } else if (i == 1) {
+            if (jQuery(steps[i]).hasClass("current") && !jQuery(steps[i]).hasClass("done")) {
+                if (i == 0) {
+                    validateStepBasic();
+                    if (stepBasicValidated == true) {
+                        jQuery(steps[i + 1]).addClass("current");
+                        jQuery(steps[i]).removeClass("current").addClass("done");
+                        stepOne.css("display", "none");
+                        stepTwo.css("display", "block");
+                        back.css("display", "inline-block");
+                    }
+                } else if (i == 1) {
+                    validateStepDetail();
+                    if (stepDetailValidated == true) {
                         jQuery(steps[i + 1]).addClass("current");
                         jQuery(steps[i]).removeClass("current").addClass("done");
                         stepTwo.css("display", "none");
                         stepThree.css("display", "block");
-                    } else if (i == 2) {
-                        jQuery(steps[i + 1]).addClass("current");
-                        jQuery(steps[i]).removeClass("current").addClass("done");
-                        stepThree.css("display", "none");
-                        stepFour.css("display", "block");
-                        next.css("display", "none");
-                        submit.css("display", "inline-block");
                     }
-                    return false;
+                } else if (i == 2) {
+                    jQuery(steps[i + 1]).addClass("current");
+                    jQuery(steps[i]).removeClass("current").addClass("done");
+                    stepThree.css("display", "none");
+                    stepFour.css("display", "block");
+                    next.css("display", "none");
+                    submit.css("display", "inline-block");
                 }
+                return false;
+            }
         })
     });
     back.on("click", function () {

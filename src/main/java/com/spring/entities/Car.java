@@ -36,10 +36,10 @@ public class Car {
     private String color;
 
     @Column(name = "Number_Of_Seats", nullable = false)
-    private int numberOfSeats;
+    private Integer numberOfSeats;
 
     @Column(name = "Production_Years", nullable = false)
-    private int productionYears;
+    private Integer productionYears;
 
     @Column(name = "Transmission_Type", nullable = false)
     private String transmissionType;

@@ -14,7 +14,8 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Mileage: <sup>*</sup></label>
-                        <input type="text" class="form-control mileage">
+                        <input type="text" class="form-control mileage" id="mileage">
+                        <small class="warning-text" id="mileage-warning" style="display: none">*Mileage is required</small>
                     </div>
 
                     <div class="form-group mb-3">
@@ -26,20 +27,22 @@
                             </div>
                         </div>
 
-
                         <select name="" id="city" class="form-control mb-3">
                             <option value="">--- City/Province ---</option>
                             <option value="HaNoi">Ha Noi</option>
                             <option value="HoChiMinh">Ho Chi Minh</option>
                         </select>
+                        <small class="warning-text mb-3" id="city-warning" style="display: none">*City is required</small>
 
                         <select name="" id="district" class="form-control mb-3">
                             <option value="">--- District ---</option>
                         </select>
+                        <small class="warning-text mb-3" id="district-warning" style="display: none">*District is required</small>
 
                         <select name="" id="ward" class="form-control mb-3">
                             <option value="">--- Ward ---</option>
                         </select>
+                        <small class="warning-text mb-3" id="ward-warning" style="display: none">*Ward is required</small>
 
                         <input type="text" class="form-control" placeholder="House number, Street" id="home-number">
                     </div>
@@ -47,7 +50,7 @@
                 <div class="col-sm-6">
                     <div class="form-group mb-3">
                         <label>Fuel consumption:</label>
-                        <input type="text" class="form-control fuel-consumption">
+                        <input type="text" class="form-control fuel-consumption" id="fuel-consumption">
                         <span>liter/100km</span>
                     </div>
                     <div class="form-group">
@@ -131,7 +134,8 @@
                             <div>
                                 <button type="button" class="remove-image-button" style="display: none">x</button>
                                 <span class="image-uploaded-file"></span>
-                                <small class="errorMessage" style="display: none">Chỉ được tải lên file ảnh (jpg, jpeg, png, gif)</small>
+                                <small class="errorMessage" style="display: none">Only accept (jpg, jpeg, png, gif)</small>
+                                <small class="warning-text" id="front-image-warning" style="display: none">*Front image is required</small>
                             </div>
                         </div>
                     </div>
@@ -154,7 +158,8 @@
                             <div>
                                 <button type="button" class="remove-image-button" style="display: none">x</button>
                                 <span class="image-uploaded-file"></span>
-                                <small class="errorMessage" style="display: none">Chỉ được tải lên file ảnh (jpg, jpeg, png, gif)</small>
+                                <small class="errorMessage" style="display: none">Only accept (jpg, jpeg, png, gif)</small>
+                                <small class="warning-text" id="back-image-warning" style="display: none">*Back image is required</small>
                             </div>
                         </div>
                     </div>
@@ -177,7 +182,8 @@
                             <div>
                                 <button type="button" class="remove-image-button" style="display: none">x</button>
                                 <span class="image-uploaded-file"></span>
-                                <small class="errorMessage" style="display: none">Chỉ được tải lên file ảnh (jpg, jpeg, png, gif)</small>
+                                <small class="errorMessage" style="display: none">Only accept (jpg, jpeg, png, gif)</small>
+                                <small class="warning-text" id="left-image-warning" style="display: none">*Left image is required</small>
                             </div>
                         </div>
                     </div>
@@ -200,7 +206,8 @@
                             <div>
                                 <button type="button" class="remove-image-button" style="display: none">x</button>
                                 <span class="image-uploaded-file"></span>
-                                <small class="errorMessage" style="display: none">Chỉ được tải lên file ảnh (jpg, jpeg, png, gif)</small>
+                                <small class="errorMessage" style="display: none">Only accept (jpg, jpeg, png, gif)</small>
+                                <small class="warning-text" id="right-image-warning" style="display: none">*Right image is required</small>
                             </div>
                         </div>
                     </div>

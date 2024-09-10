@@ -1,3 +1,16 @@
+.warning-text {
+    font-weight: normal;
+    display: block;
+    color: red;
+    margin-left: 5%;
+}
+small+small.warning-text {
+    margin-left: 0;
+}
+#city+small.warning-text, #district+small.warning-text, #ward+small.warning-text {
+    margin-top: -1rem;
+}
+
 /*BreadCrumb*/
 .breadcrumb {
     background-color: white;

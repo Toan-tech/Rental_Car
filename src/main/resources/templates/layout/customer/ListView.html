@@ -9,6 +9,9 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
@@ -43,38 +46,11 @@
             color: #6c757d;
         }
 
-        .option1 {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-            margin: 10px 10px;
-        }
-
-        .option1:hover {
-            background-color: #f2f2f2;
-            transform: scale(1.1);
-        }
-
         .items-per-page {
             display: flex;
             align-items: center;
             font-family: Arial, sans-serif;
             margin-bottom: 15px;
-        }
-
-        .number-input {
-            width: 50px; /* Chiều rộng của ô nhập liệu */
-            text-align: center;
-            border: 1px solid #000;
-            border-right: none;
-            border-radius: 2px 0 0 2px;
-        }
-
-        .number-input::-webkit-inner-spin-button,
-        .number-input::-webkit-outer-spin-button {
-            margin: 0;
         }
 
         label {
@@ -95,11 +71,13 @@
             width: 100%;
         }
 
-        .action-cell {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
+        .star-rating {
+            color: #d3d3d3; /* Default star color */
+            font-size: 24px;
+        }
+
+        .star-rating.checked {
+            color: #ffcc00; /* Color for checked stars */
         }
     </style>
 </head>
@@ -123,47 +101,47 @@
                 <div class="form-group">
                     <label for="pickupLocation">PICK-UP LOCATION</label>
                     <input type="text" class="form-control" id="pickupLocation" placeholder="Enter your location"
-                           th:field="*{driverInfo}" required>
-                    <div th:if="${#fields.hasErrors('driverInfo')}" class="text-danger">
-                        <p th:errors="*{driverInfo}">Please enter location</p>
-                    </div>
+                           th:field="*{driverInfo}">
                 </div>
                 <div class="form-group">
-                    <label for="pickupDate" style="margin-top: 10px">PICK-UP DATE AND TIME</label>
+                    <label for="pickupDate">Pick-up Date and Time</label>
                     <div style="display: flex; gap: 10px;">
                         <div class="input-wrapper" style="flex: 1">
-                            <input class="form-control" id="pickupDate" placeholder="DD/MM/YYYY"
-                                   th:field="*{startDateTime}" required>
+                            <input class="form-control" id="pickupDate" name="pickupDate" placeholder="DD/MM/YYYY"
+                                   th:value="${pickupDate}" readonly required>
                             <i class='bx bx-calendar' style="font-size: 20px;"
                                onclick="$('#pickupDate').datepicker('show');"></i>
                         </div>
                         <div class="input-wrapper" style="flex: 1">
-                            <input class="form-control" id="pickupTime" placeholder="HH:MM" th:field="*{startDateTime}"
-                                   required>
+                            <input class="form-control" id="pickupTime" name="pickupTime" placeholder="HH:MM"
+                                   th:value="${pickupTime}" readonly required>
                             <i class='bx bx-time' style="font-size: 20px;"
                                onclick="$('#pickupTime').timepicker('show');"></i>
                         </div>
                     </div>
-                    <div th:if="${#fields.hasErrors('startDateTime')}" class="text-danger">
-                        <p th:errors="*{startDateTime}">Please enter pick-up date and time</p>
-                    </div>
+                    <!-- Hidden input for startDateTime -->
+                    <input type="hidden" th:field="*{startDateTime}" id="startDateTime">
                 </div>
+
                 <div class="form-group">
-                    <label for="dropoffDate" style="margin-top: 10px">DROP-OFF DATE AND TIME</label>
+                    <label for="dropoffDate">Drop-off Date and Time</label>
                     <div style="display: flex; gap: 10px;">
                         <div class="input-wrapper" style="flex: 1">
-                            <input class="form-control" id="dropoffDate" placeholder="DD/MM/YYYY"
-                                   th:field="*{endDateTime}" required>
+                            <input class="form-control" id="dropoffDate" name="dropoffDate" placeholder="DD/MM/YYYY"
+                                   th:value="${dropoffDate}" readonly required>
                             <i class='bx bx-calendar' style="font-size: 20px;"
                                onclick="$('#dropoffDate').datepicker('show');"></i>
                         </div>
                         <div class="input-wrapper" style="flex: 1">
-                            <input class="form-control" id="dropoffTime" placeholder="HH:MM" th:field="*{endDateTime}"
-                                   required>
+                            <input class="form-control" id="dropoffTime" name="dropoffTime" placeholder="HH:MM"
+                                   th:value="${dropoffTime}" readonly required>
                             <i class='bx bx-time' style="font-size: 20px;"
                                onclick="$('#dropoffTime').timepicker('show');"></i>
                         </div>
                     </div>
+                    <!-- Hidden input for endDateTime -->
+                    <input type="hidden" th:field="*{endDateTime}" id="endDateTime">
+                    <!--       Check fields        -->
                     <div th:if="${#fields.hasErrors('endDateTime')}" class="text-danger">
                         <p th:errors="*{endDateTime}">Please enter drop-off date and time</p>
                     </div>
@@ -173,7 +151,9 @@
                     </div>
                 </div>
                 <div style="text-align: center;">
-                    <button type="submit" class="btn btn-primary" style="width: 30%; margin-top: 20px">SEARCH</button>
+                    <button type="submit" class="btn btn-primary" style="width: 30%; margin-top: 20px"
+                            onclick="combineDateTime()">SEARCH
+                    </button>
                 </div>
             </form>
         </section>
@@ -182,7 +162,7 @@
     <section class="container mt-4">
         <h2>Search Results</h2>
         <div class="d-flex justify-content-between align-items-center">
-            <p class="mb-0" th:text="'There are ' + ${carCount} + ' cars that are available for you!'"></p>
+            <p class="mb-0" th:text="'There are ' + ${NumberOfCar} + ' cars that are available for you!'"></p>
             <div>
                 <div class="d-flex">
                     <a th:href="@{/ThumbView}">
@@ -195,170 +175,182 @@
                 <label for="sortOption">Sort by: </label>
                 <select class="form-select" id="sortOption" name="sortOption"
                         style="padding: 10px; margin-left: 10px; margin-bottom: 20px">
-                    <option value="newest">Newest to Latest</option>
+                    <option value="newest" selected>Newest to Latest</option>
                     <option value="oldest">Oldest to Newest</option>
                     <option value="priceLowHigh">Price: Low to High</option>
                     <option value="priceHighLow">Price: High to Low</option>
                 </select>
             </div>
         </div>
+        <section class="container mt-6">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="table" style="background-color: #6c757d">
+                    <tr>
+                        <th scope="col" class="border border-dark">No</th>
+                        <th scope="col" class="border border-dark">Name</th>
+                        <th scope="col" class="border border-dark">Image</th>
+                        <th scope="col" class="border border-dark">Ratings</th>
+                        <th scope="col" class="border border-dark">No. of Rides</th>
+                        <th scope="col" class="border border-dark">Price</th>
+                        <th scope="col" class="border border-dark">Location</th>
+                        <th scope="col" class="border border-dark">Status</th>
+                        <th scope="col" class="border border-dark">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr scope="row" class="border border-dark" th:each="car, iterStat : ${cars}">
+                        <td class="border border-dark" th:text="${car.id}">No</td>
+                        <td class="border border-dark">
+                            <span th:text="${car.name}"></span><br>
+                            <span th:text="'- ' + ${car.brand} + ' - '"></span><br>
+                            <span th:text="'- ' + ${car.model} + ' - '"></span>
+                        </td>
+                        <td class="border border-dark" th:text="${car.images}">Image</td>
+                        <td class="border border-dark">
+                            <div>
+                        <span th:each="booking : ${car.bookings}"
+                              th:if="${booking.feedback != null}"
+                              class="fa fa-star star-rating"
+                              th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.one_star' ? ' checked' : ''}"
+                              style="font-size: 18px"></span>
 
+                                <span th:each="booking : ${car.bookings}"
+                                      th:if="${booking.feedback != null}"
+                                      class="fa fa-star star-rating"
+                                      th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.two_stars' ? ' checked' : ''}"
+                                      style="font-size: 18px"></span>
 
-        <section class="container mt-4">
-            <table class="table table-striped">
-                <thead class="table" style="background-color: #6c757d">
-                <tr>
-                    <th scope="col" class="border border-dark">No</th>
-                    <th scope="col" class="border border-dark">Name</th>
-                    <th scope="col" class="border border-dark">Image</th>
-                    <th scope="col" class="border border-dark">Ratings</th>
-                    <th scope="col" class="border border-dark">No. of Rides</th>
-                    <th scope="col" class="border border-dark">Price</th>
-                    <th scope="col" class="border border-dark">Location</th>
-                    <th scope="col" class="border border-dark">Status</th>
-                    <th scope="col" class="border border-dark">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th scope="row" class="border border-dark">1</th>
-                    <td class="border border-dark">Nissan Navara El 2017</td>
-                    <td class="border border-dark"><img src="placeholder.png" alt="Car Image" width="50"></td>
-                    <td class="border border-dark">No ratings</td>
-                    <td class="border border-dark">0</td>
-                    <td class="border border-dark">900K/day</td>
-                    <td class="border border-dark">Cau Giay-Hanoi</td>
-                    <td class="border border-dark">Available</td>
-                    <td class="border border-dark">
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-primary btn-sm" style="margin-bottom: 10px">Rent now</button>
-                            <button class="btn btn-secondary btn-sm">View details</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="border border-dark">2</th>
-                    <td class="border border-dark">Nissan Navara El 2017</td>
-                    <td class="border border-dark"><img src="placeholder.png" alt="Car Image" width="50"></td>
-                    <td class="border border-dark">No ratings</td>
-                    <td class="border border-dark">0</td>
-                    <td class="border border-dark">900K/day</td>
-                    <td class="border border-dark">Cau Giay-Hanoi</td>
-                    <td class="border border-dark">Available</td>
-                    <td class="border border-dark">
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-primary btn-sm" style="margin-bottom: 10px">Rent now</button>
-                            <button class="btn btn-secondary btn-sm">View details</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="border border-dark">3</th>
-                    <td class="border border-dark">Nissan Navara El 2017</td>
-                    <td class="border border-dark"><img src="placeholder.png" alt="Car Image" width="50"></td>
-                    <td class="border border-dark">No ratings</td>
-                    <td class="border border-dark">0</td>
-                    <td class="border border-dark">900K/day</td>
-                    <td class="border border-dark">Cau Giay-Hanoi</td>
-                    <td class="border border-dark">Available</td>
-                    <td class="border border-dark">
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-primary btn-sm" style="margin-bottom: 10px">Rent now</button>
-                            <button class="btn btn-secondary btn-sm">View details</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="border border-dark">4</th>
-                    <td class="border border-dark">Nissan Navara El 2017</td>
-                    <td class="border border-dark"><img src="placeholder.png" alt="Car Image" width="50"></td>
-                    <td class="border border-dark">No ratings</td>
-                    <td class="border border-dark">0</td>
-                    <td class="border border-dark">900K/day</td>
-                    <td class="border border-dark">Cau Giay-Hanoi</td>
-                    <td class="border border-dark">Available</td>
-                    <td class="border border-dark">
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-primary btn-sm" style="margin-bottom: 10px">Rent now</button>
-                            <button class="btn btn-secondary btn-sm">View details</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="border border-dark">5</th>
-                    <td class="border border-dark">Nissan Navara El 2017</td>
-                    <td class="border border-dark"><img src="placeholder.png" alt="Car Image" width="50"></td>
-                    <td class="border border-dark">No ratings</td>
-                    <td class="border border-dark">0</td>
-                    <td class="border border-dark">900K/day</td>
-                    <td class="border border-dark">Cau Giay-Hanoi</td>
-                    <td class="border border-dark">Available</td>
-                    <td class="border border-dark">
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-primary btn-sm" style="margin-bottom: 10px">Rent now</button>
-                            <button class="btn btn-secondary btn-sm">View details</button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                                <span th:each="booking : ${car.bookings}"
+                                      th:if="${booking.feedback != null}"
+                                      class="fa fa-star star-rating"
+                                      th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.three_stars' ? ' checked' : ''}"
+                                      style="font-size: 18px"></span>
+
+                                <span th:each="booking : ${car.bookings}"
+                                      th:if="${booking.feedback != null}"
+                                      class="fa fa-star star-rating"
+                                      th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.four_stars' ? ' checked' : ''}"
+                                      style="font-size: 18px"></span>
+
+                                <span th:each="booking : ${car.bookings}"
+                                      th:if="${booking.feedback != null}"
+                                      class="fa fa-star star-rating"
+                                      th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                      style="font-size: 18px"></span>
+                            </div>
+                            <div>
+                        <span th:if="${car.bookings.size() == 0}"
+                              class="no-ratings-text">(No ratings)</span>
+                            </div>
+                        </td>
+                        <td class="border border-dark" th:text="${car.bookings.size()}">No. of Rides</td>
+                        <td class="border border-dark" th:text="${car.basePrice} + 'K/day'">Price</td>
+                        <td class="border border-dark"
+                            th:if="${car.bookings.size() > 0}"
+                            th:text="${car.bookings.get(0).driverInfo}">Location
+                        </td>
+                        <td class="border border-dark" th:text="${car.status}">Status</td>
+                        <td class="border border-dark">
+                            <div class="d-grid gap-2">
+                                <a class="btn btn-primary btn-sm" style="margin-bottom: 10px" href="#">Rent now</a>
+                                <a class="btn btn-primary btn-sm" href="#">View details</a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </section>
+        <!--   Item per page    -->
+        <form id="itemsPerPageForm" method="get" action="/ThumbView">
+            <!-- Các input ẩn để lưu giá trị cần giữ lại -->
+            <input type="hidden" id="hiddenDriverInfo" name="driverInfo" value="">
+            <input type="hidden" id="hiddenPickupDate" name="pickupDate" value="">
+            <input type="hidden" id="hiddenPickupTime" name="pickupTime" value="">
+            <input type="hidden" id="hiddenDropoffDate" name="dropoffDate" value="">
+            <input type="hidden" id="hiddenDropoffTime" name="dropoffTime" value="">
 
-        <!-- Pagination -->
-        <!-- Pagination -->
-        <div class="row justify-content-center mt-2">
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    <!-- Previous button -->
-                    <li th:if="${page.hasPrevious()}" class="page-item">
-                        <a class="page-link" th:href="@{/ListView(page=${page.getNumber()})}">Previous</a>
-                    </li>
-
-                    <!-- Page numbers -->
-                    <th:block th:each="pageNum : ${pageNums}">
-                        <!-- Active page -->
-                        <th:block th:if="${pageNum == (page.getNumber() + 1)}">
-                            <li class="page-item active">
-                                <a class="page-link" th:href="@{/ListView(page=${pageNum})}" th:text="${pageNum}"></a>
-                            </li>
-                        </th:block>
-
-                        <!-- Other pages -->
-                        <th:block th:if="${pageNum != (page.getNumber() + 1)}">
-                            <li class="page-item">
-                                <a class="page-link"
-                                   th:href="@{/ListView(page=${pageNum}, keyword=${param.keyword}, sortOption=${param.sortOption})}"
-                                   th:text="${pageNum}"></a>
-                            </li>
-                        </th:block>
-                    </th:block>
-
-                    <!-- Next button -->
-                    <li th:if="${page.hasNext()}" class="page-item">
-                        <a class="page-link" th:href="@{/ListView(page=${page.getNumber() + 2})}">Next</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-
-        <!-- Form to handle pagination changes and sorting -->
-        <form id="frmSearch" method="get" th:action="@{/ListView}">
-            <input type="hidden" name="page" th:value="${page.getNumber()}">
-            <input type="hidden" name="sortOption" th:value="${param.sortOption}">
+            <!-- UI thay đổi số lượng item hiển thị -->
+            <div class="items-per-page">
+                <button type="button" class="btn btn-secondary"
+                        style="width: 3%; padding: 6px 12px 6px 12px; margin-left: 50px"
+                        onclick="decreasePageSize()">-
+                </button>
+                <input id="itemsPerPage" name="size" class="form-control"
+                       style="border: 1px solid black; padding: 10px; width: 5%"
+                       min="1" max="15" th:value="${pageSize}" placeholder="1" readonly onchange="this.form.submit()"/>
+                <button type="button" class="btn btn-secondary" style="width: 3%; padding: 6px 12px 6px 12px"
+                        onclick="increasePageSize()">+
+                </button>
+                <label for="itemsPerPage" style="margin-left: 10px; margin-top: 12px">per page</label>
+            </div>
         </form>
 
-        <div class="items-per-page">
-            <input type="number" id="itemsPerPage" name="itemsPerPage" value="2" min="1" max="10" class="number-input"
-                   style="border: 1px solid black">
-            <label for="itemsPerPage" style="margin-left: 10px">per page</label>
-        </div>
+        <!-- Pagination -->
+        <!--        <div class="row justify-content-center mt-2">-->
+        <!--            <nav aria-label="Page navigation">-->
+        <!--                <ul class="pagination justify-content-center">-->
+        <!--                    &lt;!&ndash; Previous Page &ndash;&gt;-->
+        <!--                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">-->
+        <!--                        <a class="page-link" th:href="@{/ThumbView((page=${currentPage - 1})}" aria-label="Previous">-->
+        <!--                            <span aria-hidden="true">Previous</span>-->
+        <!--                        </a>-->
+        <!--                    </li>-->
+
+        <!--                    &lt;!&ndash; Page Numbers &ndash;&gt;-->
+        <!--                    <li th:each="pageNum : ${pageNums}" th:classappend="${pageNum == currentPage} ? 'active'">-->
+        <!--                        <a class="page-link" th:href="@{/ThumbView((page=${pageNum})}" th:text="${pageNum}"></a>-->
+        <!--                    </li>-->
+
+        <!--                    &lt;!&ndash; Next Page &ndash;&gt;-->
+        <!--                    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">-->
+        <!--                        <a class="page-link" th:href="@{/ThumbView((page=${currentPage + 1})}" aria-label="Next">-->
+        <!--                            <span aria-hidden="true">Next</span>-->
+        <!--                        </a>-->
+        <!--                    </li>-->
+        <!--                </ul>-->
+        <!--            </nav>-->
+        <!--        </div>-->
     </section>
 </main>
 
 <!-- Include Footer Fragment -->
 <div th:replace="fragments/fragment :: footer"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+    function increasePageSize() {
+        var input = document.getElementById("itemsPerPage");
+        var currentValue = parseInt(input.value || input.placeholder);
+        if (currentValue < 15) {
+            input.value = currentValue + 1;
+            input.placeholder = currentValue + 1;
+            storeFormData();
+            document.getElementById("itemsPerPageForm").submit();
+        }
+    }
+
+    function decreasePageSize() {
+        var input = document.getElementById("itemsPerPage");
+        var currentValue = parseInt(input.value || input.placeholder);
+        if (currentValue > 1) {
+            input.value = currentValue - 1;
+            input.placeholder = currentValue - 1;
+            storeFormData();
+            document.getElementById("itemsPerPageForm").submit();
+        }
+    }
+
+    // Hàm lưu giá trị của form hiện tại vào input ẩn
+    function storeFormData() {
+        document.getElementById('hiddenDriverInfo').value = document.getElementById('pickupLocation').value;
+        document.getElementById('hiddenPickupDate').value = document.getElementById('pickupDate').value;
+        document.getElementById('hiddenPickupTime').value = document.getElementById('pickupTime').value;
+        document.getElementById('hiddenDropoffDate').value = document.getElementById('dropoffDate').value;
+        document.getElementById('hiddenDropoffTime').value = document.getElementById('dropoffTime').value;
+    }
+</script>
 <script>
     $(document).ready(function () {
         // Initialize datepickers
@@ -377,10 +369,10 @@
         // Initialize timepickers
         $('#pickupTime').timepicker({
             timeFormat: 'HH:mm',
-            interval: 30, // Cách nhau 30 phút
-            minTime: '00:00am',
-            maxTime: '11:59pm',
-            defaultTime: 'HH:mm',
+            interval: 30,
+            minTime: '00:00',
+            maxTime: '23:59',
+            defaultTime: '00:00',
             startTime: '00:00',
             dynamic: false,
             dropdown: true,
@@ -389,10 +381,10 @@
 
         $('#dropoffTime').timepicker({
             timeFormat: 'HH:mm',
-            interval: 30, // Cách nhau 30 phút
-            minTime: '00:00am',
-            maxTime: '11:59pm',
-            defaultTime: 'HH:mm',
+            interval: 30,
+            minTime: '00:00',
+            maxTime: '23:59',
+            defaultTime: '00:00',
             startTime: '00:00',
             dynamic: false,
             dropdown: true,
@@ -409,6 +401,29 @@
             $(this).closest('.input-wrapper').find('input').timepicker('show');
         });
     });
+
+    // Combine date and time into LocalDateTime format before submitting
+    function combineDateTime() {
+        // Get pickup date and time
+        var pickupDate = document.getElementById('pickupDate').value;
+        var pickupTime = document.getElementById('pickupTime').value;
+
+        // Format pickupDate to yyyy-MM-dd
+        var formattedPickupDate = pickupDate.split('/').reverse().join('-'); // Converts DD/MM/YYYY to YYYY-MM-DD
+
+        // Combine into startDateTime
+        document.getElementById('startDateTime').value = formattedPickupDate + 'T' + pickupTime;
+
+        // Get dropoff date and time
+        var dropoffDate = document.getElementById('dropoffDate').value;
+        var dropoffTime = document.getElementById('dropoffTime').value;
+
+        // Format dropoffDate to yyyy-MM-dd
+        var formattedDropoffDate = dropoffDate.split('/').reverse().join('-'); // Converts DD/MM/YYYY to YYYY-MM-DD
+
+        // Combine into endDateTime
+        document.getElementById('endDateTime').value = formattedDropoffDate + 'T' + dropoffTime;
+    }
 </script>
 <script>
     const optionMenu = document.querySelector(".select-menu"),
@@ -420,8 +435,7 @@
 
     options.forEach(option => {
         option.addEventListener("click", () => {
-            let selectedOption = option.querySelector(".option-text").innerText;
-            sBtn_text.innerText = selectedOption;
+            sBtn_text.innerText = option.querySelector(".option-text").innerText;
 
             // Change the page location based on the selected option
             let value = option.getAttribute("data-value");
@@ -434,50 +448,24 @@
     });
 </script>
 <script>
-    document.getElementById('itemsPerPage').addEventListener('change', function () {
-        let itemsPerPage = parseInt(this.value);
-        let cards = document.querySelectorAll('#cardContainer .card');
-
-        // Hide all cards initially
-        cards.forEach((card, index) => {
-            card.style.display = 'none';
-        });
-
-        // Show the selected number of cards
-        for (let i = 0; i < itemsPerPage && i < cards.length; i++) {
-            cards[i].style.display = 'block';
-        }
-    });
-
-    // Trigger change event on page load to show the initial number of cards
-    document.getElementById('itemsPerPage').dispatchEvent(new Event('change'));
-</script>
-<script>
-    function combineDateTime() {
-        // Get pickup date and time
-        var pickupDate = document.getElementById('pickupDate').value;
-        var pickupTime = document.getElementById('pickupTime').value;
-
-        // Combine into startDateTime
-        var startDateTime = pickupDate + ',' + pickupTime;
-        document.getElementById('startDateTime').value = startDateTime;
-
-        // Get dropoff date and time
-        var dropoffDate = document.getElementById('dropoffDate').value;
-        var dropoffTime = document.getElementById('dropoffTime').value;
-
-        // Combine into endDateTime
-        var endDateTime = dropoffDate + ',' + dropoffTime;
-        document.getElementById('endDateTime').value = endDateTime;
-    }
-</script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    function setUpPage(pageNumber) {
-        document.querySelector('input[name="page"]').value = pageNumber;
+    function setUpPage(pageNumber1) {
+        document.querySelector('input[name="page"]').value = pageNumber1;
         document.querySelector('#frmSearch').submit();
     }
+
+    options.forEach(option => {
+        option.addEventListener("click", () => {
+            sBtn_text.innerText = option.querySelector(".option-text").innerText;
+
+            // Change the page location based on the selected option
+            let value = option.getAttribute("data-value");
+            if (value) {
+                location.href = value;
+            }
+
+            optionMenu.classList.remove("active");
+        });
+    });
 </script>
 </body>
 </html>

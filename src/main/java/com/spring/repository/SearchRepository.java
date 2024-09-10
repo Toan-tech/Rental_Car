@@ -1,9 +1,6 @@
 package com.spring.repository;
 
-import com.spring.entities.Booking;
-import com.spring.entities.BookingStatus;
-import com.spring.entities.FeedBack;
-import com.spring.entities.RatingStar;
+import com.spring.entities.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,6 +24,7 @@ public interface SearchRepository extends JpaRepository<Booking, Integer> {
                                  @Param("startDate") LocalDateTime startDate,
                                  @Param("endDate") LocalDateTime endDate);
 
+
     @Query("SELECT b FROM Booking b WHERE b.driverInfo LIKE %:driverInfo% " +
             "AND b.startDateTime >= :startDate AND b.endDateTime <= :endDate")
     Page<Booking> findDriverInfo(@Param("driverInfo") String driverInfo,
@@ -34,7 +32,9 @@ public interface SearchRepository extends JpaRepository<Booking, Integer> {
                                  @Param("endDate") LocalDateTime endDate,
                                  Pageable pageable);
 
-    Page<Booking> findByStatus(BookingStatus status, Pageable pageable);
+    List<Booking> findByStatus(BookingStatus status);
+
+    List<Booking> findBookingsByCarId(Integer carId);
 
     // Helper method to get sorting option
     default Sort getSortOption(String sortOption) {

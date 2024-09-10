@@ -2,9 +2,12 @@ package com.spring.controller;
 
 import com.spring.entities.Booking;
 import com.spring.entities.BookingStatus;
+import com.spring.entities.Car;
 import com.spring.entities.FeedBack;
+import com.spring.repository.CarRepository;
 import com.spring.repository.RatingRepository;
 import com.spring.repository.SearchRepository;
+import com.spring.service.RatingService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,87 +25,28 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
-public class CustomerController {
+public class CustomerThumbViewController {
 
     @Autowired
     private SearchRepository searchRepository;
 
     @Autowired
-    private RatingRepository ratingRepository;
+    private RatingService ratingService;
 
-    @GetMapping({"/", "/Homepage"})
-    public String home(Model model) {
-        model.addAttribute("booking", new Booking());
-        return "layout/customer/Homepage";
-    }
-
-    @Transactional
-    @PostMapping("/Homepage")
-    public String searchBookings(@ModelAttribute("booking") Booking booking, Model model) {
-        // Fetch bookings based on search criteria
-        List<Booking> bookings = searchRepository.searchBooking(
-                booking.getDriverInfo(),
-                booking.getStartDateTime(),
-                booking.getEndDateTime()
-        );
-
-        // Check if the bookings list is empty
-        if (bookings.isEmpty()) {
-            model.addAttribute("errorMessage", "No cars match your credentials, please try again.");
-            return "layout/customer/Homepage";
-        }
-
-        // Validate if the end date is after the start date
-        if (booking.getEndDateTime().isBefore(booking.getStartDateTime())) {
-            model.addAttribute("errorMessage", "Drop-off date time must be later than pick-up date time, please try again.");
-            return "layout/customer/Homepage";
-        }
-
-        // Count the total number of cars in the result
-        long numberOfCar = bookings.size();
-
-        // Completed rides
-        int completedRides = 0;
-        for (Booking b : bookings) {
-            if (b.getStatus().equals(BookingStatus.Completed)) {
-                completedRides++;
-            }
-        }
-
-        // Get feedback ratings
-        List<FeedBack> feedbackList = ratingRepository.findFeedbackByBooking(booking);
-        int[] starRatings = new int[5];
-
-        feedbackList.forEach(feedback -> {
-            switch (feedback.getRatings()) {
-                case one_star -> starRatings[0]++;
-                case two_stars -> starRatings[1]++;
-                case three_stars -> starRatings[2]++;
-                case four_stars -> starRatings[3]++;
-                case five_stars -> starRatings[4]++;
-            }
-        });
-
-        // Set model attributes for view
-        model.addAttribute("NumberOfCar", numberOfCar);
-        model.addAttribute("CarCount", completedRides);
-        model.addAttribute("pickupDate", booking.getStartDateTime().toLocalDate());
-        model.addAttribute("pickupTime", booking.getStartDateTime().toLocalTime());
-        model.addAttribute("dropoffDate", booking.getEndDateTime().toLocalDate());
-        model.addAttribute("dropoffTime", booking.getEndDateTime().toLocalTime());
-        model.addAttribute("bookings", bookings);
-
-        return "layout/customer/ThumbView";
-    }
-
+    @Autowired
+    private CarRepository carRepository;
 
     @Transactional
     @RequestMapping(value = "/ThumbView", method = {RequestMethod.POST, RequestMethod.GET})
     public String searchThumbView(
             @ModelAttribute("booking") @Valid Booking booking,
+            @ModelAttribute("car") Car car,
             @RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
             @RequestParam(value = "size", defaultValue = "1") int pageSize,
             @RequestParam(value = "sortOption", defaultValue = "newest") String sortOption,
@@ -130,6 +74,19 @@ public class CustomerController {
         Sort sort = searchRepository.getSortOption(sortOption);
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
 
+        // Fetch bookings based on search criteria
+        List<Booking> bookings = searchRepository.searchBooking(
+                booking.getDriverInfo(),
+                booking.getStartDateTime(),
+                booking.getEndDateTime()
+        );
+
+        // Extract the list of cars from the bookings
+        List<Car> cars = bookings.stream()
+                .map(Booking::getCar)
+                .distinct()
+                .collect(Collectors.toList());
+
         Page<Booking> page = searchRepository.findDriverInfo(
                 booking.getDriverInfo(),
                 booking.getStartDateTime(),
@@ -142,34 +99,32 @@ public class CustomerController {
             return "layout/customer/ThumbView";
         }
 
-        if (booking.getEndDateTime().isBefore(booking.getStartDateTime())) {
-            model.addAttribute("errorMessage", "Drop-off date time must be later than pick-up date time, please try again.");
-            return "layout/customer/ThumbView";
-        }
-
         // Get total count of cars matching the criteria
-        long numberOfCar = page.getTotalElements();
+        long numberOfCar = cars.size();
 
         // CompletedRides
-        Page<Booking> confirmedBookings = searchRepository.findByStatus(BookingStatus.Completed, pageable);
-        int completedRides = confirmedBookings.getSize();
+        List<Booking> carListThatCompletedBooking = searchRepository.findByStatus(BookingStatus.Completed);
+
+        Map<Car, Integer> carBookingCountMap = new HashMap<>();
+
+        for (Booking completedBooking : carListThatCompletedBooking) {
+            car = completedBooking.getCar();
+            carBookingCountMap.put(car, carBookingCountMap.getOrDefault(car, 0) + 1);
+        }
+
+        int completedRides = 0;
+
+        for (Map.Entry<Car, Integer> entry : carBookingCountMap.entrySet()) {
+            if (entry.getValue() >= 1) {
+                completedRides += entry.getValue();
+            }
+        }
 
         // Get feedback ratings
-        List<FeedBack> feedbackList = ratingRepository.findFeedbackByBooking(booking);
-        int[] starRatings = new int[5];
-
-        feedbackList.forEach(feedback -> {
-            switch (feedback.getRatings()) {
-                case one_star -> starRatings[0]++;
-                case two_stars -> starRatings[1]++;
-                case three_stars -> starRatings[2]++;
-                case four_stars -> starRatings[3]++;
-                case five_stars -> starRatings[4]++;
-            }
-        });
+        FeedBack feedback = ratingService.getFeedbackByBooking(booking);
 
         // Pagination
-        int totalPages = page.getTotalPages();
+        int totalPages = (int) Math.ceil((double) bookings.size() / pageSize);
         List<Integer> pageNums = new ArrayList<>();
         for (int i = 1; i <= totalPages; i++) {
             pageNums.add(i);
@@ -183,7 +138,7 @@ public class CustomerController {
 
         // Additional model attributes for pagination, ratings, etc.
         model.addAttribute("NumberOfCar", numberOfCar);
-        model.addAttribute("starRatings", List.of(starRatings));
+        model.addAttribute("feedback", feedback);
         model.addAttribute("CarCount", completedRides);
         model.addAttribute("pageNums", pageNums);
         model.addAttribute("pageSize", pageSize);
@@ -191,7 +146,26 @@ public class CustomerController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("page", page);
         model.addAttribute("sortOption", sortOption);
+        model.addAttribute("bookings", bookings);
+        model.addAttribute("cars", cars);
 
         return "layout/customer/ThumbView";
     }
+
+    @GetMapping("/viewDetails")
+    public String viewBookingDetails(@RequestParam("carId") Integer carId, Model model) {
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id:" + carId));
+
+        // Get bookings for the selected car
+        List<Booking> bookings = searchRepository.findBookingsByCarId(carId);
+
+        // Set car and bookings details in the model
+        model.addAttribute("car", car);
+        model.addAttribute("bookings", bookings);
+
+        return "layout/customer/ViewDetails_BasicInformation";
+    }
+
+
 }

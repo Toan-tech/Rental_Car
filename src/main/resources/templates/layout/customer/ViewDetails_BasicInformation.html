@@ -51,16 +51,15 @@
         }
 
         .star-rating {
-            font-size: 1.5em;
-            color: #ddd;
-            cursor: pointer;
+            color: #d3d3d3; /* Default star color */
+            font-size: 24px;
         }
 
         .star-rating.checked {
-            color: gold;
+            color: #ffcc00; /* Color for checked stars */
         }
 
-        th, td{
+        th, td {
             font-size: 1.2em;
         }
     </style>
@@ -73,9 +72,9 @@
     <section>
         <nav aria-label="breadcrumb" style="padding: 10px;">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Search Results</a></li>
-                <li class="breadcrumb-item"><a href="#">Car Details</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/Homepage.html}">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/ThumbView.html}">Search Results</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/ViewDetails_BasicInformation}">Car Details</a></li>
             </ol>
         </nav>
         <h1 style="padding-left: 20px;">Car Details</h1>
@@ -113,30 +112,85 @@
                         <li data-target="#imageCarousel1" data-slide-to="2"></li>
                     </ol>
                 </div>
-                <div class="col-md-6">
-                    <div class="card-body">
-                        <h2 class="card-title" style="padding-top: 40px">Nissan Navara El 2017</h2>
-                        <p class="card-text">
-                            <strong>Ratings:</strong>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="1"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="2"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="3"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="4"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="5"></span>
-                            <span class="no-ratings-text" data-card="1">(No ratings yet)</span>
-                        </p>
-                        <p class="card-text">
-                            <strong>No. of rides:</strong> 0
-                            <br>
-                            <strong>Price:</strong> 900k/day
-                            <br>
-                            <strong>Locations:</strong> Cau Giay, Hanoi
-                            <br>
-                            <strong>Status:</strong> <span class="text-success">Available</span>
-                        </p>
-                        <a href="#" class="btn btn-primary" style="margin-right: 10px; padding: 10px"><span style="font-size: 19px">Rent now</span></a>
+                <form th:action="@{/viewDetails}" method="get" id="card-view">
+                    <div id="booking-container" th:field="car">
+                        <div class="col-md-12">
+                            <div class="card-body">
+                                <strong class="card-title" style=" font-size: 45px"
+                                        th:text="${car.name}">Car Name</strong>
+                                <span style="font-size: 28px"
+                                      th:text="'(' + ${car.brand} + ' - ' + ${car.model} + ')'">CarBranch - CarModel</span>
+                                <div style="font-size: 18px; margin-top: 15px; margin-bottom: 10px">
+                                    <div id="rating-container">
+                                        <div>
+                                            <strong style="font-size: 20px; color: #6c757d; margin-right: 10px">Ratings: </strong>
+                                            <span th:each="booking : ${car.bookings}"
+                                                  th:if="${booking.feedback != null}"
+                                                  class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.one_star' || booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+
+                                            <span th:each="booking : ${car.bookings}"
+                                                  th:if="${booking.feedback != null}"
+                                                  class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+
+                                            <span th:each="booking : ${car.bookings}"
+                                                  th:if="${booking.feedback != null}"
+                                                  class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+
+                                            <span th:each="booking : ${car.bookings}"
+                                                  th:if="${booking.feedback != null}"
+                                                  class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+
+                                            <span th:each="booking : ${car.bookings}"
+                                                  th:if="${booking.feedback != null}"
+                                                  class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+                                        </div>
+                                        <div>
+                                            <span th:each="booking : ${car.bookings}"
+                                                  class="no-ratings-text"
+                                                  th:if="${booking.feedback == null || booking.feedback.ratings == null}">(No ratings yet)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text">
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">No. of rides: </strong>
+                                        <span th:text="${car.bookings.size()}"
+                                              style="margin-left: 10px; font-size: 20px">0</span><br>
+                                    </div>
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">Price: </strong>
+                                        <span th:text="${car.basePrice} + '/day'"
+                                              style="margin-left: 10px; font-size: 20px">N/A</span><br>
+                                    </div>
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">Locations: </strong>
+                                        <span th:if="${car.bookings.size() > 0}"
+                                              th:text="${car.bookings.get(0).driverInfo}"
+                                              style="margin-left: 10px; font-size: 20px">Unknown</span><br>
+                                    </div>
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">Status: </strong>
+                                        <span class="text-success" th:text="${car.status}"
+                                              style="margin-left: 10px; font-size: 20px">Status</span>
+                                    </div>
+                                </div>
+                                <a href="#" class="btn btn-primary"
+                                   style="margin-right: 10px; padding: 10px; margin-top: 10px"><span
+                                        style="font-size: 19px">Rent now</span></a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </section>
@@ -145,7 +199,8 @@
         <!-- Tabs for navigation -->
         <ul class="nav nav-tabs" id="carDetailsTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" href="/templates/layout/customer/ViewDetails_BasicInformation">Basic Information</a>
+                <a class="nav-link active" href="/templates/layout/customer/ViewDetails_BasicInformation">Basic
+                    Information</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/templates/layout/customer/ViewDetails_Details">Details</a>
@@ -156,53 +211,83 @@
         </ul>
         <!-- Tab content -->
         <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
-            <div class="tab-pane fade show active" id="basic-info" role="tabpanel" aria-labelledby="basic-info-tab">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>License plate:</strong></p>
-                        <p><strong>Brand name:</strong></p>
-                        <p><strong>Production year:</strong></p>
-                        <p><strong>Transmission:</strong></p>
-                        <p><strong>Documents:</strong></p>
+            <div class="tab-pane fade show active" id="basic-info" role="tabpanel" aria-labelledby="basic-info-tab"
+                 th:field="car">
+                <form th:action="@{/viewDetails}" method="get">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>
+                                <strong>License plate:</strong>
+                                <span th:text="' ' + ${car.licensePlate}">License plate</span>
+                            </p>
+                            <p>
+                                <strong>Brand name:</strong>
+                                <span th:text="' ' + ${car.brand}">Brand name</span>
+                            </p>
+                            <p>
+                                <strong>Production year:</strong>
+                                <span th:text="' ' + ${car.productionYears}">Production year</span>
+                            </p>
+                            <p>
+                                <strong>Transmission:</strong>
+                                <span th:text="' ' + ${car.transmissionType}">Transmission</span>
+                            </p>
+                            <p>
+                                <strong>Documents:</strong>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                <strong>Color:</strong>
+                                <span th:text="' ' + ${car.color}">Color</span>
+                            </p>
+                            <p>
+                                <strong>Model:</strong>
+                                <span th:text="' ' + ${car.model}">Model</span>
+                            </p>
+                            <p>
+                                <strong>No. of seats:</strong>
+                                <span th:text="' ' + ${car.numberOfSeats}">Number of seats</span>
+                            </p>
+                            <p>
+                                <strong>Fuel:</strong>
+                                <span th:text="' ' + ${car.fuelType}">Fuel type</span>
+                            </p>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <p><strong>Color:</strong></p>
-                        <p><strong>Model:</strong></p>
-                        <p><strong>No. of seats:</strong></p>
-                        <p><strong>Fuel:</strong></p>
-                    </div>
-                </div>
+<!-- Cần chỉnh sửa lại khi merge lịa code -->
+                    <!-- Documents Table -->
+                    <table class="table table-bordered mt-3">
+                        <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Note</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Registration paper</td>
+                            <td>Verified</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Certificate of Inspection</td>
+                            <td>Verified</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Insurance</td>
+                            <td>Not available</td>
+                        </tr>
+                        </tbody>
+                    </table>
 
-                <!-- Documents Table -->
-                <table class="table table-bordered mt-3">
-                    <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Name</th>
-                        <th>Note</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Registration paper</td>
-                        <td>Verified</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Certificate of Inspection</td>
-                        <td>Verified</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Insurance</td>
-                        <td>Not available</td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <!-- Note Section -->
-                <p class="text-muted"><small>Note: Documents will be available for viewing after you've paid the deposit to rent.</small></p>
+                    <!-- Note Section -->
+                    <p class="text-muted"><small>Note: Documents will be available for viewing after you've paid the
+                        deposit to rent.</small></p>
+                </form>
             </div>
             <!-- Other tabs content can go here -->
             <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
@@ -238,32 +323,6 @@
             }
 
             optionMenu.classList.remove("active");
-        });
-    });
-</script>
-<script>
-    document.querySelectorAll('.star-rating').forEach(function (star) {
-        star.addEventListener('click', function () {
-            var card = this.getAttribute('data-card');
-            var rating = parseInt(this.getAttribute('data-rating'));
-
-            // Xóa lớp 'checked' của tất cả ngôi sao trong card hiện tại
-            document.querySelectorAll('.star-rating[data-card="' + card + '"]').forEach(function (star) {
-                star.classList.remove('checked');
-            });
-
-            // Thêm lớp 'checked' cho các ngôi sao đến ngôi sao được chọn trong card hiện tại
-            for (var i = 1; i <= rating; i++) {
-                document.querySelector('.star-rating[data-card="' + card + '"][data-rating="' + i + '"]').classList.add('checked');
-            }
-
-            // Ẩn hoặc hiện thẻ (No ratings yet)
-            var noRatingsText = document.querySelector('.no-ratings-text[data-card="' + card + '"]');
-            if (rating > 0) {
-                noRatingsText.style.display = 'none';
-            } else {
-                noRatingsText.style.display = 'inline';
-            }
         });
     });
 </script>

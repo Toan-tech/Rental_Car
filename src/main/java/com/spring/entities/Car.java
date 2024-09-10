@@ -53,7 +53,7 @@ public class Car {
     @Column(name = "Fuel_Consumption", precision = 18, scale = 2, nullable = false)
     private BigDecimal fuelConsumption;
 
-    @Column(name = "Base_Price", precision = 18, scale = 2, nullable = false)
+    @Column(name = "Base_Price", precision = 18, scale = 3, nullable = false)
     private BigDecimal basePrice;
 
     @Column(name = "Deposit", precision = 18, scale = 2, nullable = false)

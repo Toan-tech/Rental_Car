@@ -71,11 +71,12 @@
         }
 
         .star-rating {
+            color: #d3d3d3; /* Default star color */
             font-size: 24px;
         }
 
-        .star {
-            color: gold;
+        .star-rating.checked {
+            color: #ffcc00; /* Color for checked stars */
         }
     </style>
 </head>
@@ -106,13 +107,13 @@
                     <div style="display: flex; gap: 10px;">
                         <div class="input-wrapper" style="flex: 1">
                             <input class="form-control" id="pickupDate" name="pickupDate" placeholder="DD/MM/YYYY"
-                                   th:value="${pickupDate}" readonly required>
+                                   th:value="${pickupDate}" readonly>
                             <i class='bx bx-calendar' style="font-size: 20px;"
                                onclick="$('#pickupDate').datepicker('show');"></i>
                         </div>
                         <div class="input-wrapper" style="flex: 1">
                             <input class="form-control" id="pickupTime" name="pickupTime" placeholder="HH:MM"
-                                   th:value="${pickupTime}" readonly required>
+                                   th:value="${pickupTime}" readonly>
                             <i class='bx bx-time' style="font-size: 20px;"
                                onclick="$('#pickupTime').timepicker('show');"></i>
                         </div>
@@ -139,6 +140,14 @@
                     </div>
                     <!-- Hidden input for endDateTime -->
                     <input type="hidden" th:field="*{endDateTime}" id="endDateTime">
+                    <!--       Check fields        -->
+                    <div th:if="${#fields.hasErrors('endDateTime')}" class="text-danger">
+                        <p th:errors="*{endDateTime}">Please enter drop-off date and time</p>
+                    </div>
+                    <div th:if="${#fields.hasErrors('endDateTime')}" class="text-danger">
+                        <p th:if="${#fields.hasErrors('endDateTime')}" th:errors="*{endDateTime}">Drop-off date and time
+                            must be later than pick-up date and time</p>
+                    </div>
                 </div>
                 <div style="text-align: center;">
                     <button type="submit" class="btn btn-primary" style="width: 30%; margin-top: 20px"
@@ -204,91 +213,91 @@
                         <li data-target="#imageCarousel1" data-slide-to="2"></li>
                     </ol>
                 </div>
-                <div th:each="booking : ${bookings}">
-                    <div class="col-md-12">
-                        <div class="card-body">
-                            <h2 class="card-title" style="padding-top: 40px"
-                                th:text="${booking.car.name} + ${booking.car.model}">Car Name</h2>
-                            <div style="font-size: 18px; margin-left: 50px; margin-top: 10px; color: #6c757d">
-                                <div id="rating-container">
-                                    <!-- Hiển thị thông báo nếu không có đánh giá nào -->
-                                    <div th:if="${#lists.isEmpty(starRatings)}">
-                                        <p>No ratings available.</p>
-                                    </div>
-                                    <!-- Hiển thị đánh giá sao nếu có -->
-                                    <div th:unless="${#lists.isEmpty(starRatings)}">
-                                        <div th:each="rating, iterStat : ${starRatings}">
-                                            <div th:if="${iterStat.index > 0}">
-                                                <!-- Thêm khoảng cách giữa các đánh giá -->
-                                                <br/>
-                                            </div>
-                                            <span class="star-rating">
-                                                <!-- Lặp lại các sao theo số lượng đánh giá -->
-                                                <span th:each="i : ${#numbers.sequence(0, iterStat.index)}"
-                                                      class="star">&#9733;</span>
-                                            </span>
+                <form th:action="@{/ThumbView}" method="get" id="card-view">
+                    <div id="booking-container" th:each="car : ${cars}">
+                        <div class="col-md-12">
+                            <div class="card-body">
+                                <strong class="card-title" style=" font-size: 45px"
+                                        th:text="${car.name}">Car Name</strong>
+                                <span style="font-size: 28px"
+                                      th:text="'(' + ${car.brand} + ' - ' + ${car.model} + ')'">CarBranch - CarModel</span>
+                                <div style="font-size: 18px; margin-top: 15px; margin-bottom: 10px">
+                                    <div id="rating-container">
+                                        <div>
+                                            <strong style="font-size: 20px; color: #6c757d; margin-right: 10px">Ratings: </strong>
+                                            <span th:each="booking : ${car.bookings}"
+                                                  th:if="${booking.feedback != null}"
+                                                  class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.one_star' || booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+
+                                            <span th:each="booking : ${car.bookings}"
+                                                  th:if="${booking.feedback != null}"
+                                                  class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+
+                                            <span th:each="booking : ${car.bookings}"
+                                                  th:if="${booking.feedback != null}"
+                                                  class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+
+                                            <span th:each="booking : ${car.bookings}"
+                                                  th:if="${booking.feedback != null}"
+                                                  class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+
+                                            <span th:each="booking : ${car.bookings}"
+                                                  th:if="${booking.feedback != null}"
+                                                  class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+                                        </div>
+                                        <div>
+                                            <span th:each="booking : ${car.bookings}"
+                                                  class="no-ratings-text"
+                                                  th:if="${booking.feedback == null || booking.feedback.ratings == null}">(No ratings yet)</span>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="card-text">
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">No. of rides: </strong>
+                                        <span th:text="${car.bookings.size()}"
+                                              style="margin-left: 10px; font-size: 20px">0</span><br>
+                                    </div>
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">Price: </strong>
+                                        <span th:text="${car.basePrice} + '/day'"
+                                              style="margin-left: 10px; font-size: 20px">N/A</span><br>
+                                    </div>
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">Locations: </strong>
+                                        <span th:if="${car.bookings.size() > 0}"
+                                              th:text="${car.bookings.get(0).driverInfo}"
+                                              style="margin-left: 10px; font-size: 20px">Unknown</span><br>
+                                    </div>
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">Status: </strong>
+                                        <span class="text-success" th:text="${car.status}"
+                                              style="margin-left: 10px; font-size: 20px">Status</span>
+                                    </div>
+                                </div>
+                                <a href="#" class="btn btn-primary"
+                                   style="margin-right: 10px; padding: 10px; margin-top: 10px"><span
+                                        style="font-size: 19px">Rent now</span></a>
+                                <a th:href="@{/viewDetails(carId=${car.id})}" class="btn btn-primary"
+                                   style="padding: 10px; margin-top: 10px">
+                                    <span style="font-size: 19px">View details</span>
+                                </a>
                             </div>
-
-                            <div class="card-text">
-                                <div>
-                                    <strong style="font-size: 20px; color: #6c757d">No. of rides: </strong>
-                                    <span th:text="${CarCount}" style="margin-left: 10px;">0</span><br>
-                                </div>
-                                <div>
-                                    <strong style="font-size: 20px; color: #6c757d">Price: </strong>
-                                    <span th:if="${booking?.car != null}"
-                                          th:text="${booking.car.basePrice}" style="margin-left: 10px">N/A</span><br>
-                                </div>
-                                <div>
-                                    <strong style="font-size: 20px; color: #6c757d">Locations: </strong>
-                                    <span th:if="${booking != null}"
-                                          th:text="${booking.driverInfo}" style="margin-left: 10px">Unknown</span><br>
-                                </div>
-                                <div>
-                                    <strong style="font-size: 20px; color: #6c757d">Status: </strong>
-                                    <span class="text-success" th:text="${booking.car.status}"
-                                          style="margin-left: 10px">Status</span>
-                                </div>
-                            </div>
-                            <a href="#" class="btn btn-primary"
-                               style="margin-right: 10px; padding: 10px; margin-top: 10px"><span
-                                    style="font-size: 19px">Rent now</span></a>
-                            <a href="#" class="btn btn-primary" style="padding: 10px ; margin-top: 10px"><span
-                                    style="font-size: 19px">View details</span></a>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
-        <!--  Pagination     -->
-<!--        <div class="row justify-content-center mt-2">-->
-<!--            <nav aria-label="Page navigation">-->
-<!--                <ul class="pagination justify-content-center">-->
-<!--                    &lt;!&ndash; Previous Page &ndash;&gt;-->
-<!--                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">-->
-<!--                        <a class="page-link" th:href="@{/ThumbView((page=${currentPage - 1})}" aria-label="Previous">-->
-<!--                            <span aria-hidden="true">Previous</span>-->
-<!--                        </a>-->
-<!--                    </li>-->
-
-<!--                    &lt;!&ndash; Page Numbers &ndash;&gt;-->
-<!--                    <li th:each="pageNum : ${pageNums}" th:classappend="${pageNum == currentPage} ? 'active'">-->
-<!--                        <a class="page-link" th:href="@{/ThumbView((page=${pageNum})}" th:text="${pageNum}"></a>-->
-<!--                    </li>-->
-
-<!--                    &lt;!&ndash; Next Page &ndash;&gt;-->
-<!--                    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">-->
-<!--                        <a class="page-link" th:href="@{/ThumbView((page=${currentPage + 1})}" aria-label="Next">-->
-<!--                            <span aria-hidden="true">Next</span>-->
-<!--                        </a>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </nav>-->
-<!--        </div>-->
-
         <!--   Item per page    -->
         <form id="itemsPerPageForm" method="get" action="/ThumbView">
             <!-- Các input ẩn để lưu giá trị cần giữ lại -->
@@ -308,7 +317,31 @@
                 <label for="itemsPerPage" style="margin-left: 10px; margin-top: 12px">per page</label>
             </div>
         </form>
+        <!--  Pagination     -->
+        <!--                <div class="row justify-content-center mt-2">-->
+        <!--                    <nav aria-label="Page navigation">-->
+        <!--                        <ul class="pagination justify-content-center">-->
+        <!--                            &lt;!&ndash; Previous Page &ndash;&gt;-->
+        <!--                            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">-->
+        <!--                                <a class="page-link" th:href="@{/ThumbView((page=${currentPage - 1})}" aria-label="Previous">-->
+        <!--                                    <span aria-hidden="true">Previous</span>-->
+        <!--                                </a>-->
+        <!--                            </li>-->
 
+        <!--                            &lt;!&ndash; Page Numbers &ndash;&gt;-->
+        <!--                            <li th:each="pageNum : ${pageNums}" th:classappend="${pageNum == currentPage} ? 'active'">-->
+        <!--                                <a class="page-link" th:href="@{/ThumbView((page=${pageNum})}" th:text="${pageNum}"></a>-->
+        <!--                            </li>-->
+
+        <!--                            &lt;!&ndash; Next Page &ndash;&gt;-->
+        <!--                            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">-->
+        <!--                                <a class="page-link" th:href="@{/ThumbView((page=${currentPage + 1})}" aria-label="Next">-->
+        <!--                                    <span aria-hidden="true">Next</span>-->
+        <!--                                </a>-->
+        <!--                            </li>-->
+        <!--                        </ul>-->
+        <!--                    </nav>-->
+        <!--                </div>-->
     </section>
 </main>
 
@@ -346,34 +379,7 @@
         document.getElementById('hiddenDropoffDate').value = document.getElementById('dropoffDate').value;
         document.getElementById('hiddenDropoffTime').value = document.getElementById('dropoffTime').value;
     }
-
 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Lấy dữ liệu starRatings từ Thymeleaf
-        const starRatings = /*[[${starRatings}]]*/ []; // Thay thế bằng dữ liệu Thymeleaf
-
-        function renderRatings(ratings) {
-            const container = document.getElementById('rating-container');
-            container.innerHTML = '';
-
-            if (ratings.length === 0) {
-                container.innerHTML = '<p>No ratings available.</p>';
-                return;
-            }
-
-            ratings.forEach((rating, index) => {
-                const ratingDiv = document.createElement('div');
-                // Hiển thị sao cho số lượng đánh giá
-                ratingDiv.innerHTML = `<span class="star-rating">${'★'.repeat(index + 1)}</span>`;
-                container.appendChild(ratingDiv);
-            });
-        }
-
-        renderRatings(starRatings);
-    });
-</script>
-
 <script>
     $(document).ready(function () {
         // Initialize datepickers

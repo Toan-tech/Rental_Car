@@ -4,6 +4,7 @@ import com.spring.entities.Booking;
 import com.spring.entities.BookingStatus;
 import com.spring.entities.Car;
 import com.spring.entities.FeedBack;
+import com.spring.repository.CarRepository;
 import com.spring.repository.SearchRepository;
 import com.spring.service.RatingService;
 import jakarta.transaction.Transactional;
@@ -17,10 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,6 +36,9 @@ public class CustomerListViewController {
 
     @Autowired
     private RatingService ratingService;
+
+    @Autowired
+    private CarRepository carRepository;
 
     @Transactional
     @RequestMapping(value = "/ListView", method = {RequestMethod.POST, RequestMethod.GET})
@@ -147,5 +148,20 @@ public class CustomerListViewController {
         model.addAttribute("cars", cars);
 
         return "layout/customer/ListView";
+    }
+
+    @GetMapping("/viewDetails")
+    public String viewBookingDetails(@RequestParam("carId") Integer carId, Model model) {
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id:" + carId));
+
+        // Get bookings for the selected car
+        List<Booking> bookings = searchRepository.findBookingsByCarId(carId);
+
+        // Set car and bookings details in the model
+        model.addAttribute("car", car);
+        model.addAttribute("bookings", bookings);
+
+        return "layout/customer/ViewDetails_BasicInformation";
     }
 }

@@ -254,7 +254,7 @@
                         <td class="border border-dark">
                             <div class="d-grid gap-2">
                                 <a class="btn btn-primary btn-sm" style="margin-bottom: 10px" href="#">Rent now</a>
-                                <a class="btn btn-primary btn-sm" href="#">View details</a>
+                                <a class="btn btn-primary btn-sm" th:href="@{/viewDetails(carId=${car.id})}">View details</a>
                             </div>
                         </td>
                     </tr>

@@ -5,11 +5,6 @@ jQuery(document).ready(function(){
     var gasoline = jQuery(".gasoline");
     var diesel = jQuery(".diesel");
 
-    var upload = jQuery(".upload-file");
-    var uploadDefault = jQuery(".upload-default");
-    var uploadedFile = jQuery(".uploaded-file");
-    var removeDocumentButton = jQuery(".remove-document-button");
-
     chosen(automatic, manual);
     chosen(gasoline, diesel);
 
@@ -86,76 +81,6 @@ jQuery(document).ready(function(){
     diesel.click(function () {
         fuel.val("diesel");
     });
-
-    // Xử lý upload file
-    upload.each(function (index) {
-        jQuery(this).click(function () {
-            jQuery(uploadDefault[index]).click();
-        })
-
-        jQuery(this).on("dragover", function (event) {
-            event.preventDefault();
-            jQuery(this).addClass("dragover");
-        })
-
-        jQuery(this).on("dragleave", function (event) {
-            event.preventDefault();
-            jQuery(this).removeClass("dragover");
-        })
-
-        jQuery(this).on("drop", function (event) {
-            jQuery(this).removeClass("dragover");
-            event.preventDefault();
-
-            // Lấy tệp được kéo và thả
-            var files = event.originalEvent.dataTransfer.files;
-
-            var fileType = files[0].name.split('.').pop().toLowerCase(); // Lấy kiểu của file
-            var validImageTypes = ["doc", "docx", "pdf", "jpg", "jpeg", "png"];
-            if ($.inArray(fileType, validImageTypes) < 0) {
-                // Nếu kiểu file không hợp lệ
-                jQuery($(".documentErrorMessage")[index]).css("display", "block");
-                return;
-            } else {
-                upFile(files[0], index);
-            }
-        })
-    });
-
-    // Upload bằng click
-    uploadDefault.each(function (index) {
-        // Sự kiện thay đổi khi người dùng chọn file
-        jQuery(this).on('change', function () {
-            let file = this.files[0];
-
-            upFile(file, index);
-        })
-    });
-
-    // Đọc file
-    function upFile(file, index) {
-
-        // Ẩn errorMessage (nếu có)
-        jQuery($(".documentErrorMessage")[index]).css("display", "none");
-
-        // Hiển thị tên file và button
-        jQuery(removeDocumentButton[index]).css("display", "inline-block");
-        jQuery(uploadedFile[index]).text(file.name);
-        this.value = "";
-
-        // Ẩn nút upfile
-        jQuery(upload[index]).css("display", "none");
-    }
-
-    //Xóa file đã tải lên
-    removeDocumentButton.each(function (index) {
-        jQuery(this).click(function () {
-
-            jQuery(this).css("display", "none");
-            jQuery(uploadedFile[index]).text("");
-            jQuery(upload[index]).css("display", "flex");
-        })
-    })
 
     // Hàm xử lý tải lên tệp
     // function uploadFiles(files, index) {

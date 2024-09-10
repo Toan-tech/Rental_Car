@@ -29,7 +29,7 @@
         <div class="step"><span>Step 3: Pricing</span></div>
         <div class="step"><span>Step 4: Finish</span></div>
     </div>
-    <form action="/mycar/add" method="post">
+    <form action="/mycar/add" class="form-data" method="post" enctype="multipart/form-data">
         <div class="step1">
             <div th:replace="fragments/Car_Owner/Step1_Basic :: basic" ></div>
         </div>
@@ -46,6 +46,7 @@
         <div class="nav">
             <button type="button" class="prev btn btn-danger">Previous</button>
             <button type="button" class="next btn btn-primary">Next</button>
+            <button type="submit" class="submit btn btn-primary" style="display: none">Submit</button>
         </div>
     </form>
 

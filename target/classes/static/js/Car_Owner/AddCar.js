@@ -97,8 +97,173 @@ jQuery(document).ready(function () {
             jQuery(this).css("display", "none");
             jQuery(uploadedFile[index]).text("");
             jQuery(upload[index]).css("display", "flex");
+            if (index == 0) {
+                file1 = undefined;
+            } else if (index == 1) {
+                file2 = undefined;
+            } else if (index == 2) {
+                file3 = undefined;
+            }
         })
     })
+
+    // Validate
+    var license = jQuery("#license");
+    var licenseWarning = jQuery("#license-warning");
+    var color = jQuery("#color");
+    var colorWarning = jQuery("#color-warning");
+    var brand = jQuery("#brand");
+    var brandWarning = jQuery("#brand-warning");
+    var model = jQuery("#model");
+    var modelWarning = jQuery("#model-warning");
+    var productionYear = jQuery("#production-year");
+    var productionYearWarning = jQuery("#production-year-warning");
+    var seatNumber = jQuery("#seat-number");
+    var seatNumberWarning = jQuery("#seat-number-warning");
+    var transmission = jQuery("#transmission");
+    var transmissionWarning = jQuery("#transmission-warning");
+    var fuel = jQuery("#fuel");
+    var fuelWarning = jQuery("#fuel-warning");
+    var registrationWarning = jQuery("#registration-warning");
+    var certificateWarning = jQuery("#certificate-warning");
+    var insuranceWarning = jQuery("#insurance-warning");
+    var licenseValidate, colorValidate, brandValidate, modelValidate, productionYearValidate,
+        seatNumberValidate, transmissionValidate, fuelValidate, registrationValidate, certificateValidate,
+        insuranceValidate, stepBasicValidated = false;
+
+    function validateStepBasic() {
+        // license validate
+        if (license.val() == "") {
+            licenseWarning.text("");
+            licenseWarning.text("*License is required");
+            licenseValidate = false;
+        } else if (license.val() != "") {
+            let licenseData = new FormData();
+            let licenseName = license.val().split("/").pop();
+            licenseData.append("license", licenseName);
+            jQuery.ajax({
+                url: "http://localhost:8080/mycar/validatelicense",
+                type: "POST",
+                data: licenseData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response == true) {
+                        licenseWarning.text("");
+                        licenseValidate = true;
+                    } else {
+                        licenseWarning.text("");
+                        licenseWarning.text("*Your license is not match. Check again!");
+                        licenseValidate = false;
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error: ", textStatus, errorThrown);
+                }
+            })
+        }
+
+        // color validate
+        if (color.val() == "") {
+            colorWarning.text("*Color is required");
+            colorValidate = false;
+        } else {
+            colorWarning.text("");
+            colorValidate = true;
+        }
+
+        // brand validate
+        if (brand.val() == "") {
+            brandWarning.text("*Brand is required");
+            brandValidate = false;
+        } else {
+            brandWarning.text("");
+            brandValidate = true;
+        }
+
+        // model validate
+        if (model.val() == "") {
+            modelWarning.text("*Model is required");
+            modelValidate = false;
+        } else {
+            modelWarning.text("");
+            modelValidate = true;
+        }
+
+        // production Year validate
+        if (productionYear.val() == "") {
+            productionYearWarning.text("*Product year is required");
+            productionYearValidate = false;
+        } else {
+            productionYearWarning.text("");
+            productionYearValidate = true;
+        }
+
+        // Seat Number validate
+        if (seatNumber.val() == "") {
+            seatNumberWarning.text("*Seat Number is required");
+            seatNumberValidate = false;
+        } else {
+            seatNumberWarning.text("");
+            seatNumberValidate = true;
+        }
+
+        // Transmission validate
+        if (transmission.val() == "") {
+            transmissionWarning.text("*Transmission is required");
+            transmissionValidate = false;
+        } else {
+            transmissionWarning.text("");
+            transmissionValidate = true;
+        }
+
+        // Fuel validate
+        if (fuel.val() == "") {
+            fuelWarning.text("*Fuel is required");
+            fuelValidate = false;
+        } else {
+            fuelWarning.text("");
+            fuelValidate = true;
+        }
+
+        // Registration validate
+        if (file1 == undefined) {
+            registrationWarning.text("*Registration is required");
+            registrationValidate = false;
+        } else {
+            registrationWarning.text("");
+            registrationValidate = true;
+        }
+
+        // Certificate validate
+        if (file2 == undefined) {
+            certificateWarning.text("*Certificate is required");
+            certificateValidate = false;
+        } else {
+            certificateWarning.text("");
+            certificateValidate = true;
+        }
+
+        // Insurance validate
+        if (file3 == undefined) {
+            insuranceWarning.text("*Insurance is required");
+            insuranceValidate = false;
+        } else {
+            insuranceWarning.text("");
+            insuranceValidate = true;
+        }
+
+        if (
+            licenseValidate == false || colorValidate == false || brandValidate == false || modelValidate == false
+            || productionYearValidate == false || seatNumberValidate == false || transmissionValidate == false
+            || fuelValidate == false || registrationValidate == false || certificateValidate == false
+            || insuranceValidate == false
+        ) {
+            stepBasicValidated = false;
+        } else {
+            stepBasicValidated = true;
+        }
+    }
 
     // Step2
     var uploadImageContainer = jQuery(".upload-image-container");
@@ -278,18 +443,24 @@ jQuery(document).ready(function () {
     back.css("display", "none");
     next.on("click", function () {
         jQuery.each(steps, function (i) {
-            if (i >= 0 && i < 3) {
                 back.css("display", "inline-block");
                 if (jQuery(steps[i]).hasClass("current") && !jQuery(steps[i]).hasClass("done")) {
-                    jQuery(steps[i + 1]).addClass("current");
-                    jQuery(steps[i]).removeClass("current").addClass("done");
                     if (i == 0) {
-                        stepOne.css("display", "none");
-                        stepTwo.css("display", "block");
+                        validateStepBasic();
+                        if (stepBasicValidated == true) {
+                            jQuery(steps[i + 1]).addClass("current");
+                            jQuery(steps[i]).removeClass("current").addClass("done");
+                            stepOne.css("display", "none");
+                            stepTwo.css("display", "block");
+                        }
                     } else if (i == 1) {
+                        jQuery(steps[i + 1]).addClass("current");
+                        jQuery(steps[i]).removeClass("current").addClass("done");
                         stepTwo.css("display", "none");
                         stepThree.css("display", "block");
                     } else if (i == 2) {
+                        jQuery(steps[i + 1]).addClass("current");
+                        jQuery(steps[i]).removeClass("current").addClass("done");
                         stepThree.css("display", "none");
                         stepFour.css("display", "block");
                         next.css("display", "none");
@@ -297,9 +468,6 @@ jQuery(document).ready(function () {
                     }
                     return false;
                 }
-            } else {
-                return false;
-            }
         })
     });
     back.on("click", function () {
@@ -331,7 +499,7 @@ jQuery(document).ready(function () {
         selectedFile.push(file1, file2, file3, file4, file5, file6, file7);
         var fileData = new FormData(formData);
         jQuery(selectedFile).each(function (index) {
-            fileData.append("file"+index, this);
+            fileData.append("file" + index, this);
         })
 
         jQuery.ajax({
@@ -344,9 +512,9 @@ jQuery(document).ready(function () {
                 console.log("Tải lên thành công:", response);
                 window.location.href = "/addcar";
             },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.error("Lỗi khi tải lên:", textStatus, errorThrown);
-                }
-            })
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Lỗi khi tải lên:", textStatus, errorThrown);
+            }
         })
     })
+})

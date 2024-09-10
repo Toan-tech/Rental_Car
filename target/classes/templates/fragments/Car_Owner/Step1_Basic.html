@@ -16,6 +16,7 @@
                     <div class="form-group col-sm-6">
                         <label for="license">License plate: <sup>*</sup></label>
                         <input type="text" class="form-control" id="license">
+                        <small class="warning-text" id="license-warning"></small>
                     </div>
 
                     <div class="form-group col-sm-6">
@@ -23,6 +24,7 @@
                         <select name="color" id="color" class="form-control">
                             <option value="">Choose color</option>
                         </select>
+                        <small class="warning-text" id="color-warning"></small>
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="brand">Brand name: <sup>*</sup></label>
@@ -33,36 +35,42 @@
                             <option value="Lamborghini">Lamborghini</option>
                             <option value="Ford">Ford</option>
                         </select>
+                        <small class="warning-text" id="brand-warning"></small>
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="model">Model: <sup>*</sup></label>
                         <select name="" id="model" class="form-control">
                             <option value="">Choose Model</option>
                         </select>
+                        <small class="warning-text" id="model-warning"></small>
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="product-year">Production year: <sup>*</sup></label>
                         <select name="" id="product-year" class="form-control">
                             <option value="">Choose year</option>
                         </select>
+                        <small class="warning-text" id="production-year-warning"></small>
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="seat-number">No. of seats: <sup>*</sup></label>
                         <select name="" id="seat-number" class="form-control">
                             <option value="">Choose No. of seats</option>
                         </select>
+                        <small class="warning-text" id="seat-number-warning"></small>
                     </div>
                     <div class="form-group col-sm-6">
                         <p>Transmission: <sup>*</sup></p>
                         <span class="btn automatic" data-value="automatic">Automatic</span>
                         <span class="btn manual" data-value="manual">Manual</span>
                         <input type="hidden" name="transmission" id="transmission" value="">
+                        <small class="warning-text" id="transmission-warning"></small>
                     </div>
                     <div class="form-group col-sm-6">
                         <p>Fuel: <sup>*</sup></p>
                         <span class="btn gasoline" data-value="gasoline">Gasoline</span>
                         <span class="btn diesel" data-value="diesel">Diesel</span>
                         <input type="hidden" name="fuel" id="fuel" value="">
+                        <small class="warning-text" id="fuel-warning"></small>
                     </div>
                 </div>
                 <div>
@@ -80,6 +88,7 @@
                             <button type="button" class="remove-document-button" style="display: none">x</button>
                             <span class="uploaded-file"></span>
                             <small class="documentErrorMessage" style="display: none">Only accept doc, .docx, .pdf, .jpg , .jpeg , .png</small>
+                            <small class="warning-text" id="registration-warning"></small>
                         </div>
                         <div class="form-group col-md-6 col-lg-4">
                             <p>Certificate of inspection: <sup>*</sup></p>
@@ -93,6 +102,7 @@
                             <button type="button" class="remove-document-button" style="display: none">x</button>
                             <span class="uploaded-file"></span>
                             <small class="documentErrorMessage" style="display: none">Only accept doc, .docx, .pdf, .jpg , .jpeg , .png</small>
+                            <small class="warning-text" id="certificate-warning"></small>
                         </div>
                         <div class="form-group col-md-6 col-lg-4">
                             <p>Insurance: <sup>*</sup></p>
@@ -106,6 +116,7 @@
                             <button type="button" class="remove-document-button" style="display: none">x</button>
                             <span class="uploaded-file"></span>
                             <small class="documentErrorMessage" style="display: none">Only accept doc, .docx, .pdf, .jpg , .jpeg , .png</small>
+                            <small class="warning-text" id="insurance-warning"></small>
                         </div>
                     </div>
                     <p>File type: doc, .docx, .pdf, .jpg , .jpeg , .png</p>

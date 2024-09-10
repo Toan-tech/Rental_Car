@@ -1,5 +1,10 @@
 package com.spring.controller;
 
+import com.spring.entities.Car;
+import com.spring.entities.CarOwner;
+import com.spring.repository.CarOwnerRepository;
+import com.spring.repository.CarRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,10 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
-public class HomeController {
+public class CarOwnerController {
     private static final String UPLOAD_FILE = "D:\\FPT Soft Learning\\IT_Java_FullStack\\JWD\\Assignment\\Mock Project\\Toan\\src\\main\\resources\\static\\documents";
     private static final String UPLOAD_IMAGES = "D:\\FPT Soft Learning\\IT_Java_FullStack\\JWD\\Assignment\\Mock Project\\Toan\\src\\main\\resources\\static\\images";
 
@@ -37,6 +43,26 @@ public class HomeController {
         }
         System.out.println(color);
         return "redirect:/addcar";
+    }
+
+    @GetMapping(value = {"/"})
+    public String home(Model model) {
+        return "layout/Car_Owner/Homepage_LoggedIn_CarOwner";
+    }
+
+    @GetMapping(value="addcar")
+    public String step1(Model model) {
+        return "layout/Car_Owner/AddCar";
+    }
+
+    @GetMapping(value="list")
+    public String listCar(Model model) {
+        return "layout/Car_Owner/List";
+    }
+
+    @GetMapping(value="editdetail")
+    public String editCar(Model model) {
+        return "layout/Car_Owner/Edit";
     }
 
     public String upFiles(MultipartFile file) {

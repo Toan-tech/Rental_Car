@@ -20,7 +20,7 @@ public class SecurityConfig {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    private static final String[] PERMIT_ALL_LINK = {"/login", "/register", "/images/**", "/css/**", "/js/**"};
+    private static final String[] PERMIT_ALL_LINK = {"/login", "/register", "/images/**", "/css/**", "/js/**", "/forgot-password", "/reset-password"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

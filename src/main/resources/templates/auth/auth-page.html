@@ -262,7 +262,7 @@
                     <input type="password" id="password" name="password" placeholder="Password" th:field="*{password}">
                 </div>
                 <div class="form-group forgot-password">
-                    <a href="#" class="terms">Forgot your password?</a>
+                    <a th:href="@{/forgot-password}" class="terms">Forgot your password?</a>
                 </div>
                 <button type="submit" class="btn">
                     <i class='bx bx-user' style="font-size: 1.5em"></i>LOG IN

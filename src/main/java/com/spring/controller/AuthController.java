@@ -1,14 +1,9 @@
 package com.spring.controller;
 
-import com.spring.entities.CarOwner;
-import com.spring.entities.Customer;
-import com.spring.entities.RoleEnum;
-import com.spring.entities.Users;
+import com.spring.entities.*;
 import com.spring.model.UsersDTO;
 import com.spring.repository.UsersRepository;
-import com.spring.service.CarOwnerService;
-import com.spring.service.CustomerService;
-import com.spring.service.UsersService;
+import com.spring.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,10 +12,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Controller
 public class AuthController {
@@ -39,6 +36,12 @@ public class AuthController {
     @Autowired
     private CarOwnerService carOwnerService;
 
+    @Autowired
+    private PasswordResetService passwordResetService;
+
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("users", new Users());
@@ -52,38 +55,8 @@ public class AuthController {
             return "auth/auth-page";
         }
 
-        Users users = new Users();
-        users.setName(usersDTO.getName());
-        users.setEmail(usersDTO.getEmail());
-        users.setPhone(usersDTO.getPhone());
-        users.setPassword(passwordEncoder.encode(usersDTO.getPassword()));
-        users.setRole(RoleEnum.valueOf(usersDTO.getRole()));
-
         try {
-            usersService.save(users);
-            if ("Customer".equals(usersDTO.getRole())) {
-                Customer customer = new Customer();
-                customer.setName(usersDTO.getName());
-                customer.setEmail(usersDTO.getEmail());
-                customer.setPhoneNo(usersDTO.getPhone());
-                customer.setNationalIdNo("893");
-                customer.setDateOfBirth(LocalDate.from(LocalDateTime.now()));
-                customer.setAddress("NULL");
-                customer.setDrivingLicense("NULL");
-                customer.setWallet(BigDecimal.valueOf(0.0));
-                customerService.save(customer);
-            } else if ("Car_Owner".equals(usersDTO.getRole())) {
-                CarOwner carOwner = new CarOwner();
-                carOwner.setName(usersDTO.getName());
-                carOwner.setEmail(usersDTO.getEmail());
-                carOwner.setPhoneNo(usersDTO.getPhone());
-                carOwner.setNationalIdNo("893");
-                carOwner.setDateOfBirth(LocalDate.from(LocalDateTime.now()));
-                carOwner.setAddress("NULL");
-                carOwner.setDrivingLicense("NULL");
-                carOwner.setWallet(BigDecimal.valueOf(0.0));
-                carOwnerService.save(carOwner);
-            }
+            usersService.registerUser(usersDTO);
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", "An error occurred while saving data");
@@ -93,4 +66,89 @@ public class AuthController {
         return "redirect:/login";
     }
 
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordForm() {
+        return "auth/forgot-password";
+    }
+
+    @PostMapping("/forgot-password")
+    public String processForgotPassword(@RequestParam("email") String userEmail, Model model) {
+        System.out.println("Received email: " + userEmail);
+
+        try {
+            Users users = usersService.findByEmail(userEmail);
+            if (users == null) {
+                System.out.println("No user found with email: " + userEmail);
+            }
+
+            String token = UUID.randomUUID().toString();
+            passwordResetService.createPasswordResetTokenForUser(users, token);
+
+            String resetUrl = "http://localhost:8080/reset-password?token=" + token;
+            emailService.sendPasswordResetEmail(userEmail, resetUrl);
+
+            model.addAttribute("message", "Chúng tôi đã gửi đường dẫn đặt lại mật khẩu đến email của bạn.");
+        } catch (Exception e) {
+            model.addAttribute("error", "Không tìm thấy email của bạn trong hệ thống.");
+            e.printStackTrace();
+        }
+
+        return "auth/forgot-password";
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordForm(@RequestParam("token") String token, Model model) {
+        PasswordResetToken resetToken = passwordResetService.findByToken(token);
+        if (resetToken == null || resetToken.isExpired()) {
+            model.addAttribute("error", "Token không hợp lệ hoặc đã hết hạn.");
+            return "auth/reset-password";
+        }
+
+        model.addAttribute("token", token);
+        return "auth/reset-password";
+    }
+
+    @PostMapping("/reset-password")
+    public String handleResetPassword(@RequestParam("token") String token,
+                                      @RequestParam("password") String password,
+                                      @RequestParam("confirmPassword") String confirmPassword,
+                                      Model model) {
+        PasswordResetToken resetToken = passwordResetService.findByToken(token);
+        if (resetToken == null || resetToken.isExpired()) {
+            model.addAttribute("error", "Token không hợp lệ hoặc đã hết hạn.");
+            return "auth/reset-password";
+        }
+
+        if (!password.equals(confirmPassword)) {
+            model.addAttribute("error", "Mật khẩu xác nhận không khớp.");
+            model.addAttribute("token", token);
+            return "auth/reset-password";
+        }
+
+        if (!isValidPassword(password)) {
+            model.addAttribute("error", "Mật khẩu phải chứa ít nhất một chữ cái, một số và có ít nhất 7 ký tự.");
+            model.addAttribute("token", token);
+            return "auth/reset-password";
+        }
+
+        Users users = resetToken.getUsers();
+        usersService.updatePassword(users, password);
+
+        passwordResetService.deleteToken(resetToken);
+
+        model.addAttribute("message", "Mật khẩu của bạn đã được cập nhật thành công. Bạn có thể đăng nhập ngay bây giờ.");
+        return "auth/auth-page";
+    }
+
+    private boolean isValidPassword(String password) {
+        if (password.length() < 7) return false;
+        boolean hasLetter = false;
+        boolean hasDigit = false;
+        for (char c : password.toCharArray()) {
+            if (Character.isLetter(c)) hasLetter = true;
+            if (Character.isDigit(c)) hasDigit = true;
+            if (hasLetter && hasDigit) return true;
+        }
+        return false;
+    }
 }

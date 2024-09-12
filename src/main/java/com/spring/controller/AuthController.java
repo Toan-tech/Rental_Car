@@ -87,9 +87,9 @@ public class AuthController {
             String resetUrl = "http://localhost:8080/reset-password?token=" + token;
             emailService.sendPasswordResetEmail(userEmail, resetUrl);
 
-            model.addAttribute("message", "Chúng tôi đã gửi đường dẫn đặt lại mật khẩu đến email của bạn.");
+            model.addAttribute("message", "We've sent a password reset link to your email");
         } catch (Exception e) {
-            model.addAttribute("error", "Không tìm thấy email của bạn trong hệ thống.");
+            model.addAttribute("error", "Your email was not found");
             e.printStackTrace();
         }
 
@@ -100,7 +100,7 @@ public class AuthController {
     public String showResetPasswordForm(@RequestParam("token") String token, Model model) {
         PasswordResetToken resetToken = passwordResetService.findByToken(token);
         if (resetToken == null || resetToken.isExpired()) {
-            model.addAttribute("error", "Token không hợp lệ hoặc đã hết hạn.");
+            model.addAttribute("error", "Token is invalid or expired");
             return "auth/reset-password";
         }
 
@@ -115,18 +115,18 @@ public class AuthController {
                                       Model model) {
         PasswordResetToken resetToken = passwordResetService.findByToken(token);
         if (resetToken == null || resetToken.isExpired()) {
-            model.addAttribute("error", "Token không hợp lệ hoặc đã hết hạn.");
+            model.addAttribute("error", "Token is invalid or expired");
             return "auth/reset-password";
         }
 
         if (!password.equals(confirmPassword)) {
-            model.addAttribute("error", "Mật khẩu xác nhận không khớp.");
+            model.addAttribute("error", "Confirmation password does not match");
             model.addAttribute("token", token);
             return "auth/reset-password";
         }
 
         if (!isValidPassword(password)) {
-            model.addAttribute("error", "Mật khẩu phải chứa ít nhất một chữ cái, một số và có ít nhất 7 ký tự.");
+            model.addAttribute("error", "Password must contain at least one letter, one number and at least 7 characters");
             model.addAttribute("token", token);
             return "auth/reset-password";
         }
@@ -136,7 +136,7 @@ public class AuthController {
 
         passwordResetService.deleteToken(resetToken);
 
-        model.addAttribute("message", "Mật khẩu của bạn đã được cập nhật thành công. Bạn có thể đăng nhập ngay bây giờ.");
+        model.addAttribute("message", "Your password has been updated successfully. You can log in now");
         return "auth/auth-page";
     }
 

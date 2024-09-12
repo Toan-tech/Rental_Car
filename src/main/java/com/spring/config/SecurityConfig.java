@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
@@ -20,7 +21,7 @@ public class SecurityConfig {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    private static final String[] PERMIT_ALL_LINK = {"/login", "/register", "/images/**", "/css/**", "/js/**", "/forgot-password", "/reset-password"};
+    private static final String[] PERMIT_ALL_LINK = {"/home-page", "/login", "/register", "/images/**", "/css/**", "/js/**", "/forgot-password", "/reset-password"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -37,7 +38,7 @@ public class SecurityConfig {
                                 .passwordParameter("password")
                                 .loginProcessingUrl("/login-check")
                                 .failureForwardUrl("/login?error=true")
-                                .defaultSuccessUrl("/home", true)
+                                .successHandler(customAuthenticationSuccessHandler())
                 )
                 .logout(logoutForm -> logoutForm.logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
@@ -49,5 +50,23 @@ public class SecurityConfig {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return (request, response, authentication) -> {
+            String role = authentication.getAuthorities().stream()
+                    .findFirst()
+                    .get()
+                    .getAuthority();
+
+            if (role.equals("Customer")) {
+                response.sendRedirect("/customer");
+            } else if (role.equals("Car_Owner")) {
+                response.sendRedirect("/car-owner");
+            } else {
+                response.sendRedirect("/login?error=true");
+            }
+        };
     }
 }

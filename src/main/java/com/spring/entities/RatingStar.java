@@ -5,5 +5,5 @@ public enum RatingStar {
     four_stars,
     three_stars,
     two_stars,
-    one_star
+    one_star;
 }

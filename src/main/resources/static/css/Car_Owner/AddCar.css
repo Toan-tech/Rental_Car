@@ -4,12 +4,21 @@
     color: red;
     margin-left: 5%;
 }
-small+small.warning-text {
+small+small.warning-text, #fuel-consumption-warning {
     margin-left: 0;
 }
 #city+small.warning-text, #district+small.warning-text, #ward+small.warning-text {
     margin-top: -1rem;
 }
+
+#base-price-warning, #deposit-warning {
+    width: 100%;
+}
+
+#mileage-number-warning, #license-link-warning {
+    margin-left: 5%;
+}
+
 
 /*BreadCrumb*/
 .breadcrumb {
@@ -446,6 +455,7 @@ form > .form-group:nth-of-type(2) .form-control {
 .input-container {
     display: flex;
     width: 40%;
+    flex-wrap: wrap;
 }
 
 .base-price-input, .deposit-input {
@@ -455,6 +465,10 @@ form > .form-group:nth-of-type(2) .form-control {
 .input-container > span {
     line-height: 38px;
     margin-left: 10px;
+}
+
+textarea.form-control#comment {
+    width: 100%;
 }
 
 .form-check .form-check-label {
@@ -470,7 +484,7 @@ form > .form-group:nth-of-type(2) .form-control {
 }
 
 .price .form-control {
-    width: 100%;
+    width: 60%;
 }
 
 @media (max-width: 1100px) {

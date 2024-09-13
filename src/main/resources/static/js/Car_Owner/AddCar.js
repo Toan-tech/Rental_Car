@@ -110,6 +110,7 @@ jQuery(document).ready(function () {
     // Validate step1_basic
     var license = jQuery("#license");
     var licenseWarning = jQuery("#license-warning");
+    var licenseLinkWarning = jQuery("#license-link-warning");
     var color = jQuery("#color");
     var colorWarning = jQuery("#color-warning");
     var brand = jQuery("#brand");
@@ -132,20 +133,44 @@ jQuery(document).ready(function () {
         insuranceValidate, stepBasicValidated;
 
     function validateStepBasic() {
-        licenseValidate = validateValue(license, licenseWarning);
         colorValidate = validateValue(color, colorWarning);
         brandValidate = validateValue(brand, brandWarning);
         modelValidate = validateValue(model, modelWarning);
         productionYearValidate = validateValue(productionYear, productionYearWarning);
         seatNumberValidate = validateValue(seatNumber, seatNumberWarning);
-        transmissionValidate = validateValue(transmission, transmissionWarning, );
+        transmissionValidate = validateValue(transmission, transmissionWarning,);
         fuelValidate = validateValue(fuel, fuelWarning);
         registrationValidate = validateFile(file1, registrationWarning);
         certificateValidate = validateFile(file2, certificateWarning);
         insuranceValidate = validateFile(file3, insuranceWarning);
 
+        if (license.val() == "") {
+            licenseWarning.css("display", "block");
+            licenseLinkWarning.css("display", "none");
+            licenseValidate = false;
+        } else {
+            if (checkUrl(license.val())) {
+                licenseWarning.css("display", "none");
+                licenseLinkWarning.css("display", "none");
+                licenseValidate = true;
+            } else {
+                licenseWarning.css("display", "none");
+                licenseLinkWarning.css("display", "block");
+                licenseValidate = false;
+            }
+        }
+
+        function checkUrl(url) {
+            try {
+                new URL(url);
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
         if (licenseValidate == false || colorValidate == false || brandValidate == false
-        || modelValidate == false || productionYearValidate == false || seatNumberValidate == false
+            || modelValidate == false || productionYearValidate == false || seatNumberValidate == false
             || transmissionValidate == false || fuelValidate == false || registrationValidate == false ||
             certificateValidate == false || insuranceValidate == false
         ) {
@@ -341,21 +366,23 @@ jQuery(document).ready(function () {
     // validation Step2_detail
     var mileage = jQuery("#mileage");
     var mileageWarning = jQuery("#mileage-warning");
+    var mileageNumberWarning = jQuery("#mileage-number-warning");
     var city = jQuery("#city");
     var cityWarning = jQuery("#city-warning");
     var district = jQuery("#district");
     var districtWarning = jQuery("#district-warning");
     var ward = jQuery("#ward");
     var wardWarning = jQuery("#ward-warning");
+    var fuelConsumption = jQuery("#fuel-consumption");
+    var fuelConsumptionWarning = jQuery("#fuel-consumption-warning");
     var frontImageWarning = jQuery("#front-image-warning");
     var backImageWarning = jQuery("#back-image-warning");
     var leftImageWarning = jQuery("#left-image-warning");
     var rightImageWarning = jQuery("#right-image-warning");
-    var mileageValidate, cityValidate, districtValidate, wardValidate, frontImageValidate,
+    var mileageValidate, cityValidate, districtValidate, wardValidate, fuelConsumptionValidate, frontImageValidate,
         backImageValidate, leftImageValidate, rightImageValidate, stepDetailValidated;
 
     function validateStepDetail() {
-        mileageValidate = validateValue(mileage, mileageWarning);
         cityValidate = validateValue(city, cityWarning);
         districtValidate = validateValue(district, districtWarning);
         wardValidate = validateValue(ward, wardWarning);
@@ -364,7 +391,11 @@ jQuery(document).ready(function () {
         leftImageValidate = validateFile(file6, leftImageWarning);
         rightImageValidate = validateFile(file7, rightImageWarning);
 
-        if (mileageValidate == false || cityValidate == false || districtValidate == false || wardValidate == false
+        let regex = /^-?\d+(\.\d+)?$/;
+        fuelConsumptionValidate = checkNumber(fuelConsumption, fuelConsumptionWarning, regex);
+        mileageValidate = validateValueAndNumber(mileage, mileageWarning, mileageNumberWarning);
+
+        if (mileageValidate == false || cityValidate == false || districtValidate == false || wardValidate == false || fuelConsumptionValidate == false
             || backImageValidate == false || leftImageValidate == false || rightImageValidate == false || frontImageValidate == false
         ) {
             stepDetailValidated = false;
@@ -373,6 +404,28 @@ jQuery(document).ready(function () {
         }
     }
 
+    // validation Step3_Pricing
+    var basePrice = jQuery("#base-price");
+    var basePriceWarning = jQuery("#base-price-warning");
+    var basePriceNumberWarning = jQuery("#base-price-number-warning");
+    var deposit = jQuery("#deposit");
+    var depositWarning = jQuery("#deposit-warning");
+    var depositNumberWarning = jQuery("#deposit-number-warning");
+
+    var depositValidate, basePriceValidate, stepPricingValidated;
+
+    function validatePricing() {
+        basePriceValidate = validateValueAndNumber(basePrice, basePriceWarning, basePriceNumberWarning);
+        depositValidate = validateValueAndNumber(deposit, depositWarning, depositNumberWarning);
+
+        if (basePriceValidate == false || depositValidate == false) {
+            stepPricingValidated = false;
+        } else {
+            stepPricingValidated = true;
+        }
+    }
+
+    // Validation function
     function validateValue(dom, domWarning) {
         let validate;
         if (dom.val() == "") {
@@ -393,6 +446,44 @@ jQuery(document).ready(function () {
         } else {
             domWarning.css("display", "none");
             validate = true;
+        }
+        return validate;
+    }
+
+    function checkNumber(dom, domWarning, regex) {
+        let validate;
+        if (dom.val() == "") {
+            domWarning.css("display", "none");
+            validate = true;
+        } else {
+            if (dom.val().match(regex)) {
+                domWarning.css("display", "none");
+                validate = true;
+            } else {
+                domWarning.css("display", "block");
+                validate = false;
+            }
+        }
+        return validate;
+    }
+
+    function validateValueAndNumber(dom, domWarning, domNumberWarning) {
+        let regex = /^-?\d+(\.\d+)?$/;
+        let validate;
+        if (dom.val() == "") {
+            domWarning.css("display", "block");
+            domNumberWarning.css("display", "none");
+            validate = false;
+        } else {
+            if (dom.val().match(regex)) {
+                domWarning.css("display", "none");
+                domNumberWarning.css("display", "none");
+                validate = true;
+            } else {
+                domWarning.css("display", "none");
+                domNumberWarning.css("display", "block");
+                validate = false;
+            }
         }
         return validate;
     }
@@ -421,12 +512,15 @@ jQuery(document).ready(function () {
                         stepThree.css("display", "block");
                     }
                 } else if (i == 2) {
-                    jQuery(steps[i + 1]).addClass("current");
-                    jQuery(steps[i]).removeClass("current").addClass("done");
-                    stepThree.css("display", "none");
-                    stepFour.css("display", "block");
-                    next.css("display", "none");
-                    submit.css("display", "inline-block");
+                    validatePricing();
+                    if (stepPricingValidated == true) {
+                        jQuery(steps[i + 1]).addClass("current");
+                        jQuery(steps[i]).removeClass("current").addClass("done");
+                        stepThree.css("display", "none");
+                        stepFour.css("display", "block");
+                        next.css("display", "none");
+                        submit.css("display", "inline-block");
+                    }
                 }
                 return false;
             }
@@ -472,7 +566,7 @@ jQuery(document).ready(function () {
             contentType: false,
             success: function (response) {
                 console.log("Tải lên thành công:", response);
-                window.location.href = "/addcar";
+                window.location.href = "/mycar";
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error("Lỗi khi tải lên:", textStatus, errorThrown);

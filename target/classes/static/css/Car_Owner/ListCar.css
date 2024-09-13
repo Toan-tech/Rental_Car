@@ -1,6 +1,9 @@
 p {
     font-weight: bold;
 }
+p.price {
+    margin-left: 0;
+}
 small {
     font-weight: bold;
     font-size: 12px;
@@ -61,22 +64,34 @@ input+span {
     justify-content: space-between;
     padding: 0 50px;
     margin-bottom: 24px;
+    flex-wrap: wrap;
 }
-.module .btn {
+.module .btn:nth-child(1) {
     width: 100px;
 }
+
+form button {
+    margin-left: 50px;
+}
+
 .module select {
     width: 180px;
+    display: inline-block;
+    margin-left: 0;
 }
 /*page control*/
 .page-control {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     padding:0 15%;
 }
 .page-control .form-control {
     display: inline-block;
     width: 50px;
+}
+form>input.form-control{
+    width: 55px;
+    display: inline-block;
 }
 
 @media (max-width: 1100px) {
@@ -94,5 +109,23 @@ input+span {
     }
     .page-control {
         padding:0 5%;
+    }
+}
+
+@media (max-width: 650px) {
+.filter-form {
+    margin-top: 5px;
+    width: 100%;
+}
+    @media (max-width: 550px) {
+        .module select {
+            display: block;
+        }
+        form input {
+            margin-top: 5px;
+        }
+        form button {
+            margin-left: 100px;
+        }
     }
 }

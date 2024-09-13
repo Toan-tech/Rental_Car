@@ -28,6 +28,6 @@ public class FeedBack {
     @Column(name = "Date_Time", nullable = false)
     private LocalDateTime dateTime;
 
-    @OneToOne(mappedBy = "feedback", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "feedBack", fetch = FetchType.LAZY)
     private Booking booking;
 }

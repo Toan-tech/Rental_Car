@@ -1,10 +1,7 @@
 package com.spring.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,6 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 public class Car {
     @Id
@@ -50,7 +48,7 @@ public class Car {
     @Column(name = "Mileage", precision = 18, scale = 2, nullable = false)
     private BigDecimal mileage;
 
-    @Column(name = "Fuel_Consumption", precision = 18, scale = 2, nullable = false)
+    @Column(name = "Fuel_Consumption", precision = 18, scale = 2)
     private BigDecimal fuelConsumption;
 
     @Column(name = "Base_Price", precision = 18, scale = 2, nullable = false)
@@ -62,17 +60,21 @@ public class Car {
     @Column(name = "Address", nullable = false)
     private String address;
 
-    @Column(name = "Description", nullable = false)
+    @Column(name = "Description")
     private String description;
 
-    @Column(name = "Additional_Functions", nullable = false)
+    @Column(name = "Additional_Functions")
     private String additionalFunctions;
 
-    @Column(name = "Terms_Of_Use", nullable = false)
+    @Column(name = "Terms_Of_Use")
     private String termsOfUse;
 
-    @Column(name = "Images", nullable = false)
+    @Column(name = "Images", columnDefinition = "VARCHAR(600) NOT NULL")
     private String images;
+
+    @Column(name= "Status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CarStatus carStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_owner_id", nullable = false)

@@ -6,11 +6,15 @@ jQuery(document).ready(function() {
     var ward = jQuery("#ward");
     var homeNumber = jQuery("#home-number");
     var location = jQuery("#location");
+    var brand = jQuery("#brand");
+    var model = jQuery("#model");
+    var carName = jQuery(".car-name");
 
     city.on("change", updateLocation);
     district.on("change", updateLocation);
     ward.on("change", updateLocation);
     homeNumber.on("change", updateLocation);
+    model.change(updateName);
 
     function updateLocation(){
         var cityVal = city.val();
@@ -30,15 +34,18 @@ jQuery(document).ready(function() {
         if (homeNumberVal) {
             address.push(homeNumberVal);
         }
-        var fullAddress = address.join(" ,");
+        var fullAddress = address.join(", ");
 
         location.html("<p>" + fullAddress + "</p>");
     };
+    function updateName() {
+        carName.text(brand.val() + " " + model.val());
+    }
 
     // Base price
     var basePrice = jQuery("#base-price");
     var showBasePrice = jQuery("#show-base-price");
     basePrice.on("change", function () {
-        showBasePrice.html("<p>" + basePrice.val() + " k/day</p>");
+        showBasePrice.html("<p>" + basePrice.val()/1000 + " k/day</p>");
     })
 })

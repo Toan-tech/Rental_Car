@@ -24,7 +24,7 @@ jQuery(document).ready(function(){
         Audi:["Audi1", "Audi2", "Audi3", "Audi4"],
         Mercedes:["Mercedes1", "Mercedes2", "Mercedes3", "Mercedes4"],
         Lamborghini:["Lamborghini1", "Lamborghini2", "Lamborghini3", "Lamborghini4"],
-        Ford:["Ford1", "Ford2", "Ford3", "Ford4"],
+        Ford:["Ford1", "Ford2", "Ford3", "Ford4"]
     }
     var brandName = jQuery("#brand");
     var modelName = jQuery("#model");

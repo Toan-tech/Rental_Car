@@ -192,25 +192,21 @@ public class CarOwnerController {
         }
         Pageable pageable = PageRequest.of(pageNumber-1, number, sortType);
         Page<Car> carPage = carRepository.findAllByCarOwner(carOwner, pageable);
+
         List<Integer> numberOfRides = new ArrayList<>();
         List<Integer> ratings = new ArrayList<>();
+        List<Booking> bookings = new ArrayList<>();
+
         for (Car car : carPage) {
             Integer numberOfRide = bookingRepository.countByCarAndStatus(car, BookingStatus.Completed);
             numberOfRides.add(numberOfRide);
 
-            List<String> ratingList = feedBackRepository.findALLStarByCarID(car.getId());
+            Integer rate = rating(car.getId());
 
-            int rating = 0;
+            ratings.add(rate);
 
-            for (String ratingValue : ratingList) {
-                rating += switchToInt(ratingValue);
-            }
-            if (ratingList.size() > 0) {
-                Double rateScore = (double) rating / ratingList.size();
-                rating = (int) Math.round(rateScore);
-            }
-
-            ratings.add(rating);
+            Booking booking = booking(car);
+            bookings.add(booking);
         }
 
         int totalPages = carPage.getTotalPages();
@@ -225,13 +221,37 @@ public class CarOwnerController {
         model.addAttribute("sort", sort);
         model.addAttribute("numberOfRides", numberOfRides);
         model.addAttribute("rate", ratings);
+        model.addAttribute("bookings", bookings);
 
         return "layout/Car_Owner/List";
     }
 
-    @GetMapping(value = "editdetail")
-    public String editCar(Model model) {
-        return "layout/Car_Owner/Edit";
+    @GetMapping(value = "mycar/edit")
+    public String editCar(Model model,
+                          @RequestParam ("carid") Integer carId
+                          ) {
+        CarOwner carOwner = carOwnerRepository.findById(1).orElse(null);
+        List<Car> cars = carRepository.findAllByCarOwner(carOwner);
+        boolean authorized = false;
+        for (Car car : cars) {
+            if(car.getId() == carId){
+                authorized = true;
+            }
+        }
+        if (!authorized) {
+            return "redirect:/mycar";
+        } else {
+            Car car = carRepository.findById(carId).orElse(null);
+            Integer rate = rating(car.getId());
+            Integer numberOfRide = bookingRepository.countByCarAndStatus(car, BookingStatus.Completed);
+            Booking booking = booking(car);
+
+            model.addAttribute("car", car);
+            model.addAttribute("rate", rate);
+            model.addAttribute("numberOfRide", numberOfRide);
+            model.addAttribute("booking", booking);
+            return "layout/Car_Owner/Edit";
+        }
     }
 
     private String upFiles(MultipartFile file) {
@@ -275,6 +295,38 @@ public class CarOwnerController {
             default:
                 return 0;
         }
+    }
+
+    private Integer rating(Integer carId){
+        List<String> ratingList = feedBackRepository.findALLStarByCarID(carId);
+
+        int rating = 0;
+
+        for (String ratingValue : ratingList) {
+            rating += switchToInt(ratingValue);
+        }
+        if (ratingList.size() > 0) {
+            Double rateScore = (double) rating / ratingList.size();
+            rating = (int) Math.round(rateScore);
+        }
+        return rating;
+    }
+
+    private Booking booking(Car car){
+        List<Booking> bookingList = bookingRepository.findAllByCar(car);
+        Booking booking = new Booking();
+        booking.setStatus(BookingStatus.In_Progress);
+
+        for (Booking book : bookingList) {
+            if (book.getStatus().equals(BookingStatus.Pending_Deposit)){
+                booking = book;
+                break;
+            } else if (book.getStatus().equals(BookingStatus.Pending_Payment)){
+                booking = book;
+                break;
+            }
+        }
+        return booking;
     }
 }
 

@@ -105,6 +105,7 @@ sup {
 }
 .edit-detail>p {
     font-weight: normal;
+    padding-left: 5%;
 }
 .edit-detail .form-group .btn {
     background-color: #eeeeee;
@@ -113,7 +114,6 @@ sup {
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
 }
-
 .form-group .mileage {
     width: 30%;
 }
@@ -156,6 +156,9 @@ input, select {
     text-align: center;
     margin-bottom: 16px;
     margin-left: -5%;
+}
+.image-edit-container {
+    padding-left: 5%;
 }
 @media (max-width: 1400px) {
     .form-check label {
@@ -264,7 +267,7 @@ form > .form-group:nth-of-type(2) .form-control {
     margin-top: 32px;
 }
 .price {
-    margin-left: 5%;
+    margin-left: 0;
 }
 
 .price .deposit-base-price-container {

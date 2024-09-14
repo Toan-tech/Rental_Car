@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" th:href="@{css/Car_Owner/EditPricing.css}">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <script src="https://kit.fontawesome.com/2465434fef.js" crossorigin="anonymous"></script>
+<!--    <link rel="stylesheet" th:href="@{/css/Car_Owner/EditPricing.css}">-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>-->
+<!--    <script src="https://kit.fontawesome.com/2465434fef.js" crossorigin="anonymous"></script>-->
 </head>
 <body>
-<form action="" class="price">
+<div th:fragment="editPricing">
+<form action="" class="price edit-price">
     <div class="form-group deposit-base-price-container">
         <div class="label-container">
             <label for="base-price">Base price:</label>
@@ -60,6 +61,6 @@
         <button type="submit" class="btn btn-primary">Save</button>
     </div>
 </form>
-
+</div>
 </body>
 </html>

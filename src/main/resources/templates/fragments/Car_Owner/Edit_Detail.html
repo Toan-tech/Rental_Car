@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" th:href="@{css/Car_Owner/Edit_Detail.css}">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <script src="https://kit.fontawesome.com/2465434fef.js" crossorigin="anonymous"></script>
+<!--    <link rel="stylesheet" th:href="@{/css/Car_Owner/Edit_Detail.css}">-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>-->
+<!--    <script src="https://kit.fontawesome.com/2465434fef.js" crossorigin="anonymous"></script>-->
 </head>
 <body>
+<div th:fragment="editDetail">
 <form action="" class="mt-3 edit-detail">
     <div class="row">
         <div class="col-sm-6">
@@ -110,21 +111,31 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group image-edit-container">
         <label>Images: <sup>*</sup></label>
         <div class="row">
             <div class="col-sm-6">
                 <div class="upload-container">
                     <label>Front</label>
-                    <input type="file" class="upload-default" style="display: none">
-
-                    <img th:src="@{/images/1.webp}" alt="" class="images">
-
-                    <div class="upload-file">
-                        <i class="fa-solid fa-upload"></i>
-                        <p>Drag and drop</p>
-                        <p>OR</p>
-                        <p>Select file</p>
+                    <input type="file" class="image-upload-default" style="display: none"
+                           accept=".jpg, .jpeg, .png, .gif">
+                    <div class="upload-image-container">
+                        <div class="image-upload-file">
+                            <i class="fa-solid fa-upload"></i>
+                            <p>Drag and drop</p>
+                            <p>OR</p>
+                            <p>Select file</p>
+                        </div>
+                        <div class="uploaded-image" style="display: none">
+                            <img src="" alt="Uploaded Image" class="preview-image"/>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" class="remove-image-button" style="display: none">x</button>
+                        <span class="image-uploaded-file"></span>
+                        <small class="errorMessage" style="display: none">Only accept (jpg, jpeg, png, gif)</small>
+                        <small class="warning-text" id="front-image-warning" style="display: none">*Front image is
+                            required</small>
                     </div>
                 </div>
             </div>
@@ -132,13 +143,25 @@
             <div class="col-sm-6">
                 <div class="upload-container">
                     <label>Back</label>
-                    <input type="file" class="upload-default" style="display: none">
-                    <img th:src="@{/images/2.jpg}" alt="" class="images">
-                    <div class="upload-file">
-                        <i class="fa-solid fa-upload"></i>
-                        <p>Drag and drop</p>
-                        <p>OR</p>
-                        <p>Select file</p>
+                    <input type="file" class="image-upload-default" style="display: none"
+                           accept=".jpg, .jpeg, .png, .gif">
+                    <div class="upload-image-container">
+                        <div class="image-upload-file">
+                            <i class="fa-solid fa-upload"></i>
+                            <p>Drag and drop</p>
+                            <p>OR</p>
+                            <p>Select file</p>
+                        </div>
+                        <div class="uploaded-image" style="display: none">
+                            <img src="" alt="Uploaded Image" class="preview-image"/>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" class="remove-image-button" style="display: none">x</button>
+                        <span class="image-uploaded-file"></span>
+                        <small class="errorMessage" style="display: none">Only accept (jpg, jpeg, png, gif)</small>
+                        <small class="warning-text" id="back-image-warning" style="display: none">*Back image is
+                            required</small>
                     </div>
                 </div>
             </div>
@@ -146,13 +169,25 @@
             <div class="col-sm-6">
                 <div class="upload-container">
                     <label>Left</label>
-                    <input type="file" class="upload-default" style="display: none">
-                    <img src="" alt="" class="images">
-                    <div class="upload-file">
-                        <i class="fa-solid fa-upload"></i>
-                        <p>Drag and drop</p>
-                        <p>OR</p>
-                        <p>Select file</p>
+                    <input type="file" class="image-upload-default" style="display: none"
+                           accept=".jpg, .jpeg, .png, .gif">
+                    <div class="upload-image-container">
+                        <div class="image-upload-file">
+                            <i class="fa-solid fa-upload"></i>
+                            <p>Drag and drop</p>
+                            <p>OR</p>
+                            <p>Select file</p>
+                        </div>
+                        <div class="uploaded-image" style="display: none">
+                            <img src="" alt="Uploaded Image" class="preview-image"/>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" class="remove-image-button" style="display: none">x</button>
+                        <span class="image-uploaded-file"></span>
+                        <small class="errorMessage" style="display: none">Only accept (jpg, jpeg, png, gif)</small>
+                        <small class="warning-text" id="left-image-warning" style="display: none">*Left image is
+                            required</small>
                     </div>
                 </div>
             </div>
@@ -160,13 +195,25 @@
             <div class="col-sm-6">
                 <div class="upload-container">
                     <label>Right</label>
-                    <input type="file" class="upload-default" style="display: none">
-                    <img th:src="@{/images/3.webp}" alt="" class="images">
-                    <div class="upload-file">
-                        <i class="fa-solid fa-upload"></i>
-                        <p>Drag and drop</p>
-                        <p>OR</p>
-                        <p>Select file</p>
+                    <input type="file" class="image-upload-default" style="display: none"
+                           accept=".jpg, .jpeg, .png, .gif">
+                    <div class="upload-image-container">
+                        <div class="image-upload-file">
+                            <i class="fa-solid fa-upload"></i>
+                            <p>Drag and drop</p>
+                            <p>OR</p>
+                            <p>Select file</p>
+                        </div>
+                        <div class="uploaded-image" style="display: none">
+                            <img src="" alt="Uploaded Image" class="preview-image"/>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" class="remove-image-button" style="display: none">x</button>
+                        <span class="image-uploaded-file"></span>
+                        <small class="errorMessage" style="display: none">Only accept (jpg, jpeg, png, gif)</small>
+                        <small class="warning-text" id="right-image-warning" style="display: none">*Right image is
+                            required</small>
                     </div>
                 </div>
             </div>
@@ -178,8 +225,8 @@
         <button class="btn btn-danger">Discard</button>
         <button type="submit" class="btn btn-primary">Save</button>
     </div>
-
 </form>
-<script th:src="@{js/Car_Owner/Edit_Detail.js}"></script>
+<script th:src="@{/js/Car_Owner/Edit_Detail.js}"></script>
+</div>
 </body>
 </html>

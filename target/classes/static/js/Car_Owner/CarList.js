@@ -28,7 +28,7 @@ jQuery(window).on("load", function () {
             `
         );
         let carBasePrice = basePrice.eq(index).val();
-        let numberValue = Number(carBasePrice)/1000;
+        let numberValue = Number(carBasePrice) / 1000;
         priceShow.eq(index).text(numberValue + " k/day");
 
         if (carStatus.eq(index).val() == "Available") {
@@ -103,7 +103,7 @@ jQuery(window).on("load", function () {
     yesBtn.on("click", function () {
         bground.css("display", "none");
         popUp.css("display", "none");
-        if (depositVal.val() != ""){
+        if (depositVal.val() != "") {
             deposits.eq(displayInput.val()).css("display", "none");
         } else {
             payments.eq(displayInput.val()).css("display", "none");
@@ -133,13 +133,16 @@ jQuery(window).on("load", function () {
 
     function rate(star) {
         var innerHtml = "";
-        for (var i = 1; i <= 5; i++){
-            if (i <= star){
+        for (var i = 1; i <= 5; i++) {
+            if (i > star && (i - 1) < star) {
+                innerHtml += "<i class= 'fa-solid fa-star-half' style='color: yellow'></i>";
+            } else if (i <= star) {
                 innerHtml += "<i class='fa-solid fa-star' style='color: yellow'></i>";
-            } else {
+            } else if (i > star) {
                 innerHtml += "<i class='fa-solid fa-star'></i>";
             }
         }
         return innerHtml;
     }
 })
+

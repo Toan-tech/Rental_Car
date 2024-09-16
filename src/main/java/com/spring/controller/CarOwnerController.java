@@ -197,14 +197,14 @@ public class CarOwnerController {
         Page<Car> carPage = carRepository.findAllByCarOwner(carOwner, pageable);
 
         List<Integer> numberOfRides = new ArrayList<>();
-        List<Integer> ratings = new ArrayList<>();
+        List<Double> ratings = new ArrayList<>();
         List<Booking> bookings = new ArrayList<>();
 
         for (Car car : carPage) {
             Integer numberOfRide = bookingRepository.countByCarAndStatus(car, BookingStatus.Completed);
             numberOfRides.add(numberOfRide);
 
-            Integer rate = rating(car.getId());
+            Double rate = rating(car.getId());
 
             ratings.add(rate);
 
@@ -238,7 +238,7 @@ public class CarOwnerController {
             return "redirect:/mycar";
         } else {
             Car car = carRepository.findById(carId).orElse(null);
-            Integer rate = rating(car.getId());
+            Double rate = rating(car.getId());
             Integer numberOfRide = bookingRepository.countByCarAndStatus(car, BookingStatus.Completed);
             Booking booking = booking(car);
 
@@ -391,19 +391,18 @@ public class CarOwnerController {
         }
     }
 
-    private Integer rating(Integer carId) {
+    private Double rating(Integer carId) {
         List<String> ratingList = feedBackRepository.findALLStarByCarID(carId);
 
-        int rating = 0;
+        Double rating = 0.0;
 
         for (String ratingValue : ratingList) {
             rating += switchToInt(ratingValue);
         }
         if (ratingList.size() > 0) {
-            Double rateScore = (double) rating / ratingList.size();
-            rating = (int) Math.round(rateScore);
+            rating = (double) rating / ratingList.size();
         }
-        return rating;
+        return Math.ceil(rating * 2) / 2.0;
     }
 
     private Booking booking(Car car) {

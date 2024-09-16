@@ -322,18 +322,18 @@ jQuery(window).on("load", function () {
     var terms = jQuery("#term-of-use");
     var carStatus = jQuery("#status-select")
 
-    select.prop("disabled", true);
-    input.prop("disabled", true);
-    textArea.prop("disabled", true);
+    select.prop("readonly", true);
+    input.prop("readonly", true);
+    textArea.prop("readonly", true);
     uploadImageContainer.off();
 
     editBtn.on("click", function (){
         discardBtn.css("display", "inline-block");
         saveBtn.css("display", "inline-block");
         editBtn.css("display", "none");
-        select.prop("disabled", false);
-        input.prop("disabled", false);
-        textArea.prop("disabled", false);
+        select.prop("readonly", false);
+        input.prop("readonly", false);
+        textArea.prop("readonly", false);
         kickOn();
     })
 

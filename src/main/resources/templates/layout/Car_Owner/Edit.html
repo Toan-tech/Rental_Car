@@ -11,6 +11,7 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/Car_Owner/AddCar.css}">
     <link rel="stylesheet" th:href="@{/css/Car_Owner/Edit.css}">
+    <link rel="stylesheet" th:href="@{/css/Car_Owner/EditBasic.css}">
     <link rel="stylesheet" th:href="@{/css/Car_Owner/EditDetail.css}">
     <link rel="stylesheet" th:href="@{/css/Car_Owner/EditPricing.css}">
 
@@ -53,6 +54,7 @@
     </div>
     <div class="col-md-3 mt-3">
         <p class="car-name" th:text="*{name}"></p>
+        <input type="hidden" id="carId" th:field="*{id}">
         <table>
             <tr>
                 <td><p>Ratings:</p></td>
@@ -77,14 +79,19 @@
             </tr>
             <tr>
                 <td><p>Status:</p></td>
-                <td><p class="status"></p></td>
-                <input type="hidden" th:value="*{carStatus}" class="car-status">
+                <td>
+                    <p class="status" th:if="*{carStatus.name()} == 'Booked'" th:text="*{carStatus.name()}"></p>
+                        <select class="status-select form-control" id="status-select" th:field="*{carStatus}" th:unless="*{carStatus.name()} == 'Booked'">
+                            <option th:value="Available">Available</option>
+                            <option th:value="Stopped">Stopped</option>
+                        </select>
+                </td>
             </tr>
         </table>
     </div>
     <div class="col-md-2 mt-3">
-        <a href="#" class="btn btn-primary deposit" th:if="${booking.status.name() == 'Pending_Deposit'}" th:data-id="${booking.id}">Confirm Deposit</a>
-        <a href="#" class="btn btn-primary payment" th:if="${booking.status.name() == 'Pending_Payment'}" th:data-id="${booking.id}">Confirm Payment</a>
+        <a href="#" class="btn btn-primary btn-deposit" th:if="${booking.status.name() == 'Pending_Deposit'}" th:data-id="${booking.id}">Confirm Deposit</a>
+        <a href="#" class="btn btn-primary btn-payment" th:if="${booking.status.name() == 'Pending_Payment'}" th:data-id="${booking.id}">Confirm Payment</a>
     </div>
 </div>
 <div class="info-title-container">
@@ -93,27 +100,36 @@
     <span class="info-title btn">Pricing</span>
 </div>
 <div class="info-container">
-    <div class="frag">
-        <div th:replace="fragments/Car_Owner/Edit_Basic :: editBasic"></div>
-    </div>
+    <form action="" th:object="${car}" method="post" enctype="multipart/form-data">
+        <input type="hidden" class="car-status" th:field="*{carStatus}">
+        <div class="frag">
+            <div th:replace="fragments/Car_Owner/Edit_Basic :: editBasic"></div>
+        </div>
 
-    <div class="frag" style="display: none">
-        <div th:replace="fragments/Car_Owner/Edit_Detail :: editDetail"></div>
-    </div>
+        <div class="frag" style="display: none">
+            <div th:replace="fragments/Car_Owner/Edit_Detail :: editDetail"></div>
+        </div>
 
-    <div class="frag" style="display: none">
-        <div th:replace="fragments/Car_Owner/Edit_Pricing :: editPricing"></div>
-    </div>
+        <div class="frag" style="display: none">
+            <div th:replace="fragments/Car_Owner/Edit_Pricing :: editPricing"></div>
+        </div>
+        <div class="button-container">
+            <button type="button" class="btn btn-primary edit-btn">Edit</button>
+            <button type="button" class="btn btn-danger discard-btn" style="display: none">Discard</button>
+            <button type="button" class="btn btn-primary save-btn" style="display: none">Save</button>
+        </div>
+    </form>
 </div>
 <div class="background" style="display:none"></div>
 <div class="pop-up" style="display:none">
-    <input type="hidden" class="display-input" value="">
-    <input type="hidden" class="deposit-value" value="">
-    <input type="hidden" class="payment-value" value="">
-    <p>Confirm deposit</p>
-    <p>Please confirm that you have receive the deposit this booking.</p>
-    <button type="button" class="btn no-btn">No</button>
-    <button type="button" class="btn yes-btn">Yes</button>
+    <form th:action="@{/mycar/edit}" method="post">
+        <input type="hidden" class="deposit-value" name="deposit">
+        <input type="hidden" class="payment-value" name="payment">
+        <p></p>
+        <p></p>
+        <button type="button" class="btn no-btn">No</button>
+        <button type="submit" class="btn yes-btn">Yes</button>
+    </form>
 </div>
 
 <div th:replace="fragments/fragment :: footer"></div>

@@ -9,12 +9,14 @@
 </head>
 <body>
 <div th:fragment="editDetail">
-<form action="" class="mt-3 edit-detail">
     <div class="row">
         <div class="col-sm-6">
             <div class="form-group">
                 <label>Mileage: <sup>*</sup></label>
-                <input type="text" class="form-control mileage">
+                <input type="text" class="form-control mileage" th:field="*{mileage}" id="mileage">
+                <small class="warning-text" id="mileage-warning" style="display: none">*Mileage is required</small>
+                <small class="warning-text" id="mileage-number-warning" style="display: none">*Mileage must be
+                    number</small>
             </div>
 
             <div class="form-group mb-3">
@@ -26,54 +28,59 @@
                     </div>
                 </div>
 
-
+                <input type="hidden" class="show-address" th:field="*{address}" id="show-address">
                 <select name="" id="city" class="form-control mb-3">
                     <option value="">--- City/Province ---</option>
-                    <option value="">Ha Noi</option>
+                    <option value="HaNoi">Ha Noi</option>
+                    <option value="HoChiMinh">Ho Chi Minh</option>
                 </select>
+                <small class="warning-text mb-3" id="city-warning" style="display: none">*City is required</small>
 
                 <select name="" id="district" class="form-control mb-3">
                     <option value="">--- District ---</option>
-                    <option value="">Thanh Tri</option>
                 </select>
+                <small class="warning-text mb-3" id="district-warning" style="display: none">*District is
+                    required</small>
 
                 <select name="" id="ward" class="form-control mb-3">
                     <option value="">--- Ward ---</option>
-                    <option value="">Thuong Phuc</option>
                 </select>
-
-                <input type="text" class="form-control" placeholder="House number, Street">
+                <small class="warning-text mb-3" id="ward-warning" style="display: none">*Ward is required</small>
+                <input type="text" class="form-control" placeholder="House number, Street" id="houseNumber">
             </div>
         </div>
         <div class="col-sm-6">
             <div class="form-group mb-3">
                 <label>Fuel consumption:</label>
-                <input type="text" class="form-control fuel-consumption">
+                <input type="text" class="form-control fuel-consumption" th:field="*{fuelConsumption}" id="fuel-consumption">
                 <span>liter/100km</span>
+                <small class="warning-text" id="fuel-consumption-warning" style="display: none">*Fuel consumption
+                    must be number</small>
             </div>
             <div class="form-group">
                 <label>Description:</label>
-                <textarea class="form-control" rows="8"></textarea>
+                <textarea class="form-control" rows="8" th:field="*{description}" id="description"></textarea>
             </div>
         </div>
     </div>
 
     <div class="form-group add-function">
+        <input type="hidden" th:field="*{additionalFunctions}" class="show-add-function" id="additional-function">
         <label>Additional functions:</label>
         <div class="row">
             <div class="col-md-4 col-sm-6">
                 <div class="form-check-container">
                     <div class="form-check">
                         <label class="form-check-label"><i class="fa-brands fa-bluetooth"></i> Bluetooth</label>
-                        <input type="checkbox" class="form-check-input" value="" name="function">
+                        <input type="checkbox" class="form-check-input" value="Bluetooth" name="function">
                     </div>
                     <div class="form-check">
                         <label class="form-check-label"><i class="fa-solid fa-map"></i> GPS</label>
-                        <input type="checkbox" class="form-check-input" value="" name="function">
+                        <input type="checkbox" class="form-check-input" value="GPS" name="function">
                     </div>
                     <div class="form-check">
                         <label class="form-check-label"><i class="fa-solid fa-camera"></i> Camera</label>
-                        <input type="checkbox" class="form-check-input" value="" name="function">
+                        <input type="checkbox" class="form-check-input" value="Camera" name="function">
                     </div>
                 </div>
             </div>
@@ -83,15 +90,15 @@
                 <div class="form-check-container">
                     <div class="form-check">
                         <label class="form-check-label"><i class="fa-regular fa-sun"></i> Sun roof</label>
-                        <input type="checkbox" class="form-check-input" value="" name="function">
+                        <input type="checkbox" class="form-check-input" value="Sun roof" name="function">
                     </div>
                     <div class="form-check">
                         <label class="form-check-label"><i class="fa-solid fa-unlock-keyhole"></i> Child lock</label>
-                        <input type="checkbox" class="form-check-input" value="" name="function">
+                        <input type="checkbox" class="form-check-input" value="Child lock" name="function">
                     </div>
                     <div class="form-check">
                         <label class="form-check-label"><i class="fa-solid fa-child-reaching"></i> Child seat</label>
-                        <input type="checkbox" class="form-check-input" value="" name="function">
+                        <input type="checkbox" class="form-check-input" value="Child seat" name="function">
                     </div>
                 </div>
             </div>
@@ -100,11 +107,11 @@
                 <div class="form-check-container">
                     <div class="form-check">
                         <label class="form-check-label"><i class="fa-solid fa-hard-drive"></i> DVD</label>
-                        <input type="checkbox" class="form-check-input" value="" name="function">
+                        <input type="checkbox" class="form-check-input" value="DVD" name="function">
                     </div>
                     <div class="form-check">
                         <label class="form-check-label"><i class="fa-brands fa-usb"></i> USB</label>
-                        <input type="checkbox" class="form-check-input" value="" name="function">
+                        <input type="checkbox" class="form-check-input" value="USB" name="function">
                     </div>
                 </div>
             </div>
@@ -120,13 +127,13 @@
                     <input type="file" class="image-upload-default" style="display: none"
                            accept=".jpg, .jpeg, .png, .gif">
                     <div class="upload-image-container">
-                        <div class="image-upload-file">
+                        <div class="image-upload-file" style="display: none">
                             <i class="fa-solid fa-upload"></i>
                             <p>Drag and drop</p>
                             <p>OR</p>
                             <p>Select file</p>
                         </div>
-                        <div class="uploaded-image" style="display: none">
+                        <div class="uploaded-image">
                             <img src="" alt="Uploaded Image" class="preview-image"/>
                         </div>
                     </div>
@@ -146,13 +153,13 @@
                     <input type="file" class="image-upload-default" style="display: none"
                            accept=".jpg, .jpeg, .png, .gif">
                     <div class="upload-image-container">
-                        <div class="image-upload-file">
+                        <div class="image-upload-file" style="display: none">
                             <i class="fa-solid fa-upload"></i>
                             <p>Drag and drop</p>
                             <p>OR</p>
                             <p>Select file</p>
                         </div>
-                        <div class="uploaded-image" style="display: none">
+                        <div class="uploaded-image">
                             <img src="" alt="Uploaded Image" class="preview-image"/>
                         </div>
                     </div>
@@ -171,14 +178,14 @@
                     <label>Left</label>
                     <input type="file" class="image-upload-default" style="display: none"
                            accept=".jpg, .jpeg, .png, .gif">
-                    <div class="upload-image-container">
-                        <div class="image-upload-file">
+                    <div class="upload-image-container" >
+                        <div class="image-upload-file" style="display: none">
                             <i class="fa-solid fa-upload"></i>
                             <p>Drag and drop</p>
                             <p>OR</p>
                             <p>Select file</p>
                         </div>
-                        <div class="uploaded-image" style="display: none">
+                        <div class="uploaded-image">
                             <img src="" alt="Uploaded Image" class="preview-image"/>
                         </div>
                     </div>
@@ -198,13 +205,13 @@
                     <input type="file" class="image-upload-default" style="display: none"
                            accept=".jpg, .jpeg, .png, .gif">
                     <div class="upload-image-container">
-                        <div class="image-upload-file">
+                        <div class="image-upload-file" style="display: none">
                             <i class="fa-solid fa-upload"></i>
                             <p>Drag and drop</p>
                             <p>OR</p>
                             <p>Select file</p>
                         </div>
-                        <div class="uploaded-image" style="display: none">
+                        <div class="uploaded-image">
                             <img src="" alt="Uploaded Image" class="preview-image"/>
                         </div>
                     </div>
@@ -221,11 +228,6 @@
     </div>
     <p>Please include full 4 images of your vehicle</p>
     <p>File type: .jpg , .jpeg , .png, .gif</p>
-    <div class="button-container">
-        <button class="btn btn-danger">Discard</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-    </div>
-</form>
 <script th:src="@{/js/Car_Owner/Edit_Detail.js}"></script>
 </div>
 </body>

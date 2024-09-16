@@ -27,13 +27,11 @@ public class ChangeBookingStatus {
             @RequestParam(value = "payment", required = false) Integer payment,
             @RequestParam(value = "deposit", required = false) Integer deposit
     ) {
-        CarOwner carOwner = carOwnerRepository.findById(1).orElse(null);
-        List<Car> carList = carOwner.getCars();
         boolean authorized = false;
         if (payment != null) {
             Booking booking = bookingRepository.findById(payment).orElse(null);
             Car car = booking.getCar();
-            authorized = validateRole(car.getId(), carList);
+            authorized = validateRole(car.getId());
             if (!authorized) {
                 return "You are not authorized to perform this action";
             } else {
@@ -44,7 +42,7 @@ public class ChangeBookingStatus {
         } else {
             Booking booking = bookingRepository.findById(deposit).orElse(null);
             Car car = booking.getCar();
-            authorized = validateRole(car.getId(), carList);
+            authorized = validateRole(car.getId());
             if (!authorized) {
                 return "You are not authorized to perform this action";
             } else {
@@ -60,8 +58,11 @@ public class ChangeBookingStatus {
         bookingRepository.save(booking);
     }
 
-    private boolean validateRole(Integer carId, List<Car> carList) {
+    private boolean validateRole(Integer carId) {
         boolean authorized = false;
+//        TODO: update security
+        CarOwner carOwner = carOwnerRepository.findById(1).orElse(null);
+        List<Car> carList = carOwner.getCars();
         for (Car car : carList) {
             if (car.getId() == carId) {
                 authorized = true;

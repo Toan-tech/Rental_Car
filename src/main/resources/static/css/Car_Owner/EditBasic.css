@@ -1,0 +1,49 @@
+/*info-container, info-title*/
+/*Basic information*/
+.info-title {
+    background-color: #eeeeee;
+    margin-left: -5.5px;
+    border: 1px solid black;
+    border-radius: 0;
+}
+.info-title:nth-of-type(1){
+    margin-left: 0;
+    border-bottom: none;
+}
+.info-title-container {
+    position: relative;
+    bottom: -5.7px;
+    padding-bottom: 4.5px;
+    background-color: white;
+    display: inline-block;
+    margin-left: 50px;
+}
+.info-container {
+    border: 1px solid black;
+    margin: 0;
+    padding: 16px 50px;
+}
+.info-container td {
+    padding: 10px 0;
+}
+.info-container tr td:nth-of-type(1){
+    font-weight: bold;
+    width: 50%;
+}
+tr th:nth-of-type(1){
+    width: 50%;
+}
+.table-active th:nth-of-type(1){
+    width: 20px;
+}
+.document tr td:nth-of-type(1){
+    width: 20px;
+    text-align: center;
+}
+.document tr td{
+    padding: 12px;
+}
+.document {
+    font-weight: normal;
+    font-size: 14px;
+}

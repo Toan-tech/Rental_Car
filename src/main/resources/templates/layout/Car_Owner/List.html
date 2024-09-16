@@ -95,6 +95,7 @@
         </div>
         <div class="col-md-2 mt-3">
             <a th:href="@{/mycar/edit(carid=${car.id})}" class="btn btn-primary detail">View details</a>
+            <input type="hidden" class="car-index" th:if="${bookings[sts.index].status.name() == 'Pending_Payment'}" th:value="${sts.index}">
             <a href="#" class="btn btn-primary deposit" th:if="${bookings[sts.index].status.name() == 'Pending_Deposit'}" th:data-id="${bookings[sts.index].id}">Confirm Deposit</a>
             <a href="#" class="btn btn-primary payment" th:if="${bookings[sts.index].status.name() == 'Pending_Payment'}" th:data-id="${bookings[sts.index].id}">Confirm Payment</a>
         </div>
@@ -129,6 +130,7 @@
 <div class="background" style="display:none"></div>
 <div class="pop-up" style="display:none">
     <input type="hidden" class="display-input" value="">
+    <input type="hidden" class="car-status-value" value="">
     <input type="hidden" class="deposit-value" value="">
     <input type="hidden" class="payment-value" value="">
     <p>Confirm deposit</p>

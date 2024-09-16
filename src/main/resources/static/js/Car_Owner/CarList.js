@@ -50,12 +50,14 @@ jQuery(window).on("load", function () {
 
     var payments = jQuery(".payment");
     var deposits = jQuery(".deposit");
+    var carIndex = jQuery(".car-index")
 
     var bground = jQuery(".background");
     var popUp = jQuery(".pop-up");
     var displayInput = jQuery(".display-input");
     var depositVal = jQuery(".deposit-value");
     var paymentVal = jQuery(".payment-value");
+    var carStatusValue = jQuery(".car-status-value");
     var text = jQuery(".pop-up p");
     var noBtn = jQuery(".no-btn");
     var yesBtn = jQuery(".yes-btn");
@@ -78,6 +80,7 @@ jQuery(window).on("load", function () {
     payments.each(function (index) {
         jQuery(this).on("click", function () {
             displayInput.val(index);
+            carStatusValue.val(carIndex.eq(index).val());
             paymentVal.val(jQuery(this).data("id"));
             text.eq(0).text("Confirm payment");
             text.eq(1).text("Please confirm that you have\n" +
@@ -92,6 +95,7 @@ jQuery(window).on("load", function () {
         displayInput.val("");
         depositVal.val("");
         paymentVal.val("");
+        carStatusValue.val("");
         bground.css("display", "none");
         popUp.css("display", "none");
     })
@@ -103,6 +107,7 @@ jQuery(window).on("load", function () {
             deposits.eq(displayInput.val()).css("display", "none");
         } else {
             payments.eq(displayInput.val()).css("display", "none");
+            status.eq(carStatusValue.val()).text("Available").css("color", "green");
         }
         var data = new FormData();
         data.append("payment", paymentVal.val());
@@ -123,6 +128,7 @@ jQuery(window).on("load", function () {
         displayInput.val("");
         depositVal.val("");
         paymentVal.val("");
+        carStatusValue.val("");
     })
 
     function rate(star) {

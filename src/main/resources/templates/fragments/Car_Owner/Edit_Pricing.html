@@ -8,15 +8,16 @@
 <!--    <script src="https://kit.fontawesome.com/2465434fef.js" crossorigin="anonymous"></script>-->
 </head>
 <body>
-<div th:fragment="editPricing">
-<form action="" class="price edit-price">
+<div th:fragment="editPricing" class="price">
     <div class="form-group deposit-base-price-container">
         <div class="label-container">
             <label for="base-price">Base price:</label>
         </div>
         <div class="input-container">
-            <input type="text" class="form-control base-price-input" id="base-price">
+            <input type="text" class="form-control base-price-input" id="base-price" th:field="*{basePrice}">
             <span>VND/Day</span>
+            <small class="warning-text" id="base-price-warning" style="display: none">*Base price is required</small>
+            <small class="warning-text" id="base-price-number-warning" style="display: none">*Base price must be number</small>
         </div>
     </div>
     <div class="form-group deposit-base-price-container">
@@ -24,43 +25,46 @@
             <label for="deposit">Required deposit:</label>
         </div>
         <div class="input-container">
-            <input type="text" class="form-control deposit-input" id="deposit">
+            <input type="text" class="form-control deposit-input" id="deposit" th:field="*{deposit}">
             <span>VND</span>
+            <small class="warning-text" id="deposit-warning" style="display: none">*Deposit is required</small>
+            <small class="warning-text" id="deposit-number-warning" style="display: none">*Deposit must be number</small>
         </div>
     </div>
     <div class="form-group">
         <label>Terms of use</label>
         <div class="row">
+            <input type="hidden" th:field="*{termsOfUse}" class="term-of-use" id="term-of-use">
             <div class="col-md-4">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" value="" name="">
+                    <input type="checkbox" class="form-check-input term" value="1">
                     <label class="form-check-label">No smoking</label>
                 </div>
 
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" value="" name="">
+                    <input type="checkbox" class="form-check-input term" value="2">
                     <label class="form-check-label">No pet</label>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" value="" name="">
+                    <input type="checkbox" class="form-check-input term" value="3">
                     <label class="form-check-label">No food in car</label>
                 </div>
 
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" value="" name="">
+                    <input type="checkbox" class="form-check-input specify-check term" value="4">
                     <label class="form-check-label">Other</label>
+                </div>
+                <div class="specify" style="display: none">
+                    <p class="mb-2 mt-2">Please specify</p>
+                    <textarea class="form-control" rows="5" id="comment" name="otherterm" maxlength="200"></textarea>
                 </div>
             </div>
         </div>
     </div>
-    <div class="button-container">
-        <button class="btn btn-danger">Discard</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-    </div>
-</form>
+    <script th:src="@{/js/Car_Owner/Edit_Pricing.js}"></script>
 </div>
 </body>
 </html>

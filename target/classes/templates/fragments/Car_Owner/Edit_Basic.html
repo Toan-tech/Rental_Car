@@ -11,19 +11,19 @@
             <table>
                 <tr>
                     <td>License plate:</td>
-                    <td>ABC123456789</td>
+                    <td th:text="*{licensePlate}"></td>
                 </tr>
                 <tr>
                     <td>Brand name:</td>
-                    <td>Audi</td>
+                    <td th:text="*{brand}"></td>
                 </tr>
                 <tr>
                     <td>Production year:</td>
-                    <td>2022</td>
+                    <td th:text="*{productionYears}"></td>
                 </tr>
                 <tr>
                     <td>Transmission:</td>
-                    <td>ABCDEF</td>
+                    <td th:text="*{transmissionType}"></td>
                 </tr>
             </table>
         </div>
@@ -31,19 +31,19 @@
             <table>
                 <tr>
                     <td>Color:</td>
-                    <td>Red</td>
+                    <td th:text="*{color}"></td>
                 </tr>
                 <tr>
                     <td>Model:</td>
-                    <td>2002</td>
+                    <td th:text="*{model}"></td>
                 </tr>
                 <tr>
                     <td>No. of seats:</td>
-                    <td>4</td>
+                    <td th:text="*{numberOfSeats}"></td>
                 </tr>
                 <tr>
                     <td>Fuel</td>
-                    <td>Gasoline</td>
+                    <td th:text="*{fuelType}"></td>
                 </tr>
             </table>
         </div>
@@ -59,12 +59,13 @@
                 </tr>
                 </thead>
                 <tbody>
+                <input type="hidden" th:field="*{images}" class="show-document">
                 <tr>
                     <td>1</td>
                     <td>Registration paper</td>
                     <td>Verified</td>
                     <td>
-                        <a href="#">File1.PDF</a>
+                        <a href="#" class="registration"></a>
                     </td>
                 </tr>
                 <tr>
@@ -72,19 +73,22 @@
                     <td>Certificate of Inspection</td>
                     <td>Verified</td>
                     <td>
-                        <a href="#">File2.PDF</a>
+                        <a href="#" class="certificate"></a>
                     </td>
                 </tr>
                 <tr>
                     <td>3</td>
                     <td>Insurance</td>
-                    <td>Not available</td>
-                    <td>Not available</td>
+                    <td>Verified</td>
+                    <td>
+                        <a href="#" class="insurance"></a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
+    <script th:src="@{/js/Car_Owner/Edit_Basic.js}"></script>
 </div>
 </body>
 </html>

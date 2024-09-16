@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent a Car</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            background-color: darkgray;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            margin-left: 25px;
+            margin-top: 10px;
+            font-weight: bolder;
+            color: white;
+            font-size: 50px;
+        }
+
+        .header-left i {
+            font-size: 50px;
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+        }
+
+        .header-right div i {
+            color: white;
+        }
+
+        .header-right a {
+            text-decoration: none;
+            color: white;
+        }
+
+        hr {
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            border: none;
+        }
+
+        .divider {
+            margin: 0 20px;
+            border-left: 1px solid white;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 25px;
+            font-weight: bolder;
+        }
+
+        .header img {
+            vertical-align: middle;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 40px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .content-1 {
+            background-color: darkgray;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            position: relative;
+            width: 100%;
+            height: 450px;
+            border-top: 1px solid white;
+            overflow: hidden;
+        }
+
+        .content-1-head,
+        .content-1-content,
+        .content-1-btn {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .content-1-head {
+            font-size: 35px;
+            font-weight: bolder;
+            margin-left: 150px;
+            margin-right: 150px;
+            color: white;
+        }
+
+        .content-1-content {
+            font-size: 15px;
+            margin-left: 125px;
+            margin-right: 150px;
+            color: white;
+        }
+
+        .content-1-btn {
+            margin-left: 150px;
+            margin-right: 200px;
+        }
+
+        .diagonal-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: white;
+            transform: rotate(120deg);
+            transform-origin: center;
+            z-index: 1;
+        }
+
+        .content-1-head, .content-1-content, .content-1-btn {
+            position: relative;
+            z-index: 2;
+        }
+
+        .content-1-head, .content-1-content, .content-1-btn {
+            padding: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #007bff;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
+        .card {
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .location-box {
+            border: 2px solid white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .location-box:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .location-box img {
+            border-radius: 8px 8px 0 0;
+            width: 100%;
+            height: auto;
+        }
+
+        .location-box h4 {
+            margin: 15px 0 5px;
+            font-size: 20px;
+        }
+
+        .location-box p {
+            font-size: 16px;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: darkgray;
+            border-top: 1px solid #e1e1e1;
+        }
+
+        .footer-section {
+            flex: 1;
+            padding: 0 15px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            text-decoration: none;
+            color: black;
+            font-size: 10px
+        }
+
+        .footer-section a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="header-left">
+        <i class="fa-solid fa-car"></i>
+        <h1>Rent a car today!</h1>
+    </div>
+    <div class="header-right">
+        <a href="#">ABOUT US</a>
+        <div class="divider"></div>
+        <div>
+            <i class="fa-solid fa-circle-user"></i>
+            <a th:href="@{/login}">SIGN UP</a>
+        </div>
+        <div class="divider"></div>
+        <a th:href="@{/login}">LOG IN</a>
+    </div>
+</div>
+
+<hr>
+
+<div class="content-1">
+    <div class="content-1-head">
+        <div>
+            <p>Looking for a vehicle?</p>
+            <p>You’re at the right place.</p>
+        </div>
+        <div>
+            <p class="hidden">Hidden</p>
+            <p>Are you a car owner?</p>
+        </div>
+    </div>
+    <div class="content-1-content">
+        <p>Choose between 100's of private cars for rent at really low prices!</p>
+        <p>List your car and make money from your asset today!</p>
+    </div>
+    <div class="content-1-btn">
+        <button type="submit" class="btn">Find a Rental Car Near You</button>
+        <button type="submit" class="btn">List Your Car Today</button>
+    </div>
+
+    <div class="diagonal-line diagonal-line-center"></div>
+
+</div>
+
+<section class="container mt-5" style="margin-bottom: 20px">
+    <h1 class="text-center mb-4" style="font-size: 40px; padding-bottom: 20px">Why us?</h1>
+    <div class="row text-center d-flex align-items-stretch">
+        <div class="col-md-3 d-flex">
+            <div class="card p-3 border-0 flex-fill">
+                <div class="icon mb-3">
+                    <i class='bx bx-dollar-circle' style="font-size: 48px;"></i>
+                </div>
+                <h5>Save money</h5>
+                <p>We have no setup or registration fees. You are only charged when you rent a car. So get started for
+                    FREE!</p>
+            </div>
+        </div>
+        <div class="col-md-3 d-flex">
+            <div class="card p-3 border-0 flex-fill">
+                <div class="icon mb-3">
+                    <i class='bx bx-car' style="font-size: 48px;"></i>
+                </div>
+                <h5>Convenient</h5>
+                <p>We have a large selection of privately owned cars to suit your needs throughout the country.</p>
+            </div>
+        </div>
+        <div class="col-md-3 d-flex">
+            <div class="card p-3 border-0 flex-fill">
+                <div class="icon mb-3">
+                    <i class='bx bx-shield-alt-2' style="font-size: 48px;"></i>
+                </div>
+                <h5>Legal and insurance</h5>
+                <p>We fully cover all rentals and even provide roadside assistance. Our rating system and extended
+                    member profile checks provide safety.</p>
+            </div>
+        </div>
+        <div class="col-md-3 d-flex">
+            <div class="card p-3 border-0 flex-fill">
+                <div class="icon mb-3">
+                    <i class='bx bx-support' style="font-size: 48px;"></i>
+                </div>
+                <h5>24/7 support</h5>
+                <p>Our team is ready to support you all along the way with our 24/7 hotline and services.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div style="background-color: darkgray; padding: 30px 0; margin-bottom: 20px">
+    <section class="container">
+        <h1 class="text-center mb-4" style="font-size: 40px; padding-bottom: 20px">What people say?</h1>
+        <div class="row">
+            <div class="col-md-6 mb-4 d-flex">
+                <div class="card p-3 border-0 flex-fill">
+                    <div class="d-flex">
+                        <div class="icon mr-3">
+                            <i class="fa fa-user-circle" style="font-size: 50px;"></i>
+                        </div>
+                        <div>
+                            <p>Review content goes here. This is a placeholder for the first review.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4 d-flex">
+                <div class="card p-3 border-0 flex-fill">
+                    <div class="d-flex">
+                        <div class="icon mr-3">
+                            <i class="fa fa-user-circle" style="font-size: 50px;"></i>
+                        </div>
+                        <div>
+                            <p>Review content goes here. This is a placeholder for the second review.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4 d-flex">
+                <div class="card p-3 border-0 flex-fill">
+                    <div class="d-flex">
+                        <div class="icon mr-3">
+                            <i class="fa fa-user-circle" style="font-size: 50px;"></i>
+                        </div>
+                        <div>
+                            <p>Review content goes here. This is a placeholder for the third review.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4 d-flex">
+                <div class="card p-3 border-0 flex-fill">
+                    <div class="d-flex">
+                        <div class="icon mr-3">
+                            <i class="fa fa-user-circle" style="font-size: 50px;"></i>
+                        </div>
+                        <div>
+                            <p>Review content goes here. This is a placeholder for the fourth review.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<section class="container py-5">
+    <h2 class="text-center mb-4" style="font-size: 40px; padding-bottom: 20px">Where to find us?</h2>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="location-box text-center box-shadow">
+                <img src="../../static/images/location/khue-van-cac.jpg" class="img-fluid" alt="Hanoi">
+                <h4>Hanoi</h4>
+                <p>80+ cars</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="location-box text-center box-shadow">
+                <img src="../../static/images/location/lankmark.jpg" class="img-fluid" alt="Ho Chi Minh City">
+                <h4>Ho Chi Minh City</h4>
+                <p>100+ cars</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="location-box text-center box-shadow">
+                <img src="../../static/images/location/da-nang.jpg" class="img-fluid" alt="Da Nang - Hoi An">
+                <h4>Da Nang - Hoi An</h4>
+                <p>90+ cars</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="location-box text-center box-shadow">
+                <img src="../../static/images/location/nha-trang.jpg" class="img-fluid" alt="Nha Trang">
+                <h4>Nha Trang</h4>
+                <p>50+ cars</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="location-box text-center box-shadow">
+                <img src="../../static/images/location/da-lat.jpg" class="img-fluid" alt="Da Lat">
+                <h4>Da Lat</h4>
+                <p>80+ cars</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="location-box text-center box-shadow">
+                <img src="../../static/images/location/quang-ninh.jpg" class="img-fluid" alt="Quang Ninh">
+                <h4>Quang Ninh</h4>
+                <p>70+ cars</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="footer">
+    <div class="footer-section">
+        <h3>RENT CARS</h3>
+        <ul>
+            <li><a href="/Homepage"><span style="font-size: 1.4em">Search Cars and Rates</span></a></li>
+        </ul>
+    </div>
+    <div class="footer-section">
+        <h3>CUSTOMER ACCESS</h3>
+        <ul>
+            <li><a href="#"><span style="font-size: 1.4em">Manage My Booking</span></a></li>
+            <li><a href="#"><span style="font-size: 1.4em">My Wallet</span></a></li>
+            <li><a href="#"><span style="font-size: 1.4em">My Car</span></a></li>
+            <li><a href="#"><span style="font-size: 1.4em">Log In</span></a></li>
+        </ul>
+    </div>
+    <div class="footer-section">
+        <h3>JOIN US</h3>
+        <ul>
+            <li><a href="#"><span style="font-size: 1.4em">New User Sign Up</span></a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

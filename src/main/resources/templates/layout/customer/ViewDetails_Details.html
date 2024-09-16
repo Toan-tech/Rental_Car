@@ -11,7 +11,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+          rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{css/header.css}">
     <style>
@@ -54,13 +55,12 @@
         }
 
         .star-rating {
-            font-size: 1.5em;
-            color: #ddd;
-            cursor: pointer;
+            color: #d3d3d3; /* Default star color */
+            font-size: 24px;
         }
 
         .star-rating.checked {
-            color: gold;
+            color: #ffcc00; /* Color for checked stars */
         }
 
         .form-check {
@@ -68,7 +68,6 @@
             align-items: center;
             margin-bottom: 15px;
         }
-
         .form-check i {
             font-size: 24px;
             margin-right: 10px;
@@ -83,6 +82,11 @@
             width: 20px;
             height: 20px;
         }
+        .btn.disabled {
+            cursor: not-allowed;
+            background-color: #e0e0e0;
+            border: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
@@ -91,13 +95,16 @@
 
 <main>
     <section>
-        <nav aria-label="breadcrumb" style="padding: 10px;">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Search Results</a></li>
-                <li class="breadcrumb-item"><a href="#">Car Details</a></li>
-            </ol>
-        </nav>
+            <nav aria-label="breadcrumb" style="padding: 10px;" th:object="idealCar">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/result-search(location=${idealCar.location},
+                        pickupDateTime=${idealCar.pickupDateTime},
+                        dropOffDateTime=${idealCar.dropOffDateTime})}" onchange="updateUrl()">Search Results</a>
+                    </li>
+                    <li class="breadcrumb-item"><a th:href="@{/details(carId=${car.id})}">Car Details</a></li>
+                </ol>
+            </nav>
         <h1 style="padding-left: 20px;">Car Details</h1>
     </section>
     <section class="container mt-4">
@@ -133,30 +140,79 @@
                         <li data-target="#imageCarousel1" data-slide-to="2"></li>
                     </ol>
                 </div>
-                <div class="col-md-6">
-                    <div class="card-body">
-                        <h2 class="card-title" style="padding-top: 40px">Nissan Navara El 2017</h2>
-                        <p class="card-text">
-                            <strong>Ratings:</strong>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="1"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="2"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="3"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="4"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="5"></span>
-                            <span class="no-ratings-text" data-card="1">(No ratings yet)</span>
-                        </p>
-                        <p class="card-text">
-                            <strong>No. of rides:</strong> 0
-                            <br>
-                            <strong>Price:</strong> 900k/day
-                            <br>
-                            <strong>Locations:</strong> Cau Giay, Hanoi
-                            <br>
-                            <strong>Status:</strong> <span class="text-success">Available</span>
-                        </p>
-                        <a href="#" class="btn btn-primary" style="margin-right: 10px; padding: 10px"><span style="font-size: 19px">Rent now</span></a>
+                <form th:action="@{/details(carId=${car.id})}" method="get" id="card-view">
+                    <input type="hidden" name="carId" th:value="${car.id}"/>
+                    <input type="hidden" name="bookingId" th:if="${booking != null}" th:value="${booking.id}"/>
+                    <div id="booking-container" th:field="car">
+                        <div class="col-md-12">
+                            <div class="card-body">
+                                <strong class="card-title" style="font-size: 45px"
+                                        th:text="${car.name}">Car Name</strong>
+                                <span style="font-size: 28px"
+                                      th:text="'(' + ${car.brand} + ' - ' + ${car.model} + ')'">CarBranch - CarModel</span>
+                                <div style="font-size: 18px; margin-top: 15px; margin-bottom: 10px">
+                                    <div id="rating-container">
+                                        <div th:if="${booking != null}">
+                                            <strong style="font-size: 20px; color: #6c757d; margin-right: 10px">Ratings: </strong>
+                                            <span class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.one_star' || booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+                                            <span class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+                                            <span class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+                                            <span class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+                                            <span class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+                                        </div>
+                                        <div th:if="${booking == null}">
+                                            <span class="no-ratings-text">(No ratings yet)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text">
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">No. of rides: </strong>
+                                        <span th:text="${car.bookings.size()}"
+                                              style="margin-left: 10px; font-size: 20px">0</span><br>
+                                    </div>
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">Price: </strong>
+                                        <span th:text="${car.basePrice} + '/day'"
+                                              style="margin-left: 10px; font-size: 20px">N/A</span><br>
+                                    </div>
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">Locations: </strong>
+                                        <span th:if="${booking != null}" th:text="${booking.driverInfo}"
+                                              style="margin-left: 10px; font-size: 20px">Unknown</span><br>
+                                    </div>
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">Status: </strong>
+                                        <span class="text-success" th:text="${car.status}"
+                                              style="margin-left: 10px; font-size: 20px">Status</span>
+                                    </div>
+                                </div>
+                                <div th:if="${car.status.toString() == 'Booked'}">
+                                    <a href="javascript:void(0);" class="btn btn disabled"
+                                       style="margin-right: 10px; padding: 10px; margin-top: 10px"><span
+                                            style="font-size: 19px; color: black">Already Booked</span>
+                                    </a>
+                                </div>
+                                <div th:unless="${car.status.toString() == 'Booked'}">
+                                    <a th:href="@{/Overview(carId=${car.id})}" class="btn btn-primary"
+                                       style="margin-right: 10px; padding: 10px; margin-top: 10px"><span
+                                            style="font-size: 19px">Rent now</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </section>
@@ -165,100 +221,123 @@
         <!-- Tabs for navigation -->
         <ul class="nav nav-tabs" id="carDetailsTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link" href="/templates/layout/customer/ViewDetails_BasicInformation">Basic Information</a>
+                <a class="nav-link" th:href="@{/viewDetails(carId=${car.id})}">Basic
+                    Information</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="/templates/layout/customer/ViewDetails_Details">Details</a>
+                <a class="nav-link active" th:href="@{/details(carId=${car.id})}">Details</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/templates/layout/customer/ViewDetails_Term">Terms of use</a>
+                <a class="nav-link" th:href="@{/term(carId=${car.id})}">Terms of use</a>
             </li>
         </ul>
         <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
-            <div class="tab-pane fade show active" id="basic-info" role="tabpanel" aria-labelledby="details-tab">
-                <!-- Mileage and Fuel consumption -->
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <h4>Mileage:</h4>
-                        <p>Fuel consumption: 18 liter/100 km</p>
-                    </div>
-                </div>
-
-                <!-- Address -->
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <h4>Address:</h4>
-                        <p>Note: Full address will be available after you've paid the deposit to rent.</p>
-                    </div>
-                </div>
-
-                <!-- Description -->
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <h4>Description:</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore
-                            et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                            nisi ut
-                            aliquip ex ea commodo consequat.</p>
-                    </div>
-                </div>
-
-                <div style="margin-top: 15px">
-                    <h4>Additional functions:</h4>
-                    <!-- Additional functions -->
-                    <div class="row" style="margin-top: 20px">
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <i class='bx bx-bluetooth'></i>
-                                <span class="form-check-label" for="bluetooth">Bluetooth</span>
-                                <input class="form-check-input" type="checkbox" id="bluetooth"
-                                       style="margin-left: 130px">
-                            </div>
-                            <div class="form-check">
-                                <i class='bx bx-map-alt'></i>
-                                <label class="form-check-label" for="gps">GPS</label>
-                                <input class="form-check-input" type="checkbox" id="gps" style="margin-left: 130px">
-                            </div>
-                            <div class="form-check">
-                                <i class='bx bx-camera'></i>
-                                <label class="form-check-label" for="camera">Camera</label>
-                                <input class="form-check-input" type="checkbox" id="camera" style="margin-left: 130px">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <i class='bx bx-sun'></i>
-                                <label class="form-check-label" for="sunroof">Sun roof</label>
-                                <input class="form-check-input" type="checkbox" id="sunroof" style="margin-left: 135px">
-                            </div>
-                            <div class="form-check">
-                                <i class='bx bx-lock-open-alt'></i>
-                                <label class="form-check-label" for="childlock">Child lock</label>
-                                <input class="form-check-input" type="checkbox" id="childlock"
-                                       style="margin-left: 135px">
-                            </div>
-                            <div class="form-check">
-                                <i class="fa-solid fa-child-reaching"></i>
-                                <label class="form-check-label" for="childseat">Child seat</label>
-                                <input class="form-check-input" type="checkbox" id="childseat"
-                                       style="margin-left: 135px">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <i class='bx bx-disc'></i>
-                                <label class="form-check-label" for="dvd">DVD</label>
-                                <input class="form-check-input" type="checkbox" id="dvd" style="margin-left: 100px">
-                            </div>
-                            <div class="form-check">
-                                <i class="fa-brands fa-usb"></i>
-                                <label class="form-check-label" for="usb">USB</label>
-                                <input class="form-check-input" type="checkbox" id="usb" style="margin-left: 100px">
-                            </div>
+            <div class="tab-pane fade show active" id="basic-info" role="tabpanel" aria-labelledby="details-tab" th:field="car">
+                <form th:action="@{/details(carId=${car.id})}" method="get">
+                    <!-- Mileage and Fuel consumption -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h4>Mileage:</h4>
+                            <p th:text="${car.mileage}">Mileage</p>
                         </div>
                     </div>
-                </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h4>Fuel consumption:</h4>
+                            <p th:text="${car.fuelConsumption} + 'liter/100 km'">Fuel consumption</p>
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h4>Address:</h4>
+                            <p th:if="${car.status.toString() == 'Booked'}">
+                                <span th:text="${car.address}">Full address</span>
+                            </p>
+                            <p th:unless="${car.status.toString() == 'Booked'}">
+                                Note: Full address will be available after you've paid the deposit to rent.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h4>Description:</h4>
+                            <p th:text="${car.description}">
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 15px">
+                        <h4>Additional functions:</h4>
+                        <div class="row" style="margin-top: 20px">
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <i class='bx bx-bluetooth'></i>
+                                    <span class="form-check-label" for="bluetooth">Bluetooth</span>
+                                    <input class="form-check-input" type="checkbox" id="bluetooth"
+                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).Bluetooth)}"
+                                           style="margin-left: 130px">
+                                </div>
+                                <div class="form-check">
+                                    <i class='bx bx-map-alt'></i>
+                                    <label class="form-check-label" for="gps">GPS</label>
+                                    <input class="form-check-input" type="checkbox" id="gps"
+                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).GPS)}"
+                                           style="margin-left: 130px">
+                                </div>
+                                <div class="form-check">
+                                    <i class='bx bx-camera'></i>
+                                    <label class="form-check-label" for="camera">Camera</label>
+                                    <input class="form-check-input" type="checkbox" id="camera"
+                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).Camera)}"
+                                           style="margin-left: 130px">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <i class='bx bx-sun'></i>
+                                    <label class="form-check-label" for="sunroof">Sun roof</label>
+                                    <input class="form-check-input" type="checkbox" id="sunroof"
+                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).Sun_Roof)}"
+                                           style="margin-left: 135px">
+                                </div>
+                                <div class="form-check">
+                                    <i class='bx bx-lock-open-alt'></i>
+                                    <label class="form-check-label" for="childlock">Child lock</label>
+                                    <input class="form-check-input" type="checkbox" id="childlock"
+                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).Child_Lock)}"
+                                           style="margin-left: 135px">
+                                </div>
+                                <div class="form-check">
+                                    <i class="fa-solid fa-child-reaching"></i>
+                                    <label class="form-check-label" for="childseat">Child seat</label>
+                                    <input class="form-check-input" type="checkbox" id="childseat"
+                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).Child_Seat)}"
+                                           style="margin-left: 135px">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <i class='bx bx-disc'></i>
+                                    <label class="form-check-label" for="dvd">DVD</label>
+                                    <input class="form-check-input" type="checkbox" id="dvd"
+                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).DVD)}"
+                                           style="margin-left: 100px">
+                                </div>
+                                <div class="form-check">
+                                    <i class="fa-brands fa-usb"></i>
+                                    <label class="form-check-label" for="usb">USB</label>
+                                    <input class="form-check-input" type="checkbox" id="usb"
+                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).USB)}"
+                                           style="margin-left: 100px">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
@@ -267,6 +346,22 @@
 <!-- Include Footer Fragment -->
 <div th:replace="fragments/fragment :: footer"></div>
 
+<script>
+    function updateUrl() {
+        const currentUrl = window.location.href;
+        const newUrl = new URL(currentUrl);
+
+        const location = document.getElementById('pickupLocation')?.value || '';
+        const pickupDateTime = document.getElementById('startDateTime')?.value || '';
+        const dropOffDateTime = document.getElementById('endDateTime')?.value || '';
+
+        newUrl.searchParams.set('location', location);
+        newUrl.searchParams.set('pickupDateTime', pickupDateTime);
+        newUrl.searchParams.set('dropOffDateTime', dropOffDateTime);
+
+        window.location.href = newUrl.toString();
+    }
+</script>
 <script>
     const optionMenu = document.querySelector(".select-menu"),
         selectBtn = optionMenu.querySelector(".select-btn"),
@@ -287,32 +382,6 @@
             }
 
             optionMenu.classList.remove("active");
-        });
-    });
-</script>
-<script>
-    document.querySelectorAll('.star-rating').forEach(function (star) {
-        star.addEventListener('click', function () {
-            var card = this.getAttribute('data-card');
-            var rating = parseInt(this.getAttribute('data-rating'));
-
-            // Xóa lớp 'checked' của tất cả ngôi sao trong card hiện tại
-            document.querySelectorAll('.star-rating[data-card="' + card + '"]').forEach(function (star) {
-                star.classList.remove('checked');
-            });
-
-            // Thêm lớp 'checked' cho các ngôi sao đến ngôi sao được chọn trong card hiện tại
-            for (var i = 1; i <= rating; i++) {
-                document.querySelector('.star-rating[data-card="' + card + '"][data-rating="' + i + '"]').classList.add('checked');
-            }
-
-            // Ẩn hoặc hiện thẻ (No ratings yet)
-            var noRatingsText = document.querySelector('.no-ratings-text[data-card="' + card + '"]');
-            if (rating > 0) {
-                noRatingsText.style.display = 'none';
-            } else {
-                noRatingsText.style.display = 'inline';
-            }
         });
     });
 </script>

@@ -18,10 +18,6 @@
           rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{css/header.css}">
     <style>
-        .input-wrapper {
-            position: relative;
-        }
-
         .input-wrapper i {
             position: absolute;
             right: 10px;
@@ -50,21 +46,6 @@
             font-size: 25px;
             margin-bottom: 15px;
         }
-
-        .option:hover {
-            background-color: #f2f2f2;
-            transform: scale(1.1);
-        }
-
-        .star-rating {
-            font-size: 1.5em;
-            color: #ddd;
-            cursor: pointer;
-        }
-
-        .star-rating.checked {
-            color: gold;
-        }
     </style>
 </head>
 <body>
@@ -75,9 +56,9 @@
     <section>
         <nav aria-label="breadcrumb" style="padding: 10px;">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">My Bookings</a></li>
-                <li class="breadcrumb-item"><a href="#">Booking details</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/ThumbView}">My Bookings</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/detailsThumb(carId=${car.id})}">Booking details</a></li>
             </ol>
         </nav>
     </section>

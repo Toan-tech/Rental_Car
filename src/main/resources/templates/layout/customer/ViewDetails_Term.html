@@ -34,6 +34,10 @@
             margin-top: 25px;
         }
 
+        h4 {
+            font-weight: bold;
+        }
+
         p {
             font-size: 20px;
             color: #6c757d;
@@ -51,15 +55,27 @@
         }
 
         .star-rating {
-            font-size: 1.5em;
-            color: #ddd;
-            cursor: pointer;
+            color: #d3d3d3; /* Default star color */
+            font-size: 24px;
         }
 
         .star-rating.checked {
-            color: gold;
+            color: #ffcc00; /* Color for checked stars */
         }
 
+        th, td {
+            font-size: 1.2em;
+        }
+
+        .form-check i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        .btn.disabled {
+            cursor: not-allowed;
+            background-color: #e0e0e0;
+            border: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
@@ -70,9 +86,11 @@
     <section>
         <nav aria-label="breadcrumb" style="padding: 10px;">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Search Results</a></li>
-                <li class="breadcrumb-item"><a href="#">Car Details</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/result-search(location=${idealCar.location},
+                        pickupDateTime=${idealCar.pickupDateTime},
+                        dropOffDateTime=${idealCar.dropOffDateTime})}" onchange="updateUrl()">Search Results</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/details(carId=${car.id})}">Car Details</a></li>
             </ol>
         </nav>
         <h1 style="padding-left: 20px;">Car Details</h1>
@@ -110,30 +128,79 @@
                         <li data-target="#imageCarousel1" data-slide-to="2"></li>
                     </ol>
                 </div>
-                <div class="col-md-6">
-                    <div class="card-body">
-                        <h2 class="card-title" style="padding-top: 40px">Nissan Navara El 2017</h2>
-                        <p class="card-text">
-                            <strong>Ratings:</strong>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="1"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="2"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="3"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="4"></span>
-                            <span class="fa fa-star star-rating" data-card="1" data-rating="5"></span>
-                            <span class="no-ratings-text" data-card="1">(No ratings yet)</span>
-                        </p>
-                        <p class="card-text">
-                            <strong>No. of rides:</strong> 0
-                            <br>
-                            <strong>Price:</strong> 900k/day
-                            <br>
-                            <strong>Locations:</strong> Cau Giay, Hanoi
-                            <br>
-                            <strong>Status:</strong> <span class="text-success">Available</span>
-                        </p>
-                        <a href="#" class="btn btn-primary" style="margin-right: 10px; padding: 10px"><span style="font-size: 19px">Rent now</span></a>
+                <form th:action="@{/term}" method="get" id="card-view">
+                    <input type="hidden" name="carId" th:value="${car.id}"/>
+                    <input type="hidden" name="bookingId" th:if="${booking != null}" th:value="${booking.id}"/>
+                    <div id="booking-container" th:field="car">
+                        <div class="col-md-12">
+                            <div class="card-body">
+                                <strong class="card-title" style="font-size: 45px"
+                                        th:text="${car.name}">Car Name</strong>
+                                <span style="font-size: 28px"
+                                      th:text="'(' + ${car.brand} + ' - ' + ${car.model} + ')'">CarBranch - CarModel</span>
+                                <div style="font-size: 18px; margin-top: 15px; margin-bottom: 10px">
+                                    <div id="rating-container">
+                                        <div th:if="${booking != null}">
+                                            <strong style="font-size: 20px; color: #6c757d; margin-right: 10px">Ratings: </strong>
+                                            <span class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.one_star' || booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+                                            <span class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+                                            <span class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+                                            <span class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+                                            <span class="fa fa-star star-rating"
+                                                  th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                  style="font-size: 28px"></span>
+                                        </div>
+                                        <div th:if="${booking == null}">
+                                            <span class="no-ratings-text">(No ratings yet)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text">
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">No. of rides: </strong>
+                                        <span th:text="${car.bookings.size()}"
+                                              style="margin-left: 10px; font-size: 20px">0</span><br>
+                                    </div>
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">Price: </strong>
+                                        <span th:text="${car.basePrice} + '/day'"
+                                              style="margin-left: 10px; font-size: 20px">N/A</span><br>
+                                    </div>
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">Locations: </strong>
+                                        <span th:if="${booking != null}" th:text="${booking.driverInfo}"
+                                              style="margin-left: 10px; font-size: 20px">Unknown</span><br>
+                                    </div>
+                                    <div style="margin-bottom: 10px">
+                                        <strong style="font-size: 20px; color: #6c757d">Status: </strong>
+                                        <span class="text-success" th:text="${car.status}"
+                                              style="margin-left: 10px; font-size: 20px">Status</span>
+                                    </div>
+                                </div>
+                                <div th:if="${car.status.toString() == 'Booked'}">
+                                    <a href="javascript:void(0);" class="btn btn disabled"
+                                       style="margin-right: 10px; padding: 10px; margin-top: 10px"><span
+                                            style="font-size: 19px; color: black">Already Booked</span>
+                                    </a>
+                                </div>
+                                <div th:unless="${car.status.toString() == 'Booked'}">
+                                    <a th:href="@{/Overview(carId=${car.id})}" class="btn btn-primary"
+                                       style="margin-right: 10px; padding: 10px; margin-top: 10px"><span
+                                            style="font-size: 19px">Rent now</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </section>
@@ -142,68 +209,80 @@
         <!-- Tabs for navigation -->
         <ul class="nav nav-tabs" id="carDetailsTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link" href="/templates/layout/customer/ViewDetails_BasicInformation">Basic Information</a>
+                <a class="nav-link" th:href="@{/viewDetails(carId=${car.id})}">Basic
+                    Information</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/templates/layout/customer/ViewDetails_Details">Details</a>
+                <a class="nav-link" th:href="@{/details(carId=${car.id})}">Details</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="/templates/layout/customer/ViewDetails_Term">Terms of use</a>
+                <a class="nav-link active" th:href="@{/term(carId=${car.id})}">Terms of use</a>
             </li>
         </ul>
         <!-- Tab content -->
         <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
             <div class="tab-pane fade show active" id="basic-info" role="tabpanel" aria-labelledby="term-tab">
-                <!-- Mileage and Fuel consumption -->
-                <div class="row">
-                    <!-- Base price input -->
-                    <div class="col-md-6 mb-3">
-                        <label for="basePrice" class="form-label" style="font-size: 1.5rem; font-weight: bold;">Base price:</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-lg" id="basePrice" value="900,000">
-                            <span class="input-group-text" style="font-size: 1.25rem; font-weight: bold;">VND/Day</span>
+                <form th:action="@{/term(carId=${car.id})}" method="get">
+                    <!-- Base Price -->
+                    <div class="row" style="margin-top: 20px">
+                        <!-- Base price input -->
+                        <div class="col-md-6 mb-3">
+                            <label for="basePrice" class="form-label" style="font-size: 1.5rem; font-weight: bold;">Base
+                                price:</label>
+                            <div class="input-group d-flex justify-content-center">
+                                <span class="input-group-text" style="font-size: 1.25rem; margin-right: 10px;"
+                                      id="basePrice" th:text="${car.basePrice}"></span>
+                                <span class="input-group-text"
+                                      style="font-size: 1.25rem; font-weight: bold;">VND/Day</span>
+                            </div>
+                        </div>
+
+                        <!-- Required deposit input -->
+                        <div class="col-md-6 mb-3">
+                            <label for="deposit" class="form-label" style="font-size: 1.5rem; font-weight: bold;">Required
+                                deposit:</label>
+                            <div class="input-group d-flex justify-content-center">
+                                <span class="input-group-text" style="font-size: 1.25rem; margin-right: 10px;"
+                                      id="deposit" th:text="${car.deposit}"></span>
+                                <span class="input-group-text"
+                                      style="font-size: 1.25rem; font-weight: bold;">VND/Day</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Required deposit input -->
-                    <div class="col-md-6 mb-3">
-                        <label for="deposit" class="form-label" style="font-size: 1.5rem; font-weight: bold;">Required deposit:</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-lg" id="deposit" value="15,000,000">
-                            <span class="input-group-text" style="font-size: 1.25rem">VND</span>
+                    <div class="row">
+                        <div class="col-md-12 d-flex justify-content-left" style="margin-top: 20px">
+                            <label class="form-label" style="font-size: 1.5rem; font-weight: bold;">Terms of use:</label>
+                            <div class="form-check" style="margin-left: 50px; margin-bottom: 20px; margin-top: 40px">
+                                <input class="form-check-input" type="checkbox" id="noSmoking"
+                                       th:checked="${car.termsOfUse.contains(T(com.spring.entities.TermOfUse).No_Smoking)}"
+                                       style="transform: scale(1.5); margin-top: 9px">
+                                <span class="form-check-label" for="noSmoking"
+                                      style="font-size: 1.25rem; margin-left: 5px">No smoking</span>
+                            </div>
+                            <div class="form-check" style="margin-left: 50px; margin-bottom: 20px; margin-top: 40px">
+                                <input class="form-check-input" type="checkbox" id="noPet"
+                                       th:checked="${car.termsOfUse.contains(T(com.spring.entities.TermOfUse).No_pet)}"
+                                       style="transform: scale(1.5); margin-top: 10px">
+                                <span class="form-check-label" for="noPet" style="font-size: 1.25rem; margin-left: 5px">No pet</span>
+                            </div>
+                            <div class="form-check" style="margin-left: 50px; margin-bottom: 20px; margin-top: 40px">
+                                <input class="form-check-input" type="checkbox" id="noFood"
+                                       th:checked="${car.termsOfUse.contains(T(com.spring.entities.TermOfUse).No_Food_In_Cars)}"
+                                       style="transform: scale(1.5); margin-top: 9px">
+                                <span class="form-check-label" for="noFood"
+                                      style="font-size: 1.25rem; margin-left: 5px">No food in car</span>
+                            </div>
+                            <div class="form-check" style="margin-left: 50px; margin-top: 40px">
+                                <input class="form-check-input" type="checkbox" id="other"
+                                       th:checked="${car.termsOfUse.contains(T(com.spring.entities.TermOfUse).Other)}"
+                                       style="transform: scale(1.5); margin-top: 9px">
+                                <span class="form-check-label" for="other" style="font-size: 1.25rem; margin-left: 5px">Other</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <label class="form-label" style="font-size: 1.5rem; font-weight: bold;">Terms of use</label>
-                        <div class="form-check" style="margin-left: 50px; margin-bottom: 20px">
-                            <input class="form-check-input" type="checkbox" id="noSmoking" style="transform: scale(1.5); margin-top: 9px">
-                            <span class="form-check-label" for="noSmoking" style="font-size: 1.25rem">
-                                No smoking
-                            </span>
-                        </div>
-                        <div class="form-check" style="margin-left: 50px; margin-bottom: 20px">
-                            <input class="form-check-input" type="checkbox" id="noPet" style="transform: scale(1.5); margin-top: 10px">
-                            <span class="form-check-label" for="noPet" style="font-size: 1.25rem">
-                                No pet
-                            </span>
-                        </div>
-                        <div class="form-check" style="margin-left: 50px; margin-bottom: 20px">
-                            <input class="form-check-input" type="checkbox" id="noFood" style="transform: scale(1.5); margin-top: 9px">
-                            <span class="form-check-label" for="noFood" style="font-size: 1.25rem">
-                                No food in car
-                            </span>
-                        </div>
-                        <div class="form-check" style="margin-left: 50px;">
-                            <input class="form-check-input" type="checkbox" id="other" style="transform: scale(1.5); margin-top: 9px">
-                            <span class="form-check-label" for="other" style="font-size: 1.25rem">
-                                Other
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </section>
@@ -212,6 +291,22 @@
 <!-- Include Footer Fragment -->
 <div th:replace="fragments/fragment :: footer"></div>
 
+<script>
+    function updateUrl() {
+        const currentUrl = window.location.href;
+        const newUrl = new URL(currentUrl);
+
+        const location = document.getElementById('pickupLocation')?.value || '';
+        const pickupDateTime = document.getElementById('startDateTime')?.value || '';
+        const dropOffDateTime = document.getElementById('endDateTime')?.value || '';
+
+        newUrl.searchParams.set('location', location);
+        newUrl.searchParams.set('pickupDateTime', pickupDateTime);
+        newUrl.searchParams.set('dropOffDateTime', dropOffDateTime);
+
+        window.location.href = newUrl.toString();
+    }
+</script>
 <script>
     const optionMenu = document.querySelector(".select-menu"),
         selectBtn = optionMenu.querySelector(".select-btn"),
@@ -232,32 +327,6 @@
             }
 
             optionMenu.classList.remove("active");
-        });
-    });
-</script>
-<script>
-    document.querySelectorAll('.star-rating').forEach(function (star) {
-        star.addEventListener('click', function () {
-            var card = this.getAttribute('data-card');
-            var rating = parseInt(this.getAttribute('data-rating'));
-
-            // Xóa lớp 'checked' của tất cả ngôi sao trong card hiện tại
-            document.querySelectorAll('.star-rating[data-card="' + card + '"]').forEach(function (star) {
-                star.classList.remove('checked');
-            });
-
-            // Thêm lớp 'checked' cho các ngôi sao đến ngôi sao được chọn trong card hiện tại
-            for (var i = 1; i <= rating; i++) {
-                document.querySelector('.star-rating[data-card="' + card + '"][data-rating="' + i + '"]').classList.add('checked');
-            }
-
-            // Ẩn hoặc hiện thẻ (No ratings yet)
-            var noRatingsText = document.querySelector('.no-ratings-text[data-card="' + card + '"]');
-            if (rating > 0) {
-                noRatingsText.style.display = 'none';
-            } else {
-                noRatingsText.style.display = 'inline';
-            }
         });
     });
 </script>

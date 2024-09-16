@@ -24,19 +24,18 @@ public class Booking {
     @Column(name = "Booking_No", nullable = false)
     private String bookingNo;
 
+    @Column(name = "Driver_Info", nullable = false)
+    private String driverInfo;
+
     @Column(name = "Start_Date_Time", nullable = false)
-    @DateTimeFormat(pattern = "dd/MM/yyyy,HH:mm")
-    @NotNull(message = "“Please enter pick up date and time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @NotNull(message = "Please enter start date time")
     private LocalDateTime startDateTime;
 
     @Column(name = "End_Date_Time")
-    @DateTimeFormat(pattern = "dd/MM/yyyy,HH:mm")
-    @NotNull(message = "Please enter drop-off date and time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @NotNull(message = "Please enter end date time")
     private LocalDateTime endDateTime;
-
-    @Column(name = "Driver_Info", nullable = false)
-    @NotBlank(message = "Please enter location")
-    private String driverInfo;
 
     @Column(name = "Payment_Method", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -57,4 +56,8 @@ public class Booking {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "feedback_id", nullable = true)
     private FeedBack feedback;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idealCar_id", nullable = true)
+    private IdealCar idealCar;
 }

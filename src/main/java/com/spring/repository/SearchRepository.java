@@ -15,34 +15,28 @@ import java.util.List;
 @Repository
 public interface SearchRepository extends JpaRepository<Booking, Integer> {
 
-    // Find all with pagination
     Page<Booking> findAll(Pageable pageable);
 
-    @Query("SELECT b FROM Booking b WHERE b.driverInfo LIKE %:driverInfo% " +
-            "AND b.startDateTime >= :startDate AND b.endDateTime <= :endDate")
-    List<Booking> searchBooking(@Param("driverInfo") String driverInfo,
-                                 @Param("startDate") LocalDateTime startDate,
-                                 @Param("endDate") LocalDateTime endDate);
+    @Query("SELECT d FROM Booking d JOIN d.idealCar k " +
+            "WHERE k.location LIKE %:driverInfo% " +
+            "AND k.pickupDateTime >= :startDate " +
+            "AND k.dropOffDateTime <= :endDate")
+    List<Booking> findByIdealCar(
+            @Param("driverInfo") String driverInfo,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate);
 
-
-    @Query("SELECT b FROM Booking b WHERE b.driverInfo LIKE %:driverInfo% " +
-            "AND b.startDateTime >= :startDate AND b.endDateTime <= :endDate")
-    Page<Booking> findDriverInfo(@Param("driverInfo") String driverInfo,
-                                 @Param("startDate") LocalDateTime startDate,
-                                 @Param("endDate") LocalDateTime endDate,
-                                 Pageable pageable);
+    @Query("SELECT d FROM Booking d JOIN d.idealCar k " +
+            "WHERE k.location LIKE %:driverInfo% " +
+            "AND k.pickupDateTime >= :startDate " +
+            "AND k.dropOffDateTime <= :endDate")
+    Page<Booking> findBookingsByIdealCar(
+            @Param("driverInfo") String driverInfo,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            Pageable pageable);
 
     List<Booking> findByStatus(BookingStatus status);
 
     List<Booking> findBookingsByCarId(Integer carId);
-
-    // Helper method to get sorting option
-    default Sort getSortOption(String sortOption) {
-        return switch (sortOption) {
-            case "oldest" -> Sort.by(Sort.Direction.ASC, "startDateTime");
-            case "priceLowHigh" -> Sort.by(Sort.Direction.ASC, "price");
-            case "priceHighLow" -> Sort.by(Sort.Direction.DESC, "price");
-            default -> Sort.by(Sort.Direction.DESC, "startDateTime");
-        };
-    }
 }

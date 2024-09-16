@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -65,11 +66,17 @@ public class Car {
     @Column(name = "Description", nullable = false)
     private String description;
 
-    @Column(name = "Additional_Functions", nullable = false)
-    private String additionalFunctions;
+    @ElementCollection(targetClass = AdditionalFunctions.class)
+    @CollectionTable(name = "car_additional_functions", joinColumns = @JoinColumn(name = "car_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "additional_function")
+    private Set<AdditionalFunctions> additionalFunctions;
 
-    @Column(name = "Terms_Of_Use", nullable = false)
-    private String termsOfUse;
+    @ElementCollection(targetClass = TermOfUse.class)
+    @CollectionTable(name = "car_terms_of_use", joinColumns = @JoinColumn(name = "car_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "term_of_use")
+    private Set<TermOfUse> termsOfUse;
 
     @Column(name = "Images", nullable = false)
     private String images;

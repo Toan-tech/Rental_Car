@@ -1,5 +1,0 @@
-# Created at 2024-09-02T20:38:26.432
-Boot Manifest-JAR contains absolute paths in classpath 'D:\FPT Soft Learning\IT_Java_FullStack\JWD\Assignment\Mock Project\Toan\target\test-classes'
-Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-'other' has different root
-

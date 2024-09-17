@@ -12,7 +12,6 @@ import com.spring.service.UsersService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.Arrays;
 
 @Controller
 public class HomeController {
@@ -61,7 +59,7 @@ public class HomeController {
 
     @GetMapping("/car-owner")
     public String homePageAsCarOwner() {
-        return "home/home-page-as-car-owner";
+        return "home/Homepage_CarOwner.html";
     }
 
     @RequestMapping("/home")

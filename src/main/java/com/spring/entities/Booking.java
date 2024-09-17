@@ -18,19 +18,19 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "Booking_No", nullable = false)
+    @Column(name = "Booking_No")
     private String bookingNo;
 
-    @Column(name = "Start_Date_Time", nullable = false)
+    @Column(name = "Start_Date_Time")
     private LocalDateTime startDateTime;
 
-    @Column(name = "End_Date_Time", nullable = false)
+    @Column(name = "End_Date_Time")
     private LocalDateTime endDateTime;
 
-    @Column(name = "Driver_Info", nullable = false)
+    @Column(name = "Driver_Info")
     private String driverInfo;
 
-    @Column(name = "Payment_Method", nullable = false)
+    @Column(name = "Payment_Method")
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
@@ -38,15 +38,15 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "feedback_id", nullable = true)
-    private FeedBack feedBack;
+    private FeedBack feedback;
 }

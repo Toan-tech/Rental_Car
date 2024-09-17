@@ -78,12 +78,20 @@
         }
 
         .star-rating {
-            color: #d3d3d3; /* Default star color */
-            font-size: 24px;
+            color: #d3d3d3;
+            margin-right: 5px;
         }
 
         .star-rating.checked {
-            color: #ffcc00; /* Color for checked stars */
+            color: #ffcc00;
+        }
+
+        .star-rating.half {
+            color: #ffcc00;
+        }
+
+        .fa-star-half-alt {
+            color: #ffcc00;
         }
     </style>
 </head>
@@ -223,7 +231,8 @@
                                       th:text="'(' + ${car.brand} + ' - ' + ${car.model} + ')'">CarBranch - CarModel</span>
                                 <div style="font-size: 18px; margin-top: 15px; margin-bottom: 10px">
                                     <div id="rating-star">
-                                        <div>
+                                        <!-- Case 1: If the car has only one booking -->
+                                        <div th:if="${car.bookings.size() == 1}">
                                             <strong style="font-size: 20px; color: #6c757d; margin-right: 10px">Ratings: </strong>
                                             <span th:each="booking : ${car.bookings}"
                                                   th:if="${booking.feedback != null}"
@@ -255,6 +264,33 @@
                                                   th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
                                                   style="font-size: 28px"></span>
                                         </div>
+                                        <div>
+                                            <span th:each="booking : ${car.bookings}"
+                                                  class="no-ratings-text"
+                                                  th:if="${booking.feedback == null || booking.feedback.ratings == null}">(No ratings yet)</span>
+                                        </div>
+                                    </div>
+                                    <!-- Case 2: If the car has two or more bookings, display the average rating -->
+                                    <div th:if="${car.bookings.size() > 1}">
+                                        <strong style="font-size: 20px; color: #6c757d; margin-right: 10px">Ratings: </strong>
+                                        <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                              class="fa"
+                                              th:classappend="${i <= carRatings[car] ? 'fa-star star-rating checked' : 'fa-star star-rating'}"
+                                              th:if="${i <= carRatings[car]}"
+                                              style="margin-right: 10px; font-size: 28px">
+                                        </span>
+                                        <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                              class="fas"
+                                              th:classappend="${(i - 0.5) == carRatings[car] ? 'fa-star-half-alt' : ''}"
+                                              th:if="${(i - 0.5) == carRatings[car]}"
+                                              style="margin-right: 10px; font-size: 28px">
+                                        </span>
+                                        <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                              class="fa"
+                                              th:classappend="${i > carRatings[car] ? 'fa-star star-rating' : ''}"
+                                              th:if="${i > carRatings[car]}"
+                                              style="margin-right: 10px; font-size: 28px">
+                                        </span>
                                         <div>
                                             <span th:each="booking : ${car.bookings}"
                                                   class="no-ratings-text"
@@ -318,7 +354,8 @@
                     </thead>
                     <tbody>
                     <tr scope="row" class="border border-dark" th:each="car, iterStat : ${cars}">
-                        <td class="border border-dark" th:text="${iterStat.index + 1}">No</td>
+                        <td class="border border-dark" th:text="${(page.number) * pageSize + iterStat.index + 1}">No
+                        </td>
                         <td class="border border-dark">
                             <span th:text="${car.name}"></span><br>
                             <span th:text="'- ' + ${car.brand} + ' - '"></span><br>
@@ -328,39 +365,69 @@
                         <td class="border border-dark">
                             <div id="rating-container">
                                 <div>
-                                    <span th:each="booking : ${car.bookings}"
-                                          th:if="${booking.feedback != null}"
-                                          class="fa fa-star star-rating"
-                                          th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.one_star' || booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
-                                          style="font-size: 18px"></span>
+                                    <!-- Case 1: If the car has only one booking -->
+                                    <div th:if="${car.bookings.size() == 1}">
+                                        <span th:each="booking : ${car.bookings}"
+                                              th:if="${booking.feedback != null}"
+                                              class="fa fa-star star-rating"
+                                              th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.one_star' || booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                              style="font-size: 18px"></span>
 
-                                    <span th:each="booking : ${car.bookings}"
-                                          th:if="${booking.feedback != null}"
-                                          class="fa fa-star star-rating"
-                                          th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
-                                          style="font-size: 18px"></span>
+                                        <span th:each="booking : ${car.bookings}"
+                                              th:if="${booking.feedback != null}"
+                                              class="fa fa-star star-rating"
+                                              th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                              style="font-size: 18px"></span>
 
-                                    <span th:each="booking : ${car.bookings}"
-                                          th:if="${booking.feedback != null}"
-                                          class="fa fa-star star-rating"
-                                          th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
-                                          style="font-size: 18px"></span>
+                                        <span th:each="booking : ${car.bookings}"
+                                              th:if="${booking.feedback != null}"
+                                              class="fa fa-star star-rating"
+                                              th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                              style="font-size: 18px"></span>
 
-                                    <span th:each="booking : ${car.bookings}"
-                                          th:if="${booking.feedback != null}"
-                                          class="fa fa-star star-rating"
-                                          th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
-                                          style="font-size: 18px"></span>
+                                        <span th:each="booking : ${car.bookings}"
+                                              th:if="${booking.feedback != null}"
+                                              class="fa fa-star star-rating"
+                                              th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                              style="font-size: 18px"></span>
 
-                                    <span th:each="booking : ${car.bookings}"
-                                          th:if="${booking.feedback != null}"
-                                          class="fa fa-star star-rating"
-                                          th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
-                                          style="font-size: 18px"></span>
+                                        <span th:each="booking : ${car.bookings}"
+                                              th:if="${booking.feedback != null}"
+                                              class="fa fa-star star-rating"
+                                              th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                              style="font-size: 18px"></span>
+                                    </div>
+                                    <div>
+                                            <span th:each="booking : ${car.bookings}"
+                                                  class="no-ratings-text"
+                                                  th:if="${booking.feedback == null || booking.feedback.ratings == null}">(No ratings yet)</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span th:each="booking : ${car.bookings}" class="no-ratings-text"
-                                          th:if="${booking.feedback == null || booking.feedback.ratings == null}">(No ratings yet)</span>
+                                <!-- Case 2: If the car has two or more bookings, display the average rating -->
+                                <div th:if="${car.bookings.size() > 1}">
+                                    <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                          class="fa"
+                                          th:classappend="${i <= carRatings[car] ? 'fa-star checked' : 'fa-star'}"
+                                          th:if="${i <= carRatings[car]}"
+                                          style="margin-right: 10px">
+                                        </span>
+                                    <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                          class="fa"
+                                          th:classappend="${(i - 0.5) == carRatings[car] ? 'fa-star-half-alt' : ''}"
+                                          th:if="${i - 0.5 == carRatings[car]}"
+                                          style="margin-right: 10px">
+                                        </span>
+                                    <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                          class="fa"
+                                          th:classappend="${i > carRatings[car] ? 'fa-star' : ''}"
+                                          th:if="${i > carRatings[car]}"
+                                          style="margin-right: 10px">
+                                        </span>
+                                    <div>
+                                            <span th:each="booking : ${car.bookings}"
+                                                  class="no-ratings-text"
+                                                  th:if="${booking.feedback == null || booking.feedback.ratings == null}">(No ratings yet)</span>
+                                    </div>
                                 </div>
                             </div>
                         </td>
@@ -385,7 +452,7 @@
             </div>
         </section>
 
-<!--        Pagination-->
+        <!--        Pagination-->
         <div class="row justify-content-center mt-2">
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
@@ -443,14 +510,18 @@
         const location = document.getElementById('pickupLocation')?.value || '';
         const pickupDateTime = document.getElementById('startDateTime')?.value || '';
         const dropOffDateTime = document.getElementById('endDateTime')?.value || '';
-        const size = document.getElementById('itemsPerPage')?.value || '3';
+        const size = document.getElementById('itemsPerPage')?.value || '1';
         const displayType = newUrl.searchParams.get('displayType') || '1';
+        const page = newUrl.searchParams.get('page') || '1';
+        const pageSize = newUrl.searchParams.get('pageSize') || '1';
 
         newUrl.searchParams.set('location', location);
         newUrl.searchParams.set('pickupDateTime', pickupDateTime);
         newUrl.searchParams.set('dropOffDateTime', dropOffDateTime);
         newUrl.searchParams.set('size', size);
         newUrl.searchParams.set('displayType', displayType);
+        newUrl.searchParams.set('page', page);
+        newUrl.searchParams.set('pageSize', pageSize);
 
         window.location.href = newUrl.toString();
     }

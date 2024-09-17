@@ -1,10 +1,7 @@
 package com.spring.controller.customer;
 
 import com.spring.entities.*;
-import com.spring.repository.BookingRepository;
-import com.spring.repository.CarRepository;
-import com.spring.repository.IdealCarRepository;
-import com.spring.repository.SearchRepository;
+import com.spring.repository.*;
 import com.spring.service.BookingService;
 import com.spring.service.CarService;
 import jakarta.transaction.Transactional;
@@ -23,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -41,6 +39,12 @@ public class CustomerController {
 
     @Autowired
     private IdealCarRepository idealCarRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private CarService carService;
 
     @GetMapping("/ResultView")
     public String showResultView(Model model) {
@@ -71,9 +75,18 @@ public class CustomerController {
         IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
+        // Get feedback ratings
+        Map<Car, Double> carRatings = new HashMap<>();
+        List<Car> listCarRatings = carRepository.findAll();
+        for (Car carItem : listCarRatings) {
+            double averageRating = carService.calculateAverageRating(car.getId());
+            carRatings.put(carItem, averageRating);
+        }
+
         model.addAttribute("car", car);
         model.addAttribute("booking", foundBooking);
         model.addAttribute("idealCar", idealCar);
+        model.addAttribute("carRatings", carRatings);
 
         return "layout/customer/ViewDetails_BasicInformation";
     }
@@ -100,9 +113,18 @@ public class CustomerController {
         IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
+        // Get feedback ratings
+        Map<Car, Double> carRatings = new HashMap<>();
+        List<Car> listCarRatings = carRepository.findAll();
+        for (Car carItem : listCarRatings) {
+            double averageRating = carService.calculateAverageRating(car.getId());
+            carRatings.put(carItem, averageRating);
+        }
+
         model.addAttribute("car", car);
         model.addAttribute("booking", foundBooking);
         model.addAttribute("idealCar", idealCar);
+        model.addAttribute("carRatings", carRatings);
 
         return "layout/customer/ViewDetails_Details";
     }
@@ -129,9 +151,18 @@ public class CustomerController {
         IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
+        // Get feedback ratings
+        Map<Car, Double> carRatings = new HashMap<>();
+        List<Car> listCarRatings = carRepository.findAll();
+        for (Car carItem : listCarRatings) {
+            double averageRating = carService.calculateAverageRating(car.getId());
+            carRatings.put(carItem, averageRating);
+        }
+
         model.addAttribute("car", car);
         model.addAttribute("booking", foundBooking);
         model.addAttribute("idealCar", idealCar);
+        model.addAttribute("carRatings", carRatings);
 
         return "layout/customer/ViewDetails_Term";
     }
@@ -159,12 +190,23 @@ public class CustomerController {
         IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
+        // Get feedback ratings
+        Map<Car, Double> carRatings = new HashMap<>();
+        List<Car> listCarRatings = carRepository.findAll();
+        for (Car carItem : listCarRatings) {
+            double averageRating = carService.calculateAverageRating(car.getId());
+            carRatings.put(carItem, averageRating);
+        }
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
+        long numberOfDays = ChronoUnit.DAYS.between(idealCar.getPickupDateTime(), idealCar.getDropOffDateTime());
+
         model.addAttribute("car", car);
+        model.addAttribute("numberOfDays", numberOfDays);
         model.addAttribute("booking", foundBooking);
+        model.addAttribute("carRatings", carRatings);
         model.addAttribute("pickupDate", idealCar.getPickupDateTime().toLocalDate().format(dateFormatter));
         model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(timeFormatter));
         model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));
@@ -247,4 +289,13 @@ public class CustomerController {
                 .queryParam("carId", carId)
                 .build().toUriString();
     }
+
+//    @PostMapping("/fillBookingInformation")
+//    public String fillBookingInformation(@RequestParam("carId") Integer carId,
+//                                     @RequestParam("customerName") String customerName,
+//                                     @RequestParam("customerEmail") String customerEmail,
+//                                     @RequestParam("customerPhone") String customerPhone,
+//                                     RedirectAttributes redirectAttributes) {
+//
+//    }
 }

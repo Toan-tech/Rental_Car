@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
-          rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css" rel="stylesheet">
     <link href="https://cdn.rawgit.com/westonganger/bootstrap-directional-buttons/master/dist/bootstrap-directional-buttons.css"
           rel="stylesheet"/>
@@ -53,13 +50,20 @@
         }
 
         .star-rating {
-            font-size: 1.5em;
-            color: #ddd;
-            cursor: pointer;
+            color: #d3d3d3;
+            margin-right: 5px;
         }
 
         .star-rating.checked {
-            color: gold;
+            color: #ffcc00;
+        }
+
+        .star-rating.half {
+            color: #ffcc00;
+        }
+
+        .fa-star-half-alt {
+            color: #ffcc00;
         }
     </style>
 </head>
@@ -113,7 +117,6 @@
                 </div>
             </div>
         </form>
-
     </div>
 
     <section class="container mt-4" style="margin-top: 10px; margin-bottom: 10px">
@@ -139,25 +142,106 @@
                                 <div>
                                     <img src="https://s3.cloud.cmctelecom.vn/nhattao1/2017/03/8062309_9889e4939ea64ed184fcc96158b76133.jpg"
                                          class="d-block w-100 img-custom" alt="Image 1"
-                                         style="max-width: 90%; margin-left:16px; margin-top:20px; margin-right:10px">
+                                         style="max-width: 90%; margin-left:27px; margin-top:20px; margin-right:10px">
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">
-                                        <h3 class="card-title" style="margin-bottom: 20px">Nissan Navara El 2017</h3>
-                                        <p class="card-text">
-                                            <strong>Ratings:</strong>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="1"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="2"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="3"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="4"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="5"></span>
-                                            <span class="no-ratings-text" data-card="1">(No ratings yet)</span>
-                                        </p>
-                                        <p class="card-text"><strong>No. of rides:</strong> 0</p>
-                                        <p class="card-text"><strong>Price:</strong> 900k/day</p>
-                                        <p class="card-text"><strong>Locations:</strong> Cau Giay, Hanoi</p>
-                                        <p class="card-text"><strong>Status:</strong> <span class="text-success">Available</span>
-                                        </p>
+                                        <strong class="card-title" style=" font-size: 45px"
+                                                th:text="${car.name}">Car Name</strong>
+                                        <span style="font-size: 28px"
+                                              th:text="'(' + ${car.brand} + ' - ' + ${car.model} + ')'">CarBranch - CarModel</span>
+                                        <div style="font-size: 18px; margin-top: 15px; margin-bottom: 10px">
+                                            <div id="rating-star">
+                                                <!-- Case 1: If the car has only one booking -->
+                                                <div th:if="${car.bookings.size() == 1}">
+                                                    <strong style="font-size: 20px; color: #6c757d; margin-right: 10px">Ratings: </strong>
+                                                    <span th:each="booking : ${car.bookings}"
+                                                          th:if="${booking.feedback != null}"
+                                                          class="fa fa-star star-rating"
+                                                          th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.one_star' || booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                          style="font-size: 28px"></span>
+
+                                                    <span th:each="booking : ${car.bookings}"
+                                                          th:if="${booking.feedback != null}"
+                                                          class="fa fa-star star-rating"
+                                                          th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.two_stars' || booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                          style="font-size: 28px"></span>
+
+                                                    <span th:each="booking : ${car.bookings}"
+                                                          th:if="${booking.feedback != null}"
+                                                          class="fa fa-star star-rating"
+                                                          th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.three_stars' || booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                          style="font-size: 28px"></span>
+
+                                                    <span th:each="booking : ${car.bookings}"
+                                                          th:if="${booking.feedback != null}"
+                                                          class="fa fa-star star-rating"
+                                                          th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.four_stars' || booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                          style="font-size: 28px"></span>
+
+                                                    <span th:each="booking : ${car.bookings}"
+                                                          th:if="${booking.feedback != null}"
+                                                          class="fa fa-star star-rating"
+                                                          th:classappend="${booking.feedback.ratings.toString() == 'RatingStar.five_stars' ? ' checked' : ''}"
+                                                          style="font-size: 28px"></span>
+                                                </div>
+                                                <div>
+                                            <span th:each="booking : ${car.bookings}"
+                                                  class="no-ratings-text"
+                                                  th:if="${booking.feedback == null || booking.feedback.ratings == null}">(No ratings yet)</span>
+                                                </div>
+                                            </div>
+                                            <!-- Case 2: If the car has two or more bookings, display the average rating -->
+                                            <div th:if="${car.bookings.size() > 1}">
+                                                <strong style="font-size: 20px; color: #6c757d; margin-right: 5px">Ratings: </strong>
+                                                <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                                      class="fa"
+                                                      th:classappend="${i <= carRatings[car] ? 'fa-star star-rating checked' : 'fa-star star-rating'}"
+                                                      th:if="${i <= carRatings[car]}"
+                                                      style="margin-right: 10px; font-size: 28px">
+                                        </span>
+                                                <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                                      class="fas"
+                                                      th:classappend="${(i - 0.5) == carRatings[car] ? 'fa-star-half-alt' : ''}"
+                                                      th:if="${(i - 0.5) == carRatings[car]}"
+                                                      style="margin-right: 10px; font-size: 28px">
+                                        </span>
+                                                <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                                      class="fa"
+                                                      th:classappend="${i > carRatings[car] ? 'fa-star star-rating' : ''}"
+                                                      th:if="${i > carRatings[car]}"
+                                                      style="margin-right: 10px; font-size: 28px">
+                                        </span>
+                                                <div>
+                                            <span th:each="booking : ${car.bookings}"
+                                                  class="no-ratings-text"
+                                                  th:if="${booking.feedback == null || booking.feedback.ratings == null}">(No ratings yet)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-text">
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">No. of rides: </strong>
+                                                <span th:text="${car.bookings.size()}"
+                                                      style="margin-left: 10px; font-size: 20px">0</span><br>
+                                            </div>
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">Price: </strong>
+                                                <span th:text="${car.basePrice} + '/day'"
+                                                      style="margin-left: 10px; font-size: 20px">N/A</span><br>
+                                            </div>
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">Locations: </strong>
+                                                <span th:if="${car.bookings.size() > 0}"
+                                                      th:text="${car.bookings.get(0).driverInfo}"
+                                                      style="margin-left: 10px; font-size: 20px">Unknown</span><br>
+                                            </div>
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">Status: </strong>
+                                                <span class="text-success" th:text="${car.status}"
+                                                      style="margin-left: 10px; font-size: 20px">Status</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -169,11 +253,23 @@
                         <div class="card w-100">
                             <div class="card-body">
                                 <h3 class="card-title" style="margin-bottom: 20px">Booking Summary</h3>
-                                <p class="card-text"><strong>Number of days:</strong> 15</p>
-                                <p class="card-text"><strong>Price per day:</strong> 900,000 VND</p>
+                                <p class="card-text">
+                                    <strong>Number of days:</strong>
+                                    <span id="numberOfDays" th:text="${numberOfDays}">0</span>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Price per day:</strong>
+                                    <span id="basePrice" th:text="${car.basePrice}">0</span>/day
+                                </p>
                                 <hr>
-                                <p class="card-text"><strong>Total:</strong> 13,500,000 VND</p>
-                                <p class="card-text"><strong>Deposit:</strong> 15,000,000 VND</p>
+                                <p class="card-text">
+                                    <strong>Total:</strong>
+                                    <span id="total">N/A</span>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Deposit:</strong>
+                                    <span id="deposit" th:text="${car.deposit}">0</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -184,95 +280,108 @@
                 <!-- Form for Renter's Information and Driver's Information -->
                 <div class="row">
                     <!-- Renter's Information -->
-                    <div class="col-md-6">
-                        <h3>Renter's Information</h3>
-                        <form>
-                            <div class="form-group" style="margin-top: 77px">
-                                <label for="renterName">Full Name: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="renterName" placeholder="Full Name">
+                    <div class="col-md-8">
+                        <h2>Renter's Information</h2>
+                        <form >
+                            <div style="display:flex;">
+                                <div class="form-group col-md-6" style="margin-top: 30px">
+                                    <label for="renterName">Full Name: <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="renterName" placeholder="Full Name">
+                                </div>
+                                <div class="form-group col-md-6" style="margin-top: 30px; margin-left: 80px">
+                                    <label for="renterDob">Date of birth: <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="renterDob" placeholder="dd/mm/yyyy">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="renterDob">Date of birth: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="renterDob" placeholder="dd/mm/yyyy">
+                            <div style="display: flex">
+                                <div class="form-group col-md-6" style="margin-top: 30px">
+                                    <label for="renterPhone">Phone number: <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="renterPhone" placeholder="Phone number">
+                                </div>
+                                <div class="form-group col-md-6" style="margin-top: 30px; margin-left: 80px">
+                                    <label for="renterEmail">Email address:</label>
+                                    <input type="email" class="form-control" id="renterEmail" placeholder="Email address">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="renterPhone">Phone number: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="renterPhone" placeholder="Phone number">
+                            <div style="display: flex">
+                                <div class="form-group col-md-6" style="margin-top: 30px">
+                                    <label for="renterId">National ID No.: <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="renterId" placeholder="National ID No.">
+                                </div>
+                                <div class="form-group col-md-6" style="margin-top: 30px; margin-left: 80px;">
+                                    <label for="renterLicense">Driving license:</label>
+                                    <input type="file" class="form-control-file" id="renterLicense" style="border: 1px solid #6c757d; padding: 5px; border-radius: 5px;">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="renterEmail">Email address:</label>
-                                <input type="email" class="form-control" id="renterEmail" placeholder="Email address">
-                            </div>
-                            <div class="form-group">
-                                <label for="renterId">National ID No.: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="renterId" placeholder="National ID No.">
-                            </div>
-                            <div class="form-group">
-                                <label for="renterLicense">Driving license:</label>
-                                <input type="file" class="form-control-file" id="renterLicense">
-                            </div>
-                            <div class="form-group">
-                                <label>Address:</label>
-                                <select class="form-control mb-2">
+                            <div class="form-group col-md-6" style="margin-top: 30px">
+                                <label>Address (Renter):</label>
+                                <select id="renterCitySelect" name="city" class="form-control mt-2 mb-3">
                                     <option>City/Province</option>
                                 </select>
-                                <select class="form-control mb-2">
+                                <select id="renterDistrictSelect" name="district" class="form-control mb-2 mb-3">
                                     <option>District</option>
                                 </select>
-                                <select class="form-control mb-2">
+                                <select id="renterWardSelect" name="ward" class="form-control mb-2 mb-3">
                                     <option>Ward</option>
                                 </select>
-                                <input type="text" class="form-control" placeholder="House number, Street">
+                                <input type="text" id="renterHouseNumber" name="houseNumber" class="form-control" placeholder="House number, Street">
                             </div>
                         </form>
                     </div>
 
                     <!-- Driver's Information -->
-                    <div class="col-md-6">
-                        <h3>Driver's Information</h3>
+                    <div class="col-md-8 mt-4">
+                        <h2>Driver's Information</h2>
                         <form>
-                            <div class="form-group" style="margin-top: 0px">
+                            <div class="form-group" style="margin-top: 10px">
                                 <label>
                                     <input type="checkbox" id="differentDriver">
                                     <span style="font-size: 20px">Different than Renter's information</span>
                                 </label>
                             </div>
-                            <div class="form-group">
-                                <label for="driverName">Full Name: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="driverName" placeholder="Full Name">
+                            <div style="display:flex;">
+                                <div class="form-group col-md-6" style="margin-top: 10px">
+                                        <label for="driverName">Full Name: <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="driverName" placeholder="Full Name">
+                                </div>
+                                <div class="form-group col-md-6" style="margin-top: 10px; margin-left: 80px">
+                                    <label for="driverDob">Date of birth: <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="driverDob" placeholder="dd/mm/yyyy">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="driverDob">Date of birth: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="driverDob" placeholder="dd/mm/yyyy">
+                            <div style="display: flex">
+                                <div class="form-group col-md-6" style="margin-top: 30px">
+                                    <label for="driverPhone">Phone number: <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="driverPhone" placeholder="Phone number">
+                                </div>
+                                <div class="form-group col-md-6" style="margin-top: 30px; margin-left: 80px">
+                                    <label for="driverEmail">Email address:</label>
+                                    <input type="email" class="form-control" id="driverEmail" placeholder="Email address">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="driverPhone">Phone number: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="driverPhone" placeholder="Phone number">
+                            <div style="display: flex">
+                                <div class="form-group col-md-6" style="margin-top: 30px">
+                                    <label for="driverId">National ID No.: <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="driverId" placeholder="National ID No.">
+                                </div>
+                                <div class="form-group col-md-6" style="margin-top: 30px; margin-left: 80px">
+                                    <label for="driverLicense">Driving license:</label>
+                                    <input type="file" class="form-control-file" id="driverLicense" style="border: 1px solid #6c757d; padding: 5px; border-radius: 5px;">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="driverEmail">Email address:</label>
-                                <input type="email" class="form-control" id="driverEmail" placeholder="Email address">
-                            </div>
-                            <div class="form-group">
-                                <label for="driverId">National ID No.: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="driverId" placeholder="National ID No.">
-                            </div>
-                            <div class="form-group">
-                                <label for="driverLicense">Driving license:</label>
-                                <input type="file" class="form-control-file" id="driverLicense">
-                            </div>
-                            <div class="form-group">
-                                <label>Address:</label>
-                                <select class="form-control mb-2">
+
+                            <div class="form-group col-md-6" style="margin-top: 30px">
+                                <label>Address (Driver):</label>
+                                <select id="driverCitySelect" name="city" class="form-control mt-2 mb-3">
                                     <option>City/Province</option>
                                 </select>
-                                <select class="form-control mb-2">
+                                <select id="driverDistrictSelect" name="district" class="form-control mb-2 mb-3">
                                     <option>District</option>
                                 </select>
-                                <select class="form-control mb-2">
+                                <select id="driverWardSelect" name="ward" class="form-control mb-2 mb-3">
                                     <option>Ward</option>
                                 </select>
-                                <input type="text" class="form-control" placeholder="House number, Street">
+                                <input type="text" id="driverHouseNumber" name="houseNumber" class="form-control" placeholder="House number, Street">
                             </div>
                         </form>
                     </div>
@@ -281,10 +390,12 @@
                 <!-- Buttons -->
                 <div class="row">
                     <div class="col-md-12 text-right" style="margin-top: 10px">
-                        <button type="button" class="btn btn-secondary" style="padding: 9px"><span
-                                style="font-size: 1.5em">Cancel</span></button>
-                        <button type="submit" class="btn btn-primary" style="padding: 9px"><span
-                                style="font-size: 1.5em">Next</span></button>
+                        <button type="button" class="btn btn-secondary" style="padding: 5px">
+                            <span style="font-size: 20px; color: white; margin-left: 10px; margin-right: 10px">Cancel</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary" style="padding: 5px">
+                            <span style="font-size: 20px; color: white; margin-left: 10px; margin-right: 10px">Next</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -295,56 +406,100 @@
 <!-- Include Footer Fragment -->
 <div th:replace="fragments/fragment :: footer"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script>
-    $(document).ready(function () {
-        // Initialize datepickers
-        $('#pickupDate').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            todayHighlight: true
-        });
+    document.addEventListener('DOMContentLoaded', function () {
+        const locationData = {
+            "Ha Noi": ["Ba Dinh", "Hoan Kiem", "Tay Ho", "Cau Giay", "Dong Da"],
+            "Ho Chi Minh": ["District 1", "District 2", "District 3", "Binh Thanh", "Go Vap"],
+            "Da Nang": ["Hai Chau", "Thanh Khe", "Lien Chieu", "Ngu Hanh Son", "Son Tra"]
+        };
 
-        $('#dropoffDate').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            todayHighlight: true
-        });
+        const renterCitySelect = document.getElementById('renterCitySelect');
+        const renterDistrictSelect = document.getElementById('renterDistrictSelect');
+        const renterWardSelect = document.getElementById('renterWardSelect');
+        const driverCitySelect = document.getElementById('driverCitySelect');
+        const driverDistrictSelect = document.getElementById('driverDistrictSelect');
+        const driverWardSelect = document.getElementById('driverWardSelect');
 
-        // Initialize timepickers
-        $('#pickupTime').timepicker({
-            timeFormat: 'HH:mm',
-            interval: 30, // Cách nhau 30 phút
-            minTime: '00:00am',
-            maxTime: '11:59pm',
-            defaultTime: 'HH:mm',
-            startTime: '00:00',
-            dynamic: false,
-            dropdown: true,
-            scrollbar: true
-        });
+        function populateCitySelect(selectElement) {
+            for (let city in locationData) {
+                let option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                selectElement.appendChild(option);
+            }
+        }
 
-        $('#dropoffTime').timepicker({
-            timeFormat: 'HH:mm',
-            interval: 30, // Cách nhau 30 phút
-            minTime: '00:00am',
-            maxTime: '11:59pm',
-            defaultTime: 'HH:mm',
-            startTime: '00:00',
-            dynamic: false,
-            dropdown: true,
-            scrollbar: true
-        });
+        function handleCityChange(citySelect, districtSelect, wardSelect) {
+            citySelect.addEventListener('change', function () {
+                let selectedCity = this.value;
+                districtSelect.innerHTML = '<option value="">Select District</option>';
 
-        // Datepicker triggers
-        $('.bx-calendar').on('click', function () {
-            $(this).closest('.input-wrapper').find('input').datepicker('show');
-        });
+                if (selectedCity && locationData[selectedCity]) {
+                    locationData[selectedCity].forEach(district => {
+                        let option = document.createElement('option');
+                        option.value = district;
+                        option.textContent = district;
+                        districtSelect.appendChild(option);
+                    });
+                    districtSelect.disabled = false;
+                } else {
+                    districtSelect.disabled = true;
+                }
+                wardSelect.disabled = true;
+                wardSelect.innerHTML = '<option value="">Select Ward</option>';
+            });
+        }
 
-        // Timepicker triggers
-        $('.bx-time').on('click', function () {
-            $(this).closest('.input-wrapper').find('input').timepicker('show');
-        });
+        function handleDistrictChange(districtSelect, wardSelect) {
+            districtSelect.addEventListener('change', function () {
+                let selectedDistrict = this.value;
+                wardSelect.innerHTML = '<option value="">Select Ward</option>';
+
+                if (selectedDistrict) {
+                    let wards = ["Ward 1", "Ward 2", "Ward 3"];
+                    wards.forEach(ward => {
+                        let option = document.createElement('option');
+                        option.value = ward;
+                        option.textContent = ward;
+                        wardSelect.appendChild(option);
+                    });
+                    wardSelect.disabled = false;
+                } else {
+                    wardSelect.disabled = true;
+                }
+            });
+        }
+
+        // Populate city select for both renter and driver
+        populateCitySelect(renterCitySelect);
+        populateCitySelect(driverCitySelect);
+
+        // Add change event listeners for renter
+        handleCityChange(renterCitySelect, renterDistrictSelect, renterWardSelect);
+        handleDistrictChange(renterDistrictSelect, renterWardSelect);
+
+        // Add change event listeners for driver
+        handleCityChange(driverCitySelect, driverDistrictSelect, driverWardSelect);
+        handleDistrictChange(driverDistrictSelect, driverWardSelect);
+    });
+</script>
+<script>
+    function formatCurrency(value) {
+        return value.toLocaleString('vi-VN', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }) + ' VND';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const numberOfDays = parseFloat(document.getElementById('numberOfDays').textContent);
+        const basePrice = parseFloat(document.getElementById('basePrice').textContent.replace('.', '').replace(',', '.'));
+        const deposit = parseFloat(document.getElementById('deposit').textContent.replace('.', '').replace(',', '.'));
+
+        const total = numberOfDays * basePrice;
+        document.getElementById('total').textContent = formatCurrency(total);
+        document.getElementById('deposit').textContent = formatCurrency(deposit);
     });
 </script>
 <script>
@@ -357,10 +512,8 @@
 
     options.forEach(option => {
         option.addEventListener("click", () => {
-            let selectedOption = option.querySelector(".option-text").innerText;
-            sBtn_text.innerText = selectedOption;
+            sBtn_text.innerText = option.querySelector(".option-text").innerText;
 
-            // Change the page location based on the selected option
             let value = option.getAttribute("data-value");
             if (value) {
                 location.href = value;
@@ -373,48 +526,17 @@
 <script>
     const optionElements = document.querySelectorAll(".option");
 
-    // Add click event to the element
     optionElements.forEach(option => {
         option.addEventListener("click", () => {
-            // Get the data-value attribute of the clicked element
             let value = option.getAttribute("data-value");
             if (value) {
-                // Redirect to the URL or data-value
                 location.href = value;
             }
-            // Toggle the active class of the clicked element
             option.classList.toggle("active");
         });
     });
 </script>
-<script>
-    document.querySelectorAll('.star-rating').forEach(function (star) {
-        star.addEventListener('click', function () {
-            var card = this.getAttribute('data-card');
-            var rating = parseInt(this.getAttribute('data-rating'));
 
-            // Xóa lớp 'checked' của tất cả ngôi sao trong card hiện tại
-            document.querySelectorAll('.star-rating[data-card="' + card + '"]').forEach(function (star) {
-                star.classList.remove('checked');
-            });
-
-            // Thêm lớp 'checked' cho các ngôi sao đến ngôi sao được chọn trong card hiện tại
-            for (var i = 1; i <= rating; i++) {
-                document.querySelector('.star-rating[data-card="' + card + '"][data-rating="' + i + '"]').classList.add('checked');
-            }
-
-            // Ẩn hoặc hiện thẻ (No ratings yet)
-            var noRatingsText = document.querySelector('.no-ratings-text[data-card="' + card + '"]');
-            if (rating > 0) {
-                noRatingsText.style.display = 'none';
-            } else {
-                noRatingsText.style.display = 'inline';
-            }
-        });
-    });
-</script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

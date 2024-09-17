@@ -10,38 +10,91 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
+            background-color: gray;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         .header {
-            background-color: #444;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-left: 50px;
+            margin-right: 50px;
         }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            margin-left: 25px;
+            margin-top: 10px;
+            font-weight: bolder;
+            color: white;
+            font-size: 50px;
+        }
+
+        .header-left i {
+            font-size: 50px;
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+        }
+
+        .header-right div i {
+            color: white;
+        }
+
+        .header-right a {
+            text-decoration: none;
+            color: white;
+        }
+
+        hr {
+            margin-left: 50px;
+            margin-right: 50px;
+            background-color: white;
+        }
+
 
         h2 {
             text-align: center;
+            margin-bottom: 25px;
+            font-size: 25px;
+            font-weight: bolder;
         }
+
         .header img {
             vertical-align: middle;
         }
+
         .header a {
             color: white;
             text-decoration: none;
             margin: 0 15px;
         }
-        .container {
+
+        .container-fluid {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding-left: 100px;
+            padding-right: 100px;
+            padding-top: 25px;
         }
+
+
         .login-signup {
             background-color: white;
             border: 1px solid black;
@@ -53,14 +106,17 @@
             justify-content: space-between;
             flex-wrap: wrap;
         }
+
         .login, .signup {
             flex: 1;
             min-width: 280px;
             margin: 10px;
         }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         .form-group input[type="text"],
         .form-group input[type="password"],
         .form-group input[type="email"],
@@ -71,14 +127,17 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
         }
+
         .form-group input[type="checkbox"] {
             margin-right: 10px;
         }
+
         .btn {
             background-color: #007bff;
             color: white;
@@ -93,130 +152,147 @@
             max-width: 300px;
             margin: 0 auto;
         }
+
         .btn i {
             margin-right: 10px;
         }
+
         .terms a {
             color: #007bff;
             text-decoration: none;
-            white-space: nowrap; /* Ngăn liên kết bị xuống dòng */
+            white-space: nowrap;
         }
+
         .divider {
             margin: 0 20px;
             border-left: 1px solid #ccc;
         }
+
         .radio-options {
             display: flex;
             justify-content: space-between;
         }
+
         .radio-option {
             flex: 1;
-            margin: 5px;
             display: flex;
             align-items: center;
         }
-        .flex-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .flex-item {
-            display: inline-flex;
-            align-items: center;
-        }
+
         .flex-item p {
             margin: 0;
-            white-space: nowrap; /* Ngăn văn bản bị xuống dòng */
+            white-space: nowrap;
         }
+
         .forgot-password {
             text-align: center;
             margin-top: 15px;
         }
+
         .terms-container {
             display: flex;
             align-items: center;
-            white-space: nowrap; /* Ngăn phần tử bị xuống dòng */
+            white-space: nowrap;
         }
+
         .terms-container p {
-            margin: 0;
-            margin-right: 5px;
+            margin: 0 5px 0 0;
         }
-        /* Chỉnh kích thước biểu tượng */
+
         .btn i, .form-group input[type="checkbox"] {
-            font-size: 1.5em; /* Điều chỉnh kích thước theo nhu cầu */
+            font-size: 1.5em;
+        }
+
+        .circle-x {
+            font-size: 30px;
+        }
+
+        .circle-x:hover {
+            color: red;
         }
     </style>
 </head>
 <body>
 <div class="header">
-    <h1>Rent a car today!</h1>
-    <nav>
+    <div class="header-left">
+        <i class="fa-solid fa-car"></i>
+        <h1>Rent a car today!</h1>
+    </div>
+    <div class="header-right">
         <a href="#">ABOUT US</a>
-        <a href="#">MY BOOKINGS</a>
-        <a href="#">SIGN UP</a>
-        <a href="#">LOG IN</a>
-    </nav>
+        <div class="divider"></div>
+        <div>
+            <i class="fa-solid fa-car"></i>
+            <a href="#">MY BOOKINGS</a>
+        </div>
+        <div class="divider"></div>
+        <div>
+            <i class="fa-solid fa-circle-user"></i>
+            <a th:href="@{/login}">SIGN UP</a>
+        </div>
+        <div class="divider"></div>
+        <a th:href="@{/login}">LOG IN</a>
+    </div>
 </div>
 
-<div class="container">
+<hr>
+
+<div class="container-fluid">
     <div class="login-signup">
-        <!-- Login Form -->
         <div class="login">
             <h2>LOG IN USING YOUR ACCOUNT</h2>
-            <form>
+            <form th:action="@{/login-check}" method="post" th:object="${users}">
                 <div class="form-group">
                     <label for="email"></label>
-                    <input type="email" id="email" placeholder="Your email address" required>
+                    <input type="text" id="email" name="email" placeholder="Your email address" th:field="*{email}">
                 </div>
                 <div class="form-group">
                     <label for="password"></label>
-                    <input type="password" id="password" placeholder="Password" required>
+                    <input type="password" id="password" name="password" placeholder="Password" th:field="*{password}">
                 </div>
                 <div class="form-group forgot-password">
-                    <a href="#" class="terms">Forgot your password?</a>
+                    <a th:href="@{/forgot-password}" class="terms">Forgot your password?</a>
                 </div>
                 <button type="submit" class="btn">
-                    <i class='bx bx-user' style="color: white; font-size: 1.5em"></i>
-                    LOG IN
+                    <i class='bx bx-user' style="font-size: 1.5em"></i>LOG IN
                 </button>
             </form>
         </div>
 
         <div class="divider"></div>
 
-        <!-- Signup Form -->
         <div class="signup">
             <h2>NOT A MEMBER YET?</h2>
-            <form>
+            <form th:action="@{/auth}" method="post" th:object="${users}">
                 <div class="form-group">
                     <label for="name"></label>
-                    <input type="text" id="name" placeholder="Your name" required>
+                    <input type="text" id="name" name="name" placeholder="Your name" th:field="*{name}" required >
                 </div>
                 <div class="form-group">
                     <label for="signup-email"></label>
-                    <input type="email" id="signup-email" placeholder="Your email address" required>
+                    <input type="email" id="signup-email" name="email" placeholder="Your email address" th:field="*{email}" required>
                 </div>
                 <div class="form-group">
                     <label for="phone"></label>
-                    <input type="tel" id="phone" placeholder="Your phone number" required>
+                    <input type="tel" id="phone" name="phone" placeholder="Your phone number" th:field="*{phone}" required>
                 </div>
                 <div class="form-group">
                     <label for="password1"></label>
-                    <input type="password" id="password1" placeholder="Pick a password" required>
+                    <input type="password" id="password1" name="password" placeholder="Pick a password" th:field="*{password}" required>
                 </div>
                 <div class="form-group">
                     <label for="confirm-password"></label>
-                    <input type="password" id="confirm-password" placeholder="Confirm password" required>
+                    <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirm password" required>
                 </div>
                 <div class="form-group radio-options">
                     <div class="radio-option">
                         <label for="rent"></label>
-                        <input type="radio" id="rent" name="role" value="rent" required>
+                        <input type="radio" id="rent" name="role" value="Customer" required>
                         <p style="margin-left: 10px; margin-top: 20px">I want to rent a car</p>
                     </div>
                     <div class="radio-option">
                         <label for="owner"></label>
-                        <input type="radio" id="owner" name="role" value="owner" required>
+                        <input type="radio" id="owner" name="role" value="Car_Owner" required>
                         <p style="margin-left: 10px; margin-top: 20px">I am a car owner</p>
                     </div>
                 </div>
@@ -225,12 +301,45 @@
                     <p>I have read and agree with the</p>
                     <a href="#" class="terms">Terms and Conditions</a>
                 </div>
-                <button type="submit" class="btn">
+                <button type="submit" id="sign-up-btn" class="btn" disabled>
                     <i class='bx bxs-user-plus' style="font-size: 1.5em"></i>SIGN UP
                 </button>
             </form>
         </div>
+        <div class="circle-x">
+            <i class="fa-regular fa-circle-xmark"></i>
+        </div>
     </div>
 </div>
+
+<script>
+    function validateForm() {
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('signup-email').value;
+        const phone = document.getElementById('phone').value;
+        const password = document.getElementById('password1').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        const role = document.querySelector('input[name="role"]:checked');
+        const terms = document.getElementById('terms').checked;
+
+
+        const allFieldsFilled = name && email && phone && password && confirmPassword && role && terms;
+        const passwordsMatch = password === confirmPassword;
+
+
+        document.getElementById('sign-up-btn').disabled = !(allFieldsFilled && passwordsMatch);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        document.querySelectorAll('.form-group input').forEach(function(input) {
+            input.addEventListener('input', validateForm);
+        });
+
+        document.getElementById('terms').addEventListener('change', validateForm);
+    });
+</script>
+
 </body>
 </html>

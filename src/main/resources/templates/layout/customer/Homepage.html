@@ -8,11 +8,9 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://kit.fontawesome.com/2465434fef.js" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{css/header.css}">
     <style>
         .input-wrapper {
@@ -103,7 +101,7 @@
             </div>
             <div class="col-md-6 bg-light p-4" style="flex: 1; margin: 20px">
                 <h3>Find the ideal car rental for your trip</h3>
-                <form id="contentForm" th:action="@{/search}" method="post" th:object="${idealCar}">
+                <form id="contentForm" th:action="@{/result-search}" method="post" th:object="${idealCar}">
                     <!-- Error Message -->
                     <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
                         <span th:text="${errorMessage}"></span>
@@ -252,42 +250,42 @@
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="location-box text-center box-shadow">
-                    <img src="path-to-image1.jpg" class="img-fluid" alt="Hanoi">
+                    <img src="../../../static/images/location/khue-van-cac.jpg" class="img-fluid" alt="Hanoi">
                     <h4>Hanoi</h4>
                     <p>80+ cars</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="location-box text-center box-shadow">
-                    <img src="path-to-image2.jpg" class="img-fluid" alt="Ho Chi Minh City">
+                    <img src="../../../static/images/location/landmark.jpg" class="img-fluid" alt="Ho Chi Minh City">
                     <h4>Ho Chi Minh City</h4>
                     <p>100+ cars</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="location-box text-center box-shadow">
-                    <img src="path-to-image3.jpg" class="img-fluid" alt="Da Nang - Hoi An">
+                    <img src="../../../static/images/location/da-nang.jpg" class="img-fluid" alt="Da Nang - Hoi An">
                     <h4>Da Nang - Hoi An</h4>
                     <p>90+ cars</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="location-box text-center box-shadow">
-                    <img src="path-to-image4.jpg" class="img-fluid" alt="Nha Trang">
+                    <img src="../../../static/images/location/nha-trang.jpg" class="img-fluid" alt="Nha Trang">
                     <h4>Nha Trang</h4>
                     <p>50+ cars</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="location-box text-center box-shadow">
-                    <img src="path-to-image5.jpg" class="img-fluid" alt="Da Lat">
+                    <img src="../../../static/images/location/da-lat.jpg" class="img-fluid" alt="Da Lat">
                     <h4>Da Lat</h4>
                     <p>80+ cars</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="location-box text-center box-shadow">
-                    <img src="path-to-image6.jpg" class="img-fluid" alt="Quang Ninh">
+                    <img src="../../../static/images/location/quang-ninh.jpg" class="img-fluid" alt="Quang Ninh">
                     <h4>Quang Ninh</h4>
                     <p>70+ cars</p>
                 </div>

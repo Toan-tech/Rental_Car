@@ -51,13 +51,13 @@ public class Car {
     @Column(name = "Mileage", precision = 18, scale = 2, nullable = false)
     private BigDecimal mileage;
 
-    @Column(name = "Fuel_Consumption", precision = 18, scale = 2, nullable = false)
+    @Column(name = "Fuel_Consumption", precision = 18, scale = 3, nullable = false)
     private BigDecimal fuelConsumption;
 
     @Column(name = "Base_Price", precision = 18, scale = 3, nullable = false)
     private BigDecimal basePrice;
 
-    @Column(name = "Deposit", precision = 18, scale = 2, nullable = false)
+    @Column(name = "Deposit", precision = 18, scale = 3, nullable = false)
     private BigDecimal deposit;
 
     @Column(name = "Address", nullable = false)
@@ -78,7 +78,7 @@ public class Car {
     @Column(name = "term_of_use")
     private Set<TermOfUse> termsOfUse;
 
-    @Column(name = "Images", nullable = false)
+    @Column(name = "Images", columnDefinition = "VARCHAR(600) NOT NULL")
     private String images;
 
     @Column(name = "Status", nullable = false)

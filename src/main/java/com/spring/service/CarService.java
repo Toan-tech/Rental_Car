@@ -1,9 +1,8 @@
 package com.spring.service;
 
-import com.spring.entities.Booking;
-import com.spring.entities.Car;
-import com.spring.entities.RatingStar;
+import com.spring.entities.*;
 import com.spring.repository.CarRepository;
+import com.spring.repository.FeedBackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +17,13 @@ public class CarService {
     @Autowired
     private CarRepository carRepository;
 
-    public List<Car> extractDistinctCars(List<Booking> bookings) {
-        return bookings.stream()
+    @Autowired
+    private FeedBackRepository feedBackRepository;
+
+    public List<Car> extractDistinctAvailableCars(List<Booking> bookingList) {
+        return bookingList.stream()
                 .map(Booking::getCar)
+                .filter(car -> CarStatus.Available.equals(car.getStatus()))
                 .distinct()
                 .collect(Collectors.toList());
     }
@@ -34,54 +37,29 @@ public class CarService {
         return carBookingCountMap;
     }
 
-    public double calculateAverageRating(Car car) {
-        List<Booking> bookings = car.getBookings();
+    public double calculateAverageRating(Integer carId) {
+        List<String> ratingList = feedBackRepository.findALLStarByCarID(carId);
 
-        // Map để lưu feedbacks với car id
-        Map<Booking, Integer> bookingCarIdMap = new HashMap<>();
-        for (Booking booking : bookings) {
-            bookingCarIdMap.put(booking, car.getId());
+        double rating = 0.0;
+
+        for (String ratingValue : ratingList) {
+            rating += convertRatingToValue(ratingValue);
         }
-
-        // Tính tổng số sao và số lượng feedbacks
-        double totalRating = 0;
-        int count = 0;
-
-        for (Map.Entry<Booking, Integer> entry : bookingCarIdMap.entrySet()) {
-            Booking booking = entry.getKey();
-            if (booking.getFeedback() != null) {
-                RatingStar rating = booking.getFeedback().getRatings();
-                totalRating += convertRatingToValue(rating);
-                count++;
-            }
+        if (!ratingList.isEmpty()) {
+            rating = (double) rating / ratingList.size();
         }
-
-        if (count == 0) {
-            return 0; // Không có feedback
-        }
-
-        // Tính trung bình số sao
-        double averageRating = totalRating / count;
-
-        // Làm tròn trung bình số sao đến nửa sao gần nhất
-        return roundToNearestHalf(averageRating);
+        return Math.ceil(rating * 2) / 2.0;
     }
 
-    private double convertRatingToValue(RatingStar ratingStar) {
-        return switch (ratingStar) {
-            case five_stars -> 5.0;
-            case four_stars -> 4.0;
-            case three_stars -> 3.0;
-            case two_stars -> 2.0;
-            case one_star -> 1.0;
+    private double convertRatingToValue(String enumValue) {
+        return switch (enumValue) {
+            case "one_star" -> 1;
+            case "two_stars" -> 2;
+            case "three_stars" -> 3;
+            case "four_stars" -> 4;
+            case "five_stars" -> 5;
             default -> 0;
         };
-    }
-
-    // Hàm làm tròn đến nửa sao gần nhất
-    private double roundToNearestHalf(double value) {
-        if (value <= 0) return 0.0;
-        return Math.ceil(value * 2) / 2.0;
     }
 }
 

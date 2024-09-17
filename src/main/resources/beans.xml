@@ -1,42 +1,42 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<beans xmlns="http://www.springframework.org/schema/beans"-->
+<!--       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--       xsi:schemaLocation="-->
+<!--        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">-->
 
-    <!-- Configuration for DataSource -->
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="user" value="sa"/>
-        <property name="password" value="kinhart822"/>
-        <property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-        <property name="jdbcUrl" value="jdbc:sqlserver://localhost:1433;database=CarRental;encrypt=true;trustServerCertificate=true"/>
-    </bean>
+<!--    &lt;!&ndash; Configuration for DataSource &ndash;&gt;-->
+<!--    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
+<!--        <property name="user" value="sa"/>-->
+<!--        <property name="password" value="kinhart822"/>-->
+<!--        <property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>-->
+<!--        <property name="jdbcUrl" value="jdbc:sqlserver://localhost:1433;database=CarRental;encrypt=true;trustServerCertificate=true"/>-->
+<!--    </bean>-->
 
-    <!-- Configuration for Hibernate SessionFactory -->
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.spring.entities"/>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.format_sql">true</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
-            </props>
-        </property>
-        <!-- Mapping -->
-        <property name="annotatedClasses">
-            <list>
-                <value>com.spring.entities.Booking</value>
-                <value>com.spring.entities.Car</value>
-                <value>com.spring.entities.CarOwner</value>
-                <value>com.spring.entities.Customer</value>
-                <value>com.spring.entities.FeedBack</value>
-            </list>
-        </property>
-    </bean>
-    <!-- Configuration for Hibernate Transaction Manager -->
-    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-</beans>
+<!--    &lt;!&ndash; Configuration for Hibernate SessionFactory &ndash;&gt;-->
+<!--    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">-->
+<!--        <property name="dataSource" ref="dataSource"/>-->
+<!--        <property name="packagesToScan" value="com.spring.entities"/>-->
+<!--        <property name="hibernateProperties">-->
+<!--            <props>-->
+<!--                <prop key="hibernate.show_sql">true</prop>-->
+<!--                <prop key="hibernate.format_sql">true</prop>-->
+<!--                <prop key="hibernate.hbm2ddl.auto">update</prop>-->
+<!--                <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>-->
+<!--            </props>-->
+<!--        </property>-->
+<!--        &lt;!&ndash; Mapping &ndash;&gt;-->
+<!--        <property name="annotatedClasses">-->
+<!--            <list>-->
+<!--                <value>com.spring.entities.Booking</value>-->
+<!--                <value>com.spring.entities.Car</value>-->
+<!--                <value>com.spring.entities.CarOwner</value>-->
+<!--                <value>com.spring.entities.Customer</value>-->
+<!--                <value>com.spring.entities.FeedBack</value>-->
+<!--            </list>-->
+<!--        </property>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; Configuration for Hibernate Transaction Manager &ndash;&gt;-->
+<!--    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">-->
+<!--        <property name="sessionFactory" ref="sessionFactory"/>-->
+<!--    </bean>-->
+<!--</beans>-->

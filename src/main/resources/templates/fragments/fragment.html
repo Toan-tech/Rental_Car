@@ -22,15 +22,16 @@
                         <div class="select-btn">
                             <div class="icon-container">
                                 <i class="fa-solid fa-user-circle" style="font-size: 35px"></i>
-                                <span style="color: white">Welcome</span>
-                                <!--                                <span th:text="'Welcome, '  + ${}" style="color: white">Welcome</span>-->
+                                <form th:action="@{/userNameProfile}" method="get">
+                                    <span th:text="'Welcome, ' + ${username}" style="color: white">Welcome</span>
+                                </form>
                                 <i class='bx bxs-down-arrow' style="padding-right: 5px; padding-left: 15px; font-size: 20px;"></i>
                             </div>
                         </div>
                         <ul class="options">
                             <li class="option" data-value="#">
                                     <span class="option-text">
-                                        <a href="#" style="color: black">My Profile</a>
+                                        <a th:href="@{/my-profile}" style="color: black">My Profile</a>
                                     </span>
                             </li>
                             <li class="option" data-value="#">
@@ -46,7 +47,7 @@
                             <hr>
                             <li class="option" data-value="login.html">
                                     <span class="option-text">
-                                        <a href="#" style="color: black">Logout</a>
+                                        <a th:href="@{/logout}" style="color: black">Logout</a>
                                     </span>
                             </li>
                         </ul>
@@ -72,13 +73,13 @@
                 <li><a href="#"><span style="font-size: 1.4em">Manage My Booking</span></a></li>
                 <li><a href="#"><span style="font-size: 1.4em">My Wallet</span></a></li>
                 <li><a href="#"><span style="font-size: 1.4em">My Car</span></a></li>
-                <li><a href="#"><span style="font-size: 1.4em">Log In</span></a></li>
+                <li><a th:href="@{/login}"><span style="font-size: 1.4em">Log In</span></a></li>
             </ul>
         </div>
         <div class="footer-section">
             <h3>JOIN US</h3>
             <ul>
-                <li><a href="#"><span style="font-size: 1.4em">New User Sign Up</span></a></li>
+                <li><a th:href="@{/logout}"><span style="font-size: 1.4em">New User Sign Up</span></a></li>
             </ul>
         </div>
     </div>

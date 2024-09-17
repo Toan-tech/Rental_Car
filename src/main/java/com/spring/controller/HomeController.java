@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Objects;
 
 @Controller
 public class HomeController {
@@ -151,10 +152,9 @@ public class HomeController {
                         deleteFile(customer.getDrivingLicense());
                     }
 
-                    String drivingLicensePath = saveFile(drivingLicense);
+                    String drivingLicensePath = saveFile(drivingLicense, userEmail);
                     customer.setDrivingLicense(drivingLicensePath);
                 }
-
                 customerRepository.save(customer);
 
                 if (users != null) {
@@ -175,10 +175,9 @@ public class HomeController {
                     if (carOwner.getDrivingLicense() != null) {
                         deleteFile(carOwner.getDrivingLicense());
                     }
-                    String drivingLicensePath = saveFile(drivingLicense);
+                    String drivingLicensePath = saveFile(drivingLicense, userEmail);
                     carOwner.setDrivingLicense(drivingLicensePath);
                 }
-
                 carOwnerRepository.save(carOwner);
 
                 if (users != null) {
@@ -187,10 +186,8 @@ public class HomeController {
                     usersRepository.save(users);
                 }
             }
-
             return "redirect:/my-profile";
         }
-
         return "redirect:/login";
     }
 
@@ -215,27 +212,32 @@ public class HomeController {
                 return "redirect:/changePassword";
             }
 
-            String encodedPassword = passwordEncoder.encode(newPassword);
+            if (!isValidPassword(newPassword)) {
+                model.addAttribute("error", "Password must be at least 8 characters long and contain both letters and numbers.");
+                return "redirect:/changePassword";
+            }
 
+            String encodedPassword = passwordEncoder.encode(newPassword);
             user.setPassword(encodedPassword);
             usersRepository.save(user);
 
             return "redirect:/login?passwordChanged";
         }
-
         return "redirect:/login";
     }
 
-    private String saveFile(MultipartFile file) {
+    private String saveFile(MultipartFile file, String userEmail) {
         try {
             String uploadDir = new File("src/main/resources/static/images/driving-license").getAbsolutePath();
 
-            String fileName = file.getOriginalFilename();
-            File destinationFile = new File(uploadDir + File.separator + fileName);
+            String fileExtension = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf('.'));
+            String newFileName = userEmail + fileExtension;
+
+            File destinationFile = new File(uploadDir + File.separator + newFileName);
 
             file.transferTo(destinationFile);
 
-            return "images/driving-license/" + fileName;
+            return "images/driving-license/" + newFileName;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -254,5 +256,10 @@ public class HomeController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isValidPassword(String password) {
+        String regex = "^(?=.*[a-zA-Z])(?=.*\\d).{8,}$";
+        return password.matches(regex);
     }
 }

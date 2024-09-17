@@ -252,9 +252,11 @@
             <a href="#">
                 <p>My wallet</p>
             </a>
-            <a href="#">
-                <p>Log out</p>
-            </a>
+            <form th:action="@{/logout}" method="post" id="logoutForm">
+                <a href="#" onclick="document.getElementById('logoutForm').submit();">
+                    <p>Log out</p>
+                </a>
+            </form>
         </div>
     </div>
 </div>
@@ -285,7 +287,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col">
-                                <form th:action="@{/updateProfile}" method="post" enctype="multipart/form-data">
+                                <form th:action="@{/updateProfile}" method="post" enctype="multipart/form-data" id="my-profile">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="driverName">Full Name: <span
@@ -336,7 +338,7 @@
                                                     disabled>
                                                 <option value="">Select District</option>
                                             </select>
-                                            <select id="wardSelect" name="ward" class="form-control mb-2" disabled>
+                                            <select id="wardSelect" name="ward" class="form-control mb-2">
                                                 <option value="">Select Ward</option>
                                             </select>
                                             <input type="text" id="houseNumber" name="houseNumber"
@@ -346,7 +348,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 text-center" style="margin-top: 20px">
-                                            <button type="button" class="btn btn-secondary"><span>Discard</span>
+                                            <button type="button" class="btn btn-secondary" onclick="resetContent()"><span>Discard</span>
                                             </button>
                                             <button type="submit" class="btn btn-primary"><span>Save</span></button>
                                         </div>
@@ -361,14 +363,18 @@
                     <div class="container">
                         <div class="row">
                             <div class="col">
-                                <form th:action="@{/changePassword}" method="post">
+                                <form th:action="@{/changePassword}" method="post"
+                                      onsubmit="return validatePasswords()" id="change-password">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="newPassword">New Password: <span
                                                     class="text-danger">*</span></label>
                                             <input type="password" class="form-control" id="newPassword"
                                                    name="newPassword"
-                                                   placeholder="New Password">
+                                                   placeholder="New Password"
+                                                   required
+                                                   pattern="(?=.*[a-zA-Z])(?=.*\d).{8,}"
+                                                   title="Password must be at least 8 characters long and contain both letters and numbers.">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -377,12 +383,14 @@
                                                     class="text-danger">*</span></label>
                                             <input type="password" class="form-control" id="confirmPassword"
                                                    name="confirmPassword"
-                                                   placeholder="Confirm Password">
+                                                   placeholder="Confirm Password" required>
+                                            <small id="passwordError" class="text-danger" style="display: none;">Passwords
+                                                do not match.</small>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 text-left" style="margin-top: 20px">
-                                            <button type="button" class="btn btn-secondary"><span>Discard</span>
+                                            <button type="button" class="btn btn-secondary" onclick="resetPassword()"><span>Discard</span>
                                             </button>
                                             <button type="submit" class="btn btn-primary"><span>Save</span></button>
                                         </div>
@@ -539,6 +547,30 @@
         updateDistrict(districtSelect);
         updateWard(wardSelect);
     });
+</script>
+
+<script>
+    function resetContent() {
+        document.getElementById('my-profile').reset()
+    }
+
+    function resetPassword() {
+        document.getElementById('change-password').reset()
+    }
+
+    function validatePasswords() {
+        var newPassword = document.getElementById('newPassword').value;
+        var confirmPassword = document.getElementById('confirmPassword').value;
+        var passwordError = document.getElementById('passwordError');
+
+        if (newPassword !== confirmPassword) {
+            passwordError.style.display = 'block';
+            return false;
+        } else {
+            passwordError.style.display = 'none';
+            return true;
+        }
+    }
 </script>
 
 </body>

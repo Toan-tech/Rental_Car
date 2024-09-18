@@ -392,5 +392,66 @@
     });
 </script>
 
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function (event) {
+        let isValid = true;
+
+        const name = document.getElementById('name').value;
+        if (name.length < 10) {
+            document.getElementById('nameError').innerText = "Name must be at least 10 characters";
+            isValid = false;
+        } else {
+            document.getElementById('nameError').innerText = "";
+        }
+
+        const email = document.getElementById('signup-email').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            document.getElementById('emailError').innerText = "Invalid email format";
+            isValid = false;
+        } else {
+            document.getElementById('emailError').innerText = "";
+        }
+
+        const phone = document.getElementById('phone').value;
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(phone)) {
+            document.getElementById('phoneError').innerText = "Phone number must be 10 digits";
+            isValid = false;
+        } else {
+            document.getElementById('phoneError').innerText = "";
+        }
+
+        const password = document.getElementById('password1').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        if (password !== confirmPassword) {
+            document.getElementById('confirmPasswordError').innerText = "Passwords do not match";
+            isValid = false;
+        } else {
+            document.getElementById('confirmPasswordError').innerText = "";
+        }
+
+        if (isValid) {
+            event.preventDefault();
+
+            fetch(`/check-email?email=${encodeURIComponent(email)}`)
+                .then(response => response.json())
+                .then(emailExists => {
+                    if (emailExists) {
+                        document.getElementById('emailError').innerText = "Email already exists. Please choose another email.";
+                    } else {
+                        document.getElementById('registerForm').submit();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking email:', error);
+                    document.getElementById('emailError').innerText = "An error occurred while checking the email.";
+                });
+        } else {
+            event.preventDefault();
+        }
+    });
+</script>
+
 </body>
 </html>

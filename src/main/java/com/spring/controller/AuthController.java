@@ -46,6 +46,22 @@ public class AuthController {
         return "auth/auth-page";
     }
 
+    @PostMapping("/login-check")
+    public String loginSubmit(@Valid @ModelAttribute("users") Users users,
+                              BindingResult result,
+                              Model model) {
+        if (result.hasErrors()) {
+            return "auth/auth-page";
+        }
+
+        Users existingUser = usersService.findByEmail(users.getEmail());
+        if (existingUser == null || !usersService.checkPassword(users.getPassword(), existingUser.getPassword())) {
+            model.addAttribute("loginError", "Email or password incorrect");
+            return "auth/auth-page";
+        }
+        return "redirect:/home";
+    }
+
     @PostMapping("/auth")
     public String registerForm(@Valid @ModelAttribute UsersDTO usersDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {

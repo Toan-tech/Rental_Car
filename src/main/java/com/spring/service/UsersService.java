@@ -12,4 +12,6 @@ public interface UsersService {
     void registerUser(UsersDTO usersDTO);
 
     void updatePassword(Users users, String newPassword);
+
+    boolean checkPassword(String rawPassword, String encodedPassword);
 }

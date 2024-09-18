@@ -9,6 +9,6 @@ import org.springframework.web.servlet.view.RedirectView;
 public class GlobalException {
     @ExceptionHandler(Exception.class)
     public RedirectView exception(Exception e, HttpServletRequest request) {
-        return new RedirectView("/car-owner");
+        return new RedirectView("/");
     }
 }

@@ -34,7 +34,12 @@ table {
 tr td:nth-child(1) {
     width: 30%;
 }
-.star {
+
+tr td {
+    padding-bottom: 1rem;
+}
+
+tr td p {
     margin-bottom: 0;
 }
 .fa-angle-right, .fa-angle-left {

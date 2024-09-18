@@ -44,9 +44,6 @@ jQuery(document).ready(function () {
     var carousel = jQuery(".carousel-inner");
     var showBasePrice = jQuery(".base-price");
     var priceShow = jQuery(".show-price");
-    var starRate = jQuery(".star-rate");
-    var star = jQuery(".star");
-    var starCmt = jQuery(".star+small");
     var imgs = jQuery(".uploaded-image img");
 
     let imageArray = images.val().split(", ");
@@ -81,11 +78,6 @@ jQuery(document).ready(function () {
     let carBasePrice = showBasePrice.val();
     let numberValue = Number(carBasePrice)/1000;
     priceShow.text(numberValue + " k/day");
-
-    star.html(rate(starRate.val()));
-    if (starRate.val() != 0) {
-        starCmt.css("visibility", "hidden");
-    }
 
     //     Payment and deposit button
     var btnPayment = jQuery(".btn-payment");
@@ -128,19 +120,6 @@ jQuery(document).ready(function () {
         bground.css("display", "none");
         popUp.css("display", "none");
     })
-
-    function rate(star) {
-        var innerHtml = "";
-        for (var i = 1; i <= 5; i++){
-            if (i <= star){
-                innerHtml += "<i class='fa-solid fa-star' style='color: yellow'></i>";
-            } else {
-                innerHtml += "<i class='fa-solid fa-star'></i>";
-            }
-        }
-        return innerHtml;
-    }
-
 
     // Edit-detail
     // Upload image

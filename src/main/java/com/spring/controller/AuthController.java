@@ -4,6 +4,7 @@ import com.spring.entities.*;
 import com.spring.model.UsersDTO;
 import com.spring.repository.UsersRepository;
 import com.spring.service.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -14,9 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Controller
@@ -48,13 +46,32 @@ public class AuthController {
         return "auth/auth-page";
     }
 
+    @PostMapping("/login-check")
+    public String loginSubmit(@Valid @ModelAttribute("users") Users users,
+                              BindingResult result,
+                              Model model) {
+        if (result.hasErrors()) {
+            return "auth/auth-page";
+        }
+
+        Users existingUser = usersService.findByEmail(users.getEmail());
+        if (existingUser == null || !usersService.checkPassword(users.getPassword(), existingUser.getPassword())) {
+            model.addAttribute("loginError", "Email or password incorrect");
+            return "auth/auth-page";
+        }
+        return "redirect:/home";
+    }
+
     @PostMapping("/auth")
-    public String registerForm(@ModelAttribute UsersDTO usersDTO, Model model) {
+    public String registerForm(@Valid @ModelAttribute UsersDTO usersDTO, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error", "Validation errors occurred");
+            return "auth/auth-page";
+        }
         if (!usersDTO.getPassword().equals(usersDTO.getConfirmPassword())) {
             model.addAttribute("error", "Passwords do not match");
             return "auth/auth-page";
         }
-
         try {
             usersService.registerUser(usersDTO);
         } catch (Exception e) {
@@ -62,7 +79,6 @@ public class AuthController {
             model.addAttribute("error", "An error occurred while saving data");
             return "auth/auth-page";
         }
-
         return "redirect:/login";
     }
 
@@ -92,7 +108,6 @@ public class AuthController {
             model.addAttribute("error", "Your email was not found");
             e.printStackTrace();
         }
-
         return "auth/forgot-password";
     }
 

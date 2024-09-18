@@ -21,7 +21,7 @@ public class SecurityConfig {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    private static final String[] PERMIT_ALL_LINK = {"/home-page", "/login", "/register", "/images/**", "/css/**", "/js/**", "/forgot-password", "/reset-password", "/auth"};
+    private static final String[] PERMIT_ALL_LINK = {"/home-page", "/login", "/auth", "/login-check", "/register", "/images/**", "/css/**", "/js/**", "/forgot-password", "/reset-password"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -31,13 +31,12 @@ public class SecurityConfig {
                         .requestMatchers(PERMIT_ALL_LINK).permitAll()
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())
                 .formLogin(
                         loginForm -> loginForm.loginPage("/login")
                                 .usernameParameter("email")
                                 .passwordParameter("password")
                                 .loginProcessingUrl("/login-check")
-                                .failureForwardUrl("/login?error=true")
+                                .failureUrl("/login?error=true")
                                 .successHandler(customAuthenticationSuccessHandler())
                 )
                 .logout(logoutForm -> logoutForm.logoutUrl("/logout")

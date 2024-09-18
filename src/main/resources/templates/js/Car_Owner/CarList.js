@@ -9,9 +9,6 @@ jQuery(window).on("load", function () {
     var priceShow = jQuery(".price");
     var status = jQuery(".status");
     var carStatus = jQuery(".car-status");
-    var starRate = jQuery(".star-rate");
-    var star = jQuery(".star");
-    var starCmt = jQuery("small");
 
     images.each(function (index) {
         let imageArray = jQuery(this).val().split(", ");
@@ -46,10 +43,6 @@ jQuery(window).on("load", function () {
             status.eq(index).text("Stopped");
         }
 
-        star.eq(index).html(rate(starRate.eq(index).val()));
-        if (starRate.eq(index).val() != 0) {
-            starCmt.eq(index).css("visibility", "hidden");
-        }
     })
 
     // Payment and deposit button
@@ -139,18 +132,5 @@ jQuery(window).on("load", function () {
         carStatusValue.val("");
     })
 
-    function rate(star) {
-        var innerHtml = "";
-        for (var i = 1; i <= 5; i++) {
-            if (i > star && (i - 1) < star) {
-                innerHtml += "<i class= 'fa-solid fa-star-half' style='color: yellow'></i>";
-            } else if (i <= star) {
-                innerHtml += "<i class='fa-solid fa-star' style='color: yellow'></i>";
-            } else if (i > star) {
-                innerHtml += "<i class='fa-solid fa-star'></i>";
-            }
-        }
-        return innerHtml;
-    }
 })
 

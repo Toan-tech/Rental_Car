@@ -261,6 +261,9 @@
                     <label for="password"></label>
                     <input type="password" id="password" name="password" placeholder="Password" th:field="*{password}">
                 </div>
+
+                <small style="color: red" th:if="${param.error}" class="error">Email or password incorrect</small>
+
                 <div class="form-group forgot-password">
                     <a th:href="@{/forgot-password}" class="terms">Forgot your password?</a>
                 </div>
@@ -274,27 +277,41 @@
 
         <div class="signup">
             <h2>NOT A MEMBER YET?</h2>
-            <form th:action="@{/auth}" method="post" th:object="${users}">
+            <form th:action="@{/auth}" method="post" th:object="${users}" id="registerForm">
                 <div class="form-group">
                     <label for="name"></label>
-                    <input type="text" id="name" name="name" placeholder="Your name" th:field="*{name}" required >
+                    <input type="text" id="name" name="name" placeholder="Your name" th:field="*{name}" required>
+                    <small id="nameError" class="text-danger"></small>
                 </div>
+
                 <div class="form-group">
                     <label for="signup-email"></label>
-                    <input type="email" id="signup-email" name="email" placeholder="Your email address" th:field="*{email}" required>
+                    <input type="text" id="signup-email" name="email" placeholder="Your email address"
+                           th:field="*{email}" required>
+                    <small id="emailError" class="text-danger"></small>
                 </div>
+
                 <div class="form-group">
                     <label for="phone"></label>
-                    <input type="tel" id="phone" name="phone" placeholder="Your phone number" th:field="*{phone}" required>
+                    <input type="tel" id="phone" name="phone" placeholder="Your phone number" th:field="*{phone}"
+                           required>
+                    <small id="phoneError" class="text-danger"></small>
                 </div>
+
                 <div class="form-group">
                     <label for="password1"></label>
-                    <input type="password" id="password1" name="password" placeholder="Pick a password" th:field="*{password}" required>
+                    <input type="password" id="password1" name="password" placeholder="Pick a password"
+                           th:field="*{password}" required>
+                    <small id="passwordError" class="text-danger"></small>
                 </div>
+
                 <div class="form-group">
                     <label for="confirm-password"></label>
-                    <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirm password" required>
+                    <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirm password"
+                           required>
+                    <small id="confirmPasswordError" class="text-danger"></small>
                 </div>
+
                 <div class="form-group radio-options">
                     <div class="radio-option">
                         <label for="rent"></label>
@@ -307,14 +324,16 @@
                         <p style="margin-left: 10px; margin-top: 20px">I am a car owner</p>
                     </div>
                 </div>
+
                 <div class="form-group terms-container">
                     <input type="checkbox" id="terms" required>
                     <p>I have read and agree with the</p>
                     <a href="#" class="terms">Terms and Conditions</a>
                 </div>
-                <input type="submit" id="sign-up-btn" class="btn" disabled>
+
+                <button type="submit" id="sign-up-btn" class="btn">
                     <i class='bx bxs-user-plus' style="font-size: 1.5em"></i>SIGN UP
-                </input>
+                </button>
             </form>
         </div>
         <div class="circle-x">
@@ -324,31 +343,52 @@
 </div>
 
 <script>
-    function validateForm() {
+    document.getElementById('registerForm').addEventListener('submit', function (event) {
+        let isValid = true;
 
+        // Name validation
         const name = document.getElementById('name').value;
+        if (name.length < 10) {
+            document.getElementById('nameError').innerText = "Name must be at least 10 characters";
+            isValid = false;
+        } else {
+            document.getElementById('nameError').innerText = "";
+        }
+
+        // Email validation
         const email = document.getElementById('signup-email').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            document.getElementById('emailError').innerText = "Invalid email format";
+            isValid = false;
+        } else {
+            document.getElementById('emailError').innerText = "";
+        }
+
+        // Phone number validation
         const phone = document.getElementById('phone').value;
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(phone)) {
+            document.getElementById('phoneError').innerText = "Phone number must be 10 digits";
+            isValid = false;
+        } else {
+            document.getElementById('phoneError').innerText = "";
+        }
+
+        // Password validation
         const password = document.getElementById('password1').value;
         const confirmPassword = document.getElementById('confirm-password').value;
-        const role = document.querySelector('input[name="role"]:checked');
-        const terms = document.getElementById('terms').checked;
+        if (password !== confirmPassword) {
+            document.getElementById('confirmPasswordError').innerText = "Passwords do not match";
+            isValid = false;
+        } else {
+            document.getElementById('confirmPasswordError').innerText = "";
+        }
 
-
-        const allFieldsFilled = name && email && phone && password && confirmPassword && role && terms;
-        const passwordsMatch = password === confirmPassword;
-
-
-        document.getElementById('sign-up-btn').disabled = !(allFieldsFilled && passwordsMatch);
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-
-        document.querySelectorAll('.form-group input').forEach(function(input) {
-            input.addEventListener('input', validateForm);
-        });
-
-        document.getElementById('terms').addEventListener('change', validateForm);
+        // Prevent form submission if invalid
+        if (!isValid) {
+            event.preventDefault();
+        }
     });
 </script>
 

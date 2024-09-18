@@ -1,0 +1,153 @@
+#title-main {
+    display: flex;
+    justify-content: space-between;
+    background-color: darkgray;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+#title-main p {
+    margin-left: 20px;
+    font-size: 20px;
+}
+
+#user-menu-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+#user-menu-toggle i {
+    margin-left: 5px;
+}
+
+#mega-menu {
+    position: absolute;
+    top: 75px;
+    right: 0;
+    width: 250px;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+#mega-menu a {
+    padding: 5px;
+    text-decoration: none;
+    color: black;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+}
+
+#mega-menu a p {
+    display: flex;
+    font-size: 15px;
+    align-items: center;
+    margin: 0 0 0 10px;
+    font-weight: normal;
+}
+
+#mega-menu a i {
+    font-size: 10px;
+}
+
+#mega-menu a:hover {
+    background-color: #f0f0f0;
+}
+
+#mega-menu a:last-child {
+    border-bottom: none;
+}
+
+#title-main .hidden {
+    display: none;
+}
+
+#title-main .title-main-left {
+    display: flex;
+}
+
+#title-main .title-main-left i {
+    font-size: 50px;
+    color: white;
+    margin-top: 10px;
+}
+
+#title-main .title-main-left h1 {
+    margin-left: 25px;
+    margin-top: 5px;
+    font-weight: bolder;
+    color: white;
+    font-size: 50px;
+}
+
+#title-main .title-main-right {
+    display: flex;
+}
+
+.divider {
+    margin: 0 50px;
+    border-left: 1px solid #ccc;
+}
+
+#title-main .title-main-right #about-us {
+    color: white;
+    text-decoration: none;
+    margin: 10px 15px 0;
+}
+
+#title-main .title-main-right #user-menu-toggle {
+    color: white;
+    display: flex;
+}
+
+#title-main .title-main-right #user-menu-toggle p {
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+#title-main .title-main-right #user-menu-toggle i {
+    margin-top: -10px;
+}
+
+.footer {
+    background-color: #eee;
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.footer-section {
+    width: 30%;
+}
+
+.footer-section h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.footer-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 8px;
+}
+
+.footer-section ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.footer-section ul li a:hover {
+    color: #000;
+}

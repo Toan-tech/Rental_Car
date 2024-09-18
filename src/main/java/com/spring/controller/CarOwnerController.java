@@ -63,16 +63,11 @@ public class CarOwnerController {
         Page<Car> carPage = carRepository.findAllByCarOwner(carOwner, pageable);
 
         List<Integer> numberOfRides = new ArrayList<>();
-        List<Double> ratings = new ArrayList<>();
         List<Booking> bookings = new ArrayList<>();
 
         for (Car car : carPage) {
             Integer numberOfRide = bookingRepository.countByCarAndStatus(car, BookingStatus.Completed);
             numberOfRides.add(numberOfRide);
-
-            Double rate = rating(car.getId());
-
-            ratings.add(rate);
 
             Booking booking = booking(car);
             bookings.add(booking);
@@ -89,7 +84,6 @@ public class CarOwnerController {
         model.addAttribute("number", number);
         model.addAttribute("sort", sort);
         model.addAttribute("numberOfRides", numberOfRides);
-        model.addAttribute("rate", ratings);
         model.addAttribute("bookings", bookings);
 
         return "layout/Car_Owner/List";
@@ -104,12 +98,10 @@ public class CarOwnerController {
             return "redirect:/car-owner/mycar";
         } else {
             Car car = carRepository.findById(carId).orElse(null);
-            Double rate = rating(car.getId());
             Integer numberOfRide = bookingRepository.countByCarAndStatus(car, BookingStatus.Completed);
             Booking booking = booking(car);
 
             model.addAttribute("car", car);
-            model.addAttribute("rate", rate);
             model.addAttribute("numberOfRide", numberOfRide);
             model.addAttribute("booking", booking);
             return "layout/Car_Owner/Edit";
@@ -145,37 +137,6 @@ public class CarOwnerController {
                 return "redirect:/car-owner/mycar/edit?carid=" + carDeposit.getId();
             }
         }
-    }
-
-    private int switchToInt(String enumValue) {
-        switch (enumValue) {
-            case "one_star":
-                return 1;
-            case "two_stars":
-                return 2;
-            case "three_stars":
-                return 3;
-            case "four_stars":
-                return 4;
-            case "five_stars":
-                return 5;
-            default:
-                return 0;
-        }
-    }
-
-    private Double rating(Integer carId) {
-        List<String> ratingList = feedBackRepository.findALLStarByCarID(carId);
-
-        Double rating = 0.0;
-
-        for (String ratingValue : ratingList) {
-            rating += switchToInt(ratingValue);
-        }
-        if (ratingList.size() > 0) {
-            rating = (double) rating / ratingList.size();
-        }
-        return Math.ceil(rating * 2) / 2.0;
     }
 
     private Booking booking(Car car) {

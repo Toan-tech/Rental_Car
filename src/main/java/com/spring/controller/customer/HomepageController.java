@@ -113,19 +113,10 @@ public class HomepageController {
             }
         }
 
-        // Get feedback ratings
-        Map<Car, Double> carRatings = new HashMap<>();
-        List<Car> listCarRatings = carRepository.findAll();
-        for (Car carItem : listCarRatings) {
-            double averageRating = carService.calculateAverageRating(car.getId());
-            carRatings.put(carItem, averageRating);
-        }
-
         // Set model attributes for view
         model.addAttribute("NumberOfCar", numberOfCar);
         model.addAttribute("CarAvailable", carAvailable);
         model.addAttribute("CarCount", completedRides);
-        model.addAttribute("carRatings", carRatings);
         model.addAttribute("pickupDate", idealCar.getPickupDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
         model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));

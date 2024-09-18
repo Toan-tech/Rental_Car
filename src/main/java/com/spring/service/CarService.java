@@ -36,30 +36,5 @@ public class CarService {
         }
         return carBookingCountMap;
     }
-
-    public double calculateAverageRating(Integer carId) {
-        List<String> ratingList = feedBackRepository.findALLStarByCarID(carId);
-
-        double rating = 0.0;
-
-        for (String ratingValue : ratingList) {
-            rating += convertRatingToValue(ratingValue);
-        }
-        if (!ratingList.isEmpty()) {
-            rating = (double) rating / ratingList.size();
-        }
-        return Math.ceil(rating * 2) / 2.0;
-    }
-
-    private double convertRatingToValue(String enumValue) {
-        return switch (enumValue) {
-            case "one_star" -> 1;
-            case "two_stars" -> 2;
-            case "three_stars" -> 3;
-            case "four_stars" -> 4;
-            case "five_stars" -> 5;
-            default -> 0;
-        };
-    }
 }
 

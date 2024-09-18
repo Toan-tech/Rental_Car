@@ -75,18 +75,9 @@ public class CustomerController {
         IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
-        // Get feedback ratings
-        Map<Car, Double> carRatings = new HashMap<>();
-        List<Car> listCarRatings = carRepository.findAll();
-        for (Car carItem : listCarRatings) {
-            double averageRating = carService.calculateAverageRating(car.getId());
-            carRatings.put(carItem, averageRating);
-        }
-
         model.addAttribute("car", car);
         model.addAttribute("booking", foundBooking);
         model.addAttribute("idealCar", idealCar);
-        model.addAttribute("carRatings", carRatings);
 
         return "layout/customer/ViewDetails_BasicInformation";
     }
@@ -113,18 +104,9 @@ public class CustomerController {
         IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
-        // Get feedback ratings
-        Map<Car, Double> carRatings = new HashMap<>();
-        List<Car> listCarRatings = carRepository.findAll();
-        for (Car carItem : listCarRatings) {
-            double averageRating = carService.calculateAverageRating(car.getId());
-            carRatings.put(carItem, averageRating);
-        }
-
         model.addAttribute("car", car);
         model.addAttribute("booking", foundBooking);
         model.addAttribute("idealCar", idealCar);
-        model.addAttribute("carRatings", carRatings);
 
         return "layout/customer/ViewDetails_Details";
     }
@@ -151,18 +133,9 @@ public class CustomerController {
         IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
-        // Get feedback ratings
-        Map<Car, Double> carRatings = new HashMap<>();
-        List<Car> listCarRatings = carRepository.findAll();
-        for (Car carItem : listCarRatings) {
-            double averageRating = carService.calculateAverageRating(car.getId());
-            carRatings.put(carItem, averageRating);
-        }
-
         model.addAttribute("car", car);
         model.addAttribute("booking", foundBooking);
         model.addAttribute("idealCar", idealCar);
-        model.addAttribute("carRatings", carRatings);
 
         return "layout/customer/ViewDetails_Term";
     }
@@ -190,14 +163,6 @@ public class CustomerController {
         IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
-        // Get feedback ratings
-        Map<Car, Double> carRatings = new HashMap<>();
-        List<Car> listCarRatings = carRepository.findAll();
-        for (Car carItem : listCarRatings) {
-            double averageRating = carService.calculateAverageRating(car.getId());
-            carRatings.put(carItem, averageRating);
-        }
-
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -206,7 +171,6 @@ public class CustomerController {
         model.addAttribute("car", car);
         model.addAttribute("numberOfDays", numberOfDays);
         model.addAttribute("booking", foundBooking);
-        model.addAttribute("carRatings", carRatings);
         model.addAttribute("pickupDate", idealCar.getPickupDateTime().toLocalDate().format(dateFormatter));
         model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(timeFormatter));
         model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));

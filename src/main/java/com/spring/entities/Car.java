@@ -91,4 +91,12 @@ public class Car {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "car")
     private List<Booking> bookings = new ArrayList<>();
+
+    public double getRatingAvgStar() {
+        int star = 0;
+        for (Booking booking : bookings) {
+            star += booking.getFeedback().getRatings().ordinal() + 1;
+        }
+        return (double) star / (double)bookings.size();
+    }
 }

@@ -42,7 +42,7 @@ public class Customer {
     @Column(name = "Driving_License", nullable = false)
     private String drivingLicense;
 
-    @Column(name = "Wallet", precision = 18, scale = 2, nullable = false)
+    @Column(name = "Wallet", precision = 18, scale = 3, nullable = false)
     private BigDecimal wallet;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")

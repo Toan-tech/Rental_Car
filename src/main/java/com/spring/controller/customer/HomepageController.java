@@ -1,28 +1,22 @@
 package com.spring.controller.customer;
 
-import com.spring.entities.Booking;
-import com.spring.entities.Car;
-import com.spring.entities.IdealCar;
-import com.spring.repository.BookingRepository;
-import com.spring.repository.CarRepository;
-import com.spring.repository.IdealCarRepository;
+import com.spring.entities.*;
+import com.spring.repository.*;
 import com.spring.service.BookingService;
 import com.spring.service.CarService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -42,25 +36,40 @@ public class HomepageController {
     private BookingRepository bookingRepository;
 
     @Autowired
-    private CarRepository carRepository;
+    private CustomerRepository customerRepository;
 
     @Transactional
     @RequestMapping(value = "/result-search", method = {RequestMethod.POST, RequestMethod.GET})
-    public String resultSearchBookings(@ModelAttribute("booking") Booking booking,
-                                       @ModelAttribute("car") Car car,
-                                       @ModelAttribute(name = "idealCar") IdealCar idealCar,
-                                       @RequestParam("location") String location,
-                                       @RequestParam("pickupDateTime") String pickupDateTimeStr,
-                                       @RequestParam("dropOffDateTime") String dropOffDateTimeStr,
-                                       @RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
-                                       @RequestParam(value = "size", defaultValue = "1") int pageSize,
-                                       @RequestParam(value = "sortOption", defaultValue = "newest") String sortOption,
-                                       @RequestParam(value = "displayType", defaultValue = "1") String displayType,
-                                       BindingResult result,
-                                       Model model) {
+    public String resultSearchBookings(
+            Principal principal,
+            @ModelAttribute("booking") Booking booking,
+            @ModelAttribute("car") Car car,
+            @ModelAttribute(name = "idealCar") IdealCar idealCar,
+            @RequestParam("location") String location,
+            @RequestParam("pickupDateTime") String pickupDateTimeStr,
+            @RequestParam("dropOffDateTime") String dropOffDateTimeStr,
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
+            @RequestParam(value = "size", defaultValue = "1") int pageSize,
+            @RequestParam(value = "sortOption", defaultValue = "newest") String sortOption,
+            @RequestParam(value = "displayType", defaultValue = "1") String displayType,
+            BindingResult result,
+            Model model
+    ) {
 
         if (result.hasErrors()) {
             return "layout/customer/ResultView";
+        }
+
+        if (principal != null) {
+            String email = principal.getName();
+
+            Customer customer = customerRepository.findCustomerByEmail(email);
+
+            if (customer != null) {
+                model.addAttribute("loggedIn", true);
+            } else {
+                model.addAttribute("loggedIn", false);
+            }
         }
 
         // Convert datetime strings to LocalDateTime
@@ -96,8 +105,6 @@ public class HomepageController {
         }
 
         List<Car> cars = carService.extractDistinctAvailableCars(page.getContent());
-        Page<Car> pagedCars = new PageImpl<>(cars, PageRequest.of(pageNumber - 1, pageSize), cars.size());
-
         List<Car> carsItem = carService.extractDistinctAvailableCars(bookingService.findNumberOfCars(location, pickupDateTime, dropOffDateTime));
 
         long numberOfCar = cars.size();
@@ -121,13 +128,13 @@ public class HomepageController {
         model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
         model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         model.addAttribute("dropoffTime", idealCar.getDropOffDateTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
-        model.addAttribute("cars", pagedCars.getContent());
+        model.addAttribute("cars", cars);
         model.addAttribute("carsItem", carsItem);
         model.addAttribute("pageNums", IntStream.rangeClosed(1, page.getTotalPages()).boxed().collect(Collectors.toList()));
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("page", pagedCars);
+        model.addAttribute("page", page);
         model.addAttribute("bookings", page.getContent());
         model.addAttribute("sortOption", sortOption);
         model.addAttribute("displayType", displayType);

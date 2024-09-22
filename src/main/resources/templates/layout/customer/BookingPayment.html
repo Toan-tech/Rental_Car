@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,20 +8,13 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
-          rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css" rel="stylesheet">
     <link href="https://cdn.rawgit.com/westonganger/bootstrap-directional-buttons/master/dist/bootstrap-directional-buttons.css"
           rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{css/rating.css}">
     <link rel="stylesheet" th:href="@{css/header.css}">
     <style>
-        .input-wrapper {
-            position: relative;
-        }
-
         .input-wrapper i {
             position: absolute;
             right: 10px;
@@ -55,16 +48,6 @@
             background-color: #f2f2f2;
             transform: scale(1.1);
         }
-
-        .star-rating {
-            font-size: 1.5em;
-            color: #ddd;
-            cursor: pointer;
-        }
-
-        .star-rating.checked {
-            color: gold;
-        }
     </style>
 </head>
 <body>
@@ -75,40 +58,62 @@
     <section>
         <nav aria-label="breadcrumb" style="padding: 10px;">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Search Results</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Book car</li>
             </ol>
         </nav>
     </section>
-    <div style="background-color: #333333; padding: 30px; color: white; display: flex">
-        <!-- Booking Details -->
-        <div class="card-body">
-            <h1 class="card-title" style="margin-bottom: 40px">Booking Details</h1>
-            <ul style="margin-left: 120px">
-                <li><strong style="font-size: x-large">Pick-up location: </strong><span style="font-size: 1.2em">Trung Kinh, Cau Giay, Ha Noi</span>
-                </li>
-                <li style="margin-top: 20px"><strong style="font-size: x-large">Pick up date and time: </strong><span
-                        style="font-size: 1.2em">13/02/2022 - 12:00 PM</span></li>
-                <li style="margin-top: 20px"><strong style="font-size: x-large">Return date and time: </strong><span
-                        style="font-size: 1.2em">23/02/2022 - 14:00 PM</span></li>
-            </ul>
-        </div>
-        <div class="option" data-value="#" style="background-color: #333333; padding-top: 30px;">
-            <i class="fa-solid fa-pen-to-square" style="font-size: 40px"></i>
-            <span style="font-size: 30px; margin-left: 10px">Change Details</span>
-        </div>
+    <div style="background-color: #333333; padding: 30px; color: white">
+        <form th:action="@{/BookingPayment(carId=${car.id})}" method="get">
+            <div class="card-body">
+                <h1 class="card-title" style="margin-bottom: 40px">Booking Details</h1>
+                <div class="d-flex justify-content-between align-items-start">
+                    <!-- Booking Details -->
+                    <div style="flex: 1;">
+                        <ul style="margin-left: 20px">
+                            <li>
+                                <strong style="font-size: x-large">Pick-up location: </strong>
+                                <span th:text="${booking?.idealCar.location ?: 'N/A'}"
+                                      style="font-size: 1.2em; margin-left: 100px">Location</span>
+                            </li>
+                            <li style="margin-top: 20px">
+                                <strong style="font-size: x-large">Pick-up date and time: </strong>
+                                <span th:text="${pickupDate} + ' - ' + ${pickupTime}"
+                                      style="font-size: 1.2em; margin-left: 33px">dd/mm/yyyy - HH:mm AM/PM</span>
+                            </li>
+                            <li style="margin-top: 20px">
+                                <strong style="font-size: x-large">Return date and time: </strong>
+                                <span th:text="${dropoffDate} + ' - ' + ${dropoffTime}"
+                                      style="font-size: 1.2em;  margin-left: 40px">dd/mm/yyyy - HH:mm AM/PM</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Edit Button -->
+                    <div style="margin-left: auto;">
+                        <a th:href="@{/editBooking(carId=${car.id})}">
+                            <div class="option"
+                                 style="background-color: #333333; padding: 20px; color: white; text-align: center;">
+                                <i class="fa-solid fa-pen-to-square" style="font-size: 40px"></i>
+                                <span style="font-size: 30px; margin-left: 10px">Change Details</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
     <section class="container mt-4" style="margin-top: 10px; margin-bottom: 10px">
         <!-- Tabs for navigation -->
         <ul class="nav nav-tabs" id="carDetailsTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link disabled" href="#"><span style="font-size: 1.2em">Step 1: Booking Information</span></a>
+                <a class="nav-link disabled" th:href="@{/Overview(carId=${car.id})}"><span style="font-size: 1.2em">Step 1: Booking Information</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="#"><span style="font-size: 1.2em">Step 2: Payment</span></a>
+                <a class="nav-link active" th:href="@{/BookingPayment(carId=${car.id})}"><span style="font-size: 1.2em">Step 2: Payment</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" href="#"><span style="font-size: 1.2em">Step 3: Finish</span></a>
+                <a class="nav-link disabled" th:href="@{/bookingSuccess(carId=${car.id})}"><span style="font-size: 1.2em">Step 3: Finish</span></a>
             </li>
         </ul>
         <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
@@ -120,24 +125,48 @@
                             <div class="row g-0">
                                 <div>
                                     <img src="https://s3.cloud.cmctelecom.vn/nhattao1/2017/03/8062309_9889e4939ea64ed184fcc96158b76133.jpg"
-                                         class="d-block w-100 img-custom" alt="Image 1"style="max-width: 90%; margin-left:16px; margin-top:20px; margin-right:10px">
+                                         class="d-block w-100 img-custom" alt="Image 1"
+                                         style="max-width: 90%; margin-left:16px; margin-top:20px; margin-right:10px">
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">
-                                        <h3 class="card-title" style="margin-bottom: 20px">Nissan Navara El 2017</h3>
-                                        <p class="card-text">
-                                            <strong>Ratings:</strong>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="1"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="2"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="3"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="4"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="5"></span>
-                                            <span class="no-ratings-text" data-card="1">(No ratings yet)</span>
-                                        </p>
-                                        <p class="card-text"><strong>No. of rides:</strong> 0</p>
-                                        <p class="card-text"><strong>Price:</strong> 900k/day</p>
-                                        <p class="card-text"><strong>Locations:</strong> Cau Giay, Hanoi</p>
-                                        <p class="card-text"><strong>Status:</strong> <span class="text-success">Available</span></p>
+                                        <strong class="card-title" style=" font-size: 45px"
+                                                th:text="${car.name}">Car Name</strong>
+                                        <span style="font-size: 28px"
+                                              th:text="'(' + ${car.brand} + ' - ' + ${car.model} + ')'">CarBranch - CarModel</span>
+                                        <div style="font-size: 18px; margin-top: 15px; margin-bottom: 10px">
+                                            <div id="rating-star">
+                                                <i th:data-star="${car.getRatingAvgStar()}"></i>
+                                                <div>
+                                                    <span th:each="booking : ${car.bookings}"
+                                                          class="no-ratings-text"
+                                                          th:if="${booking.feedback == null || booking.feedback.ratings == null}">(No ratings yet)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-text">
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">No. of rides: </strong>
+                                                <span th:text="${car.bookings.size()}"
+                                                      style="margin-left: 10px; font-size: 20px">0</span><br>
+                                            </div>
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">Price: </strong>
+                                                <span th:text="${car.basePrice} + '/day'"
+                                                      style="margin-left: 10px; font-size: 20px">N/A</span><br>
+                                            </div>
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">Locations: </strong>
+                                                <span th:if="${car.bookings.size() > 0}"
+                                                      th:text="${car.bookings.get(0).driverInfo}"
+                                                      style="margin-left: 10px; font-size: 20px">Unknown</span><br>
+                                            </div>
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">Status: </strong>
+                                                <span class="text-success" th:text="${car.status}"
+                                                      style="margin-left: 10px; font-size: 20px">Status</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -149,11 +178,23 @@
                         <div class="card w-100">
                             <div class="card-body">
                                 <h3 class="card-title" style="margin-bottom: 20px">Booking Summary</h3>
-                                <p class="card-text"><strong>Number of days:</strong> 15</p>
-                                <p class="card-text"><strong>Price per day:</strong> 900,000 VND</p>
+                                <p class="card-text">
+                                    <strong>Number of days:</strong>
+                                    <span id="numberOfDays" th:text="${numberOfDays}">0</span>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Price per day:</strong>
+                                    <span id="basePrice" th:text="${car.basePrice}">0</span>/day
+                                </p>
                                 <hr>
-                                <p class="card-text"><strong>Total:</strong> 13,500,000 VND</p>
-                                <p class="card-text"><strong>Deposit:</strong> 15,000,000 VND</p>
+                                <p class="card-text">
+                                    <strong>Total:</strong>
+                                    <span id="total">N/A</span>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Deposit:</strong>
+                                    <span id="deposit" th:text="${car.deposit}">0</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -164,19 +205,33 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h1 style="margin-bottom: 20px">Please select your payment method</h1>
-                        <form action="#" method="POST" style="margin-left: 50px">
+                        <form th:action="@{/BookingPayment(carId=${car.id})}" method="post" style="margin-left: 50px">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="wallet" value="wallet" style="margin-top: 15px">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="wallet" value="My_Wallet"
+                                       style="margin-top: 15px" required>
                                 <label class="form-check-label" for="wallet" style="margin-bottom: 15px; font-size: 30px">
                                     My wallet
                                 </label>
                                 <div class="ml-4">
-                                    <span style="font-size: 20px; margin-left: 20px">Current balance: <strong style="color: green;">20,000,000 VND</strong></span>
+                                    <div id="sufficientWalletBalance" style="font-size: 20px; margin-left: 20px"
+                                         th:if="${customer.wallet} >= ${car.deposit}">
+                                        <span>Current Balance:</span>
+                                        <span style="color: green; margin-left: 10px" th:text="${customer.wallet} + ' ' + 'VND'"></span>
+                                    </div>
+                                    <div id="insufficientWalletBalance" style="font-size: 20px; margin-left: 20px"
+                                         th:unless="${customer.wallet} >= ${car.deposit}">
+                                        <span>Current Balance:</span>
+                                        <span style="color: red; margin-left: 10px" th:text="${customer.wallet} + ' ' + 'VND'"></span>
+                                        <span style="color: red; margin-left: 30px">(Insufficient)</span>
+                                        <div style="margin-top: 5px">
+                                            <span>Please go to My wallet to top-up and try again</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="cash" value="cash" style="margin-top: 38px">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="cash" value="Cash" style="margin-top: 38px">
                                 <label class="form-check-label" for="cash" style="margin-bottom: 15px; font-size: 30px; margin-top: 20px">
                                     Cash
                                 </label>
@@ -186,7 +241,7 @@
                             </div>
 
                             <div class="form-check" style="margin-bottom: 30px">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="bankTransfer" style="margin-top: 38px">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="Bank_Transfer" style="margin-top: 38px">
                                 <label class="form-check-label" for="bankTransfer" style="margin-bottom: 15px; font-size: 30px; margin-top: 20px">
                                     Bank transfer
                                 </label>
@@ -194,10 +249,16 @@
                                     <span style="font-size: 20px; margin-left: 20px">Our operator will contact you for further instruction</span>
                                 </div>
                             </div>
-
                             <div class="mt-4 text-center">
-                                <button type="button" class="btn btn-secondary"><span style="font-size: 20px; padding: 5px">Cancel</span></button>
-                                <button type="submit" class="btn btn-primary"><span style="font-size: 20px; padding: 5px">Confirm payment</span></button>
+                                <a href="#" class="btn btn-secondary"
+                                   style="margin-right: 10px; padding: 5px; margin-top: 10px"
+                                   onclick="confirmCancel()">
+                                    <span style="font-size: 20px; margin-left: 10px; margin-right: 10px">Cancel</span>
+                                </a>
+                                <button type="submit" class="btn btn-primary"
+                                        style="margin-right: 10px; padding: 5px; margin-top: 10px">
+                                    <span style="font-size: 20px; margin-left: 10px; margin-right: 10px">Next</span>
+                                </button>
                             </div>
                             <div class="mt-4 text-center">
                                 <span style="margin-right: 22px">* The deposit amount will be deducted from your wallet.</span>
@@ -212,56 +273,66 @@
 <!-- Include Footer Fragment -->
 <div th:replace="fragments/fragment :: footer"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script>
-    $(document).ready(function () {
-        // Initialize datepickers
-        $('#pickupDate').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            todayHighlight: true
-        });
+    function confirmCancel() {
+        if (confirm("Are you sure you want to cancel the booking flow?")) {
+            window.location.href = "/Homepage";
+        }
+    }
+</script>
+<script>
+    function formatCurrency(value) {
+        return value.toLocaleString('vi-VN', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }) + ' VND';
+    }
 
-        $('#dropoffDate').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            todayHighlight: true
-        });
+    document.addEventListener('DOMContentLoaded', function () {
+        const numberOfDays = parseFloat(document.getElementById('numberOfDays').textContent);
+        const basePrice = parseFloat(document.getElementById('basePrice').textContent.replace('.', '').replace(',', '.'));
+        const deposit = parseFloat(document.getElementById('deposit').textContent.replace('.', '').replace(',', '.'));
 
-        // Initialize timepickers
-        $('#pickupTime').timepicker({
-            timeFormat: 'HH:mm',
-            interval: 30, // Cách nhau 30 phút
-            minTime: '00:00am',
-            maxTime: '11:59pm',
-            defaultTime: 'HH:mm',
-            startTime: '00:00',
-            dynamic: false,
-            dropdown: true,
-            scrollbar: true
-        });
+        const total = numberOfDays * basePrice;
+        const formattedTotal = formatCurrency(total);
+        const formattedDeposit = formatCurrency(deposit);
 
-        $('#dropoffTime').timepicker({
-            timeFormat: 'HH:mm',
-            interval: 30, // Cách nhau 30 phút
-            minTime: '00:00am',
-            maxTime: '11:59pm',
-            defaultTime: 'HH:mm',
-            startTime: '00:00',
-            dynamic: false,
-            dropdown: true,
-            scrollbar: true
-        });
+        document.getElementById('total').textContent = formattedTotal;
+        document.getElementById('deposit').textContent = formattedDeposit;
 
-        // Datepicker triggers
-        $('.bx-calendar').on('click', function () {
-            $(this).closest('.input-wrapper').find('input').datepicker('show');
-        });
+        // Handle deposit and total payment logic
+        const depositAmount = deposit;
+        const totalAmount = total;
 
-        // Timepicker triggers
-        $('.bx-time').on('click', function () {
-            $(this).closest('.input-wrapper').find('input').timepicker('show');
-        });
+        if (depositAmount > totalAmount) {
+            // Calculate excess amount
+            const excessAmount = depositAmount - totalAmount;
+            alert(`The deposit exceeds the total amount. Excess of ${formatCurrency(excessAmount)} will be refunded to your wallet.`);
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const sufficientBalance = document.getElementById('sufficientWalletBalance').textContent.replace('.', '').replace(',', '.');
+        const insufficientBalance = document.getElementById('insufficientWalletBalance').textContent.replace('.', '').replace(',', '.');
+
+        document.getElementById('sufficientWalletBalance').textContent = formatCurrency(sufficientBalance)
+        document.getElementById('insufficientWalletBalance').textContent = formatCurrency(insufficientBalance);
+    });
+
+    // Handle the payment logic based on selected payment method
+    document.querySelector('form').addEventListener('submit', function (event) {
+        const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+        const walletBalance = parseFloat(document.getElementById('sufficientWalletBalance').textContent.replace('Current balance: ', '').replace(' VND', '').replace('.', '').replace(',', '.'));
+        const deposit = parseFloat(document.getElementById('deposit').textContent.replace('.', '').replace(',', '.'));
+
+        if (selectedPaymentMethod === 'My_Wallet') {
+            if (walletBalance >= deposit) {
+                alert('Deposit deducted from your wallet. Booking confirmed.');
+            } else {
+                event.preventDefault();
+                alert('Insufficient wallet balance. Please top-up and try again.');
+            }
+        }
     });
 </script>
 <script>
@@ -274,10 +345,8 @@
 
     options.forEach(option => {
         option.addEventListener("click", () => {
-            let selectedOption = option.querySelector(".option-text").innerText;
-            sBtn_text.innerText = selectedOption;
+            sBtn_text.innerText = option.querySelector(".option-text").innerText;
 
-            // Change the page location based on the selected option
             let value = option.getAttribute("data-value");
             if (value) {
                 location.href = value;
@@ -290,48 +359,15 @@
 <script>
     const optionElements = document.querySelectorAll(".option");
 
-    // Add click event to the element
     optionElements.forEach(option => {
         option.addEventListener("click", () => {
-            // Get the data-value attribute of the clicked element
             let value = option.getAttribute("data-value");
             if (value) {
-                // Redirect to the URL or data-value
                 location.href = value;
             }
-            // Toggle the active class of the clicked element
             option.classList.toggle("active");
         });
     });
 </script>
-<script>
-    document.querySelectorAll('.star-rating').forEach(function (star) {
-        star.addEventListener('click', function () {
-            var card = this.getAttribute('data-card');
-            var rating = parseInt(this.getAttribute('data-rating'));
-
-            // Xóa lớp 'checked' của tất cả ngôi sao trong card hiện tại
-            document.querySelectorAll('.star-rating[data-card="' + card + '"]').forEach(function (star) {
-                star.classList.remove('checked');
-            });
-
-            // Thêm lớp 'checked' cho các ngôi sao đến ngôi sao được chọn trong card hiện tại
-            for (var i = 1; i <= rating; i++) {
-                document.querySelector('.star-rating[data-card="' + card + '"][data-rating="' + i + '"]').classList.add('checked');
-            }
-
-            // Ẩn hoặc hiện thẻ (No ratings yet)
-            var noRatingsText = document.querySelector('.no-ratings-text[data-card="' + card + '"]');
-            if (rating > 0) {
-                noRatingsText.style.display = 'none';
-            } else {
-                noRatingsText.style.display = 'inline';
-            }
-        });
-    });
-</script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

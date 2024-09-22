@@ -9,7 +9,7 @@
 [data-star]::before {
     display: block;
     content: '★★★★★';
-    color: #eee;
+    color: #d3d3d3;
     font-size: inherit;
 }
 [data-star]::after {
@@ -19,10 +19,10 @@
     left: 0;
     content: '★★★★★';
     width: 0;
-    color: #ff8c00;
+    color: #ffcc00;
     overflow: hidden;
     height: 100%;
-    font-size: inherit; /* Tăng kích thước chữ */
+    font-size: inherit;
 }
 [data-star^="0.1"]::after{width:2%}
 [data-star^="0.2"]::after{width:4%}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,20 +8,13 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
-          rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css" rel="stylesheet">
     <link href="https://cdn.rawgit.com/westonganger/bootstrap-directional-buttons/master/dist/bootstrap-directional-buttons.css"
           rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{css/rating.css}">
     <link rel="stylesheet" th:href="@{css/header.css}">
     <style>
-        .input-wrapper {
-            position: relative;
-        }
-
         .input-wrapper i {
             position: absolute;
             right: 10px;
@@ -55,16 +48,6 @@
             background-color: #f2f2f2;
             transform: scale(1.1);
         }
-
-        .star-rating {
-            font-size: 1.5em;
-            color: #ddd;
-            cursor: pointer;
-        }
-
-        .star-rating.checked {
-            color: gold;
-        }
     </style>
 </head>
 <body>
@@ -75,40 +58,23 @@
     <section>
         <nav aria-label="breadcrumb" style="padding: 10px;">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Search Results</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Book car</li>
             </ol>
         </nav>
     </section>
-    <div style="background-color: #333333; padding: 30px; color: white; display: flex">
-        <!-- Booking Details -->
-        <div class="card-body">
-            <h1 class="card-title" style="margin-bottom: 40px">Booking Details</h1>
-            <ul style="margin-left: 120px">
-                <li><strong style="font-size: x-large">Pick-up location: </strong><span style="font-size: 1.2em">Trung Kinh, Cau Giay, Ha Noi</span>
-                </li>
-                <li style="margin-top: 20px"><strong style="font-size: x-large">Pick up date and time: </strong><span
-                        style="font-size: 1.2em">13/02/2022 - 12:00 PM</span></li>
-                <li style="margin-top: 20px"><strong style="font-size: x-large">Return date and time: </strong><span
-                        style="font-size: 1.2em">23/02/2022 - 14:00 PM</span></li>
-            </ul>
-        </div>
-        <div class="option" data-value="#" style="background-color: #333333; padding-top: 30px;">
-            <i class="fa-solid fa-pen-to-square" style="font-size: 40px"></i>
-            <span style="font-size: 30px; margin-left: 10px">Change Details</span>
-        </div>
-    </div>
     <section class="container mt-4" style="margin-top: 10px; margin-bottom: 10px">
         <!-- Tabs for navigation -->
         <ul class="nav nav-tabs" id="carDetailsTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link disabled" href="#"><span style="font-size: 1.2em">Step 1: Booking Information</span></a>
+                <a class="nav-link disabled" th:href="@{/Overview(carId=${car.id})}"><span style="font-size: 1.2em">Step 1: Booking Information</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" href="#"><span style="font-size: 1.2em">Step 2: Payment</span></a>
+                <a class="nav-link disabled" th:href="@{/BookingPayment(carId=${car.id})}"><span
+                        style="font-size: 1.2em">Step 2: Payment</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="#"><span style="font-size: 1.2em">Step 3: Finish</span></a>
+                <a class="nav-link active" th:href="@{/bookingSuccess(carId=${car.id})}"><span style="font-size: 1.2em">Step 3: Finish</span></a>
             </li>
         </ul>
         <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
@@ -125,21 +91,43 @@
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">
-                                        <h3 class="card-title" style="margin-bottom: 20px">Nissan Navara El 2017</h3>
-                                        <p class="card-text">
-                                            <strong>Ratings:</strong>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="1"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="2"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="3"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="4"></span>
-                                            <span class="fa fa-star star-rating" data-card="1" data-rating="5"></span>
-                                            <span class="no-ratings-text" data-card="1">(No ratings yet)</span>
-                                        </p>
-                                        <p class="card-text"><strong>No. of rides:</strong> 0</p>
-                                        <p class="card-text"><strong>Price:</strong> 900k/day</p>
-                                        <p class="card-text"><strong>Locations:</strong> Cau Giay, Hanoi</p>
-                                        <p class="card-text"><strong>Status:</strong> <span class="text-success">Available</span>
-                                        </p>
+                                        <strong class="card-title" style=" font-size: 45px"
+                                                th:text="${car.name}">Car Name</strong>
+                                        <span style="font-size: 28px"
+                                              th:text="'(' + ${car.brand} + ' - ' + ${car.model} + ')'">CarBranch - CarModel</span>
+                                        <div style="font-size: 18px; margin-top: 15px; margin-bottom: 10px">
+                                            <div id="rating-star">
+                                                <i th:data-star="${car.getRatingAvgStar()}"></i>
+                                                <div>
+                                                    <span th:each="booking : ${car.bookings}"
+                                                          class="no-ratings-text"
+                                                          th:if="${booking.feedback == null || booking.feedback.ratings == null}">(No ratings yet)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-text">
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">No. of rides: </strong>
+                                                <span th:text="${car.bookings.size()}"
+                                                      style="margin-left: 10px; font-size: 20px">0</span><br>
+                                            </div>
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">Price: </strong>
+                                                <span th:text="${car.basePrice} + '/day'"
+                                                      style="margin-left: 10px; font-size: 20px">N/A</span><br>
+                                            </div>
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">Locations: </strong>
+                                                <span th:if="${car.bookings.size() > 0}"
+                                                      th:text="${car.bookings.get(0).driverInfo}"
+                                                      style="margin-left: 10px; font-size: 20px">Unknown</span><br>
+                                            </div>
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">Status: </strong>
+                                                <span class="text-success" th:text="${car.status}"
+                                                      style="margin-left: 10px; font-size: 20px">Status</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -151,11 +139,23 @@
                         <div class="card w-100">
                             <div class="card-body">
                                 <h3 class="card-title" style="margin-bottom: 20px">Booking Summary</h3>
-                                <p class="card-text"><strong>Number of days:</strong> 15</p>
-                                <p class="card-text"><strong>Price per day:</strong> 900,000 VND</p>
+                                <p class="card-text">
+                                    <strong>Number of days:</strong>
+                                    <span id="numberOfDays" th:text="${numberOfDays}">0</span>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Price per day:</strong>
+                                    <span id="basePrice" th:text="${car.basePrice}">0</span>/day
+                                </p>
                                 <hr>
-                                <p class="card-text"><strong>Total:</strong> 13,500,000 VND</p>
-                                <p class="card-text"><strong>Deposit:</strong> 15,000,000 VND</p>
+                                <p class="card-text">
+                                    <strong>Total:</strong>
+                                    <span id="total">N/A</span>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Deposit:</strong>
+                                    <span id="deposit" th:text="${car.deposit}">0</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -166,15 +166,25 @@
             <div class="container mt-4">
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <p style="font-size: 20px; color: black"><strong>You've successfully booked Nissan Navara El 2017 from 13/02/2022 - 12:00 PM to
-                            23/02/2022 - 14:00 PM.</strong></p>
-                        <p style="font-size: 20px; color: black">Your booking number is: <strong>012345</strong></p>
-                        <p style="font-size: 20px; color: black">Our operator will contact you with further guidance about pickup.</p>
+                        <p style="font-size: 20px; color: black"><strong>You've successfully booked <strong
+                                th:text="${car.name} + ' '+'(' + ${car.brand} + ' - ' + ${car.model} + ')'"></strong>
+                            from <strong th:text="${pickupDate} + ' - ' + ${pickupTime}"></strong>
+                            to <strong th:text="${dropoffDate} + ' - ' + ${dropoffTime}"></strong>.</strong></p>
+                        <p style="font-size: 20px; color: black">Your booking number is: <strong
+                                th:text="${booking.bookingNo}"></strong></p>
+                        <p style="font-size: 20px; color: black">Our operator will contact you with further guidance
+                            about pickup.</p>
 
                         <div class="mt-4">
-                            <a href="#" class="btn btn-link" style="text-decoration: underline"><span style="font-size: 20px; padding: 5px">Go to homepage</span></a>
-                            <a href="#" class="btn btn-secondary"><span style="font-size: 20px; padding: 5px">Book another car</span></a>
-                            <a href="#" class="btn btn-primary" style="margin-left: 20px"><span style="font-size: 20px; padding: 5px">View Booking</span></a>
+                            <a th:href="@{/Homepage}" class="btn btn-link" style="text-decoration: underline"><span
+                                    style="font-size: 20px; padding: 5px">Go to homepage</span></a>
+                            <a th:href="@{/result-search(location=${idealCar.location},
+                                        pickupDateTime=${idealCar.pickupDateTime},
+                                        dropOffDateTime=${idealCar.dropOffDateTime})}" onchange="updateUrl()" class="btn btn-secondary">
+                                <span style="font-size: 20px; padding: 5px">Book another car</span>
+                            </a>
+                            <a href="#" class="btn btn-primary" style="margin-left: 20px"><span
+                                    style="font-size: 20px; padding: 5px">View Booking</span></a>
                         </div>
                     </div>
                 </div>
@@ -185,58 +195,6 @@
 <!-- Include Footer Fragment -->
 <div th:replace="fragments/fragment :: footer"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // Initialize datepickers
-        $('#pickupDate').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            todayHighlight: true
-        });
-
-        $('#dropoffDate').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            todayHighlight: true
-        });
-
-        // Initialize timepickers
-        $('#pickupTime').timepicker({
-            timeFormat: 'HH:mm',
-            interval: 30, // Cách nhau 30 phút
-            minTime: '00:00am',
-            maxTime: '11:59pm',
-            defaultTime: 'HH:mm',
-            startTime: '00:00',
-            dynamic: false,
-            dropdown: true,
-            scrollbar: true
-        });
-
-        $('#dropoffTime').timepicker({
-            timeFormat: 'HH:mm',
-            interval: 30, // Cách nhau 30 phút
-            minTime: '00:00am',
-            maxTime: '11:59pm',
-            defaultTime: 'HH:mm',
-            startTime: '00:00',
-            dynamic: false,
-            dropdown: true,
-            scrollbar: true
-        });
-
-        // Datepicker triggers
-        $('.bx-calendar').on('click', function () {
-            $(this).closest('.input-wrapper').find('input').datepicker('show');
-        });
-
-        // Timepicker triggers
-        $('.bx-time').on('click', function () {
-            $(this).closest('.input-wrapper').find('input').timepicker('show');
-        });
-    });
-</script>
 <script>
     const optionMenu = document.querySelector(".select-menu"),
         selectBtn = optionMenu.querySelector(".select-btn"),
@@ -247,10 +205,8 @@
 
     options.forEach(option => {
         option.addEventListener("click", () => {
-            let selectedOption = option.querySelector(".option-text").innerText;
-            sBtn_text.innerText = selectedOption;
+            sBtn_text.innerText = option.querySelector(".option-text").innerText;
 
-            // Change the page location based on the selected option
             let value = option.getAttribute("data-value");
             if (value) {
                 location.href = value;
@@ -263,48 +219,49 @@
 <script>
     const optionElements = document.querySelectorAll(".option");
 
-    // Add click event to the element
     optionElements.forEach(option => {
         option.addEventListener("click", () => {
-            // Get the data-value attribute of the clicked element
             let value = option.getAttribute("data-value");
             if (value) {
-                // Redirect to the URL or data-value
                 location.href = value;
             }
-            // Toggle the active class of the clicked element
             option.classList.toggle("active");
         });
     });
 </script>
 <script>
-    document.querySelectorAll('.star-rating').forEach(function (star) {
-        star.addEventListener('click', function () {
-            var card = this.getAttribute('data-card');
-            var rating = parseInt(this.getAttribute('data-rating'));
+    function updateUrl() {
+        const currentUrl = window.location.href;
+        const newUrl = new URL(currentUrl);
 
-            // Xóa lớp 'checked' của tất cả ngôi sao trong card hiện tại
-            document.querySelectorAll('.star-rating[data-card="' + card + '"]').forEach(function (star) {
-                star.classList.remove('checked');
-            });
+        const location = document.getElementById('pickupLocation')?.value || '';
+        const pickupDateTime = document.getElementById('startDateTime')?.value || '';
+        const dropOffDateTime = document.getElementById('endDateTime')?.value || '';
 
-            // Thêm lớp 'checked' cho các ngôi sao đến ngôi sao được chọn trong card hiện tại
-            for (var i = 1; i <= rating; i++) {
-                document.querySelector('.star-rating[data-card="' + card + '"][data-rating="' + i + '"]').classList.add('checked');
-            }
+        newUrl.searchParams.set('location', location);
+        newUrl.searchParams.set('pickupDateTime', pickupDateTime);
+        newUrl.searchParams.set('dropOffDateTime', dropOffDateTime);
 
-            // Ẩn hoặc hiện thẻ (No ratings yet)
-            var noRatingsText = document.querySelector('.no-ratings-text[data-card="' + card + '"]');
-            if (rating > 0) {
-                noRatingsText.style.display = 'none';
-            } else {
-                noRatingsText.style.display = 'inline';
-            }
-        });
+        window.location.href = newUrl.toString();
+    }
+</script>
+<script>
+    function formatCurrency(value) {
+        return value.toLocaleString('vi-VN', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }) + ' VND';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const numberOfDays = parseFloat(document.getElementById('numberOfDays').textContent);
+        const basePrice = parseFloat(document.getElementById('basePrice').textContent.replace('.', '').replace(',', '.'));
+        const deposit = parseFloat(document.getElementById('deposit').textContent.replace('.', '').replace(',', '.'));
+
+        const total = numberOfDays * basePrice;
+        document.getElementById('total').textContent = formatCurrency(total);
+        document.getElementById('deposit').textContent = formatCurrency(deposit);
     });
 </script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

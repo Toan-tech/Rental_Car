@@ -14,8 +14,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{css/rating.css}">
     <link rel="stylesheet" th:href="@{css/header.css}">
-
-
     <style>
         .input-wrapper {
             position: relative;
@@ -79,25 +77,7 @@
             padding: 10px 20px;
             width: 100%;
         }
-
-        .star-rating {
-            color: #d3d3d3;
-            margin-right: 5px;
-        }
-
-        .star-rating.checked {
-            color: #ffcc00;
-        }
-
-        .star-rating.half {
-            color: #ffcc00;
-        }
-
-        .fa-star-half-alt {
-            color: #ffcc00;
-        }
     </style>
-
 </head>
 <body>
 <!-- Include Header Fragment -->
@@ -266,10 +246,11 @@
                                               style="margin-left: 10px; font-size: 20px">Status</span>
                                     </div>
                                 </div>
-                                <a th:href="@{/Overview(carId=${car.id})}"
+                                <a th:href="${loggedIn} ? '/Overview?carId=' + ${car.id} : '/login'"
                                    class="btn btn-primary"
-                                   style="margin-right: 10px; padding: 10px; margin-top: 10px"><span
-                                        style="font-size: 19px">Rent now</span></a>
+                                   style="margin-right: 10px; padding: 10px; margin-top: 10px">
+                                    <span style="font-size: 19px">Rent now</span>
+                                </a>
                                 <a th:href="@{/viewDetails(carId=${car.id})}" class="btn btn-primary"
                                    style="padding: 10px; margin-top: 10px">
                                     <span style="font-size: 19px">View details</span>
@@ -326,7 +307,8 @@
                         <td class="border border-dark">
                             <div class="d-grid gap-2">
                                 <a class="btn btn-primary btn-sm" style="margin-bottom: 10px"
-                                   th:href="@{/Overview(carId=${car.id}, bookingId=${booking.id})}">Rent now</a>
+                                   th:href="${loggedIn ? '/Overview?carId=' + ${car.id} : '/login'}">Rent now
+                                </a>
                                 <a class="btn btn-primary btn-sm" th:href="@{/viewDetails(carId=${car.id})}">View
                                     details</a>
                             </div>

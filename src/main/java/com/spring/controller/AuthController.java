@@ -51,7 +51,7 @@ public class AuthController {
     @Autowired
     CarOwnerRepository carOwnerRepository;
 
-    @GetMapping("/login")
+    @GetMapping({"/", "/login"})
     public String loginForm(Model model) {
         model.addAttribute("users", new Users());
         return "layout/auth/auth-page";
@@ -74,6 +74,7 @@ public class AuthController {
             } else if (carOwner != null) {
                 model.addAttribute("username", carOwner.getName());
             } else {
+                model.addAttribute("loggedIn", false);
                 return "redirect:/login";
             }
         } else {

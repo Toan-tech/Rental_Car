@@ -26,11 +26,12 @@ public interface SearchRepository extends JpaRepository<Booking, Integer> {
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
 
-    @Query("SELECT d FROM Booking d JOIN d.idealCar k " +
+    @Query("SELECT d FROM Booking d JOIN d.idealCar k JOIN d.car p " +
             "WHERE k.location LIKE %:driverInfo% " +
             "AND k.pickupDateTime >= :startDate " +
-            "AND k.dropOffDateTime <= :endDate")
-    Page<Booking> findBookingsByIdealCar(
+            "AND k.dropOffDateTime <= :endDate " +
+            "AND p.status = 'Available'")
+    Page<Booking> findBookingsByIdealCarAndAvailableStatus(
             @Param("driverInfo") String driverInfo,
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
@@ -39,4 +40,15 @@ public interface SearchRepository extends JpaRepository<Booking, Integer> {
     List<Booking> findByStatus(BookingStatus status);
 
     List<Booking> findBookingsByCarId(Integer carId);
+
+    @Query("SELECT b FROM Booking b JOIN b.idealCar ic " +
+            "WHERE b.car.id = :carId " +
+            "AND b.driverInfo LIKE %:pickupLocation% " +
+            "AND b.startDateTime <= :newPickupDateTime " +
+            "AND b.endDateTime >= :newDropoffDateTime")
+    List<Booking> checkBookingAvailableByCarIdAndIdealCar(
+            @Param("carId") Integer carId,
+            @Param("pickupLocation") String pickupLocation,
+            @Param("newPickupDateTime") LocalDateTime newPickupDateTime,
+            @Param("newDropoffDateTime") LocalDateTime newDropoffDateTime);
 }

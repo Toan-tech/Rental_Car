@@ -2,14 +2,16 @@ package com.spring.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Getter
 @Setter
@@ -21,13 +23,13 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "Booking_No", nullable = false)
+    @Column(name = "Booking_No")
     private String bookingNo;
 
-    @Column(name = "Driver_Info", nullable = false)
+    @Column(name = "Driver_Info")
     private String driverInfo;
 
-    @Column(name = "Start_Date_Time", nullable = false)
+    @Column(name = "Start_Date_Time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull(message = "Please enter start date time")
     private LocalDateTime startDateTime;
@@ -37,20 +39,20 @@ public class Booking {
     @NotNull(message = "Please enter end date time")
     private LocalDateTime endDateTime;
 
-    @Column(name = "Payment_Method", nullable = false)
+    @Column(name = "Payment_Method")
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
-    @Column(name = "Status", nullable = false)
+    @Column(name = "Status")
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "car_id", nullable = false)
+    @JoinColumn(name = "car_id", nullable = true)
     private Car car;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "customer_id", nullable = true)
     private Customer customer;
 
     @OneToOne(fetch = FetchType.EAGER)

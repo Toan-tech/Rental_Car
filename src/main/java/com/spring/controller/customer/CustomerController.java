@@ -613,7 +613,6 @@ public class CustomerController {
 
         return "layout/customer/FinishPayment";
     }
-
     @Transactional
     @RequestMapping(value = "/booking-view", method = {RequestMethod.POST, RequestMethod.GET})
     public String viewBookings(

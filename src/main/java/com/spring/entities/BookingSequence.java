@@ -18,9 +18,9 @@ public class BookingSequence {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date")
     private LocalDate date;
 
-    @Column(name = "sequence_number", nullable = false)
+    @Column(name = "sequence_number")
     private int sequenceNumber;
 }

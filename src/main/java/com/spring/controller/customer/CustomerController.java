@@ -5,14 +5,17 @@ import com.spring.repository.*;
 import com.spring.service.BookingService;
 import com.spring.service.CarService;
 import com.spring.service.EmailService;
-import com.spring.service.EmailServiceImpl;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -29,6 +32,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 public class CustomerController {
@@ -407,38 +412,37 @@ public class CustomerController {
 
                 // Save the booking
                 bookingRepository.save(booking);
+
+                // Redirect to Booking Payment page with bookingId and carId
+                return "redirect:" + UriComponentsBuilder.fromPath("/BookingPayment")
+                        .queryParam("carId", carId)
+                        .queryParam("bookingId", booking.getId())
+                        .build().toUriString();
             }
         }
-        // Redirect to Booking Payment page after updating
-        return "redirect:/BookingPayment?carId=" + carId;
+        // Redirect to homepage if the user is not authenticated or no customer is found
+        return "redirect:/viewDetails?carId=" + carId;
+
     }
+
 
     @GetMapping("/BookingPayment")
     public String bookingPayment(@RequestParam("carId") Integer carId,
+                                 @RequestParam("bookingId") Integer bookingId,
                                  Principal principal,
                                  Model model) {
         String email = principal.getName();
         Customer customer = customerRepository.findCustomerByEmail(email);
         model.addAttribute("customer", customer);
 
-        Car car = carRepository.findById(carId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id: " + carId));
+        // Retrieve the booking using the bookingId passed from the Overview method
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid booking Id: " + bookingId));
 
-        List<Booking> bookings = searchRepository.findBookingsByCarId(carId);
-        Booking foundBooking = null;
-        for (Booking booking : bookings) {
-            if (booking.getId() != 0) {
-                foundBooking = booking;
-                break;
-            }
-        }
-
-        if (foundBooking == null) {
-            throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
-        }
-
-        IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
+        IdealCar idealCar = idealCarRepository.findById(booking.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
+
+        Car car = booking.getCar();
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
@@ -447,121 +451,151 @@ public class CustomerController {
 
         model.addAttribute("car", car);
         model.addAttribute("numberOfDays", numberOfDays);
-        model.addAttribute("booking", foundBooking);
+        model.addAttribute("booking", booking);
         model.addAttribute("pickupDate", idealCar.getPickupDateTime().toLocalDate().format(dateFormatter));
-        model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(timeFormatter));  // Định dạng giờ có AM/PM
+        model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(timeFormatter));
         model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));
-        model.addAttribute("dropoffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));  // Định dạng giờ có AM/PM
+        model.addAttribute("dropoffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));
         model.addAttribute("idealCar", idealCar);
 
         return "layout/customer/BookingPayment";
     }
 
+
     @PostMapping("/BookingPayment")
     public String submitBookingPayment(@RequestParam("carId") Integer carId,
+                                       @RequestParam("bookingId") Integer bookingId,
                                        @RequestParam("paymentMethod") PaymentMethod paymentMethod,
                                        Principal principal,
                                        Model model
-    ) {
-        try {
-            String email = principal.getName();
-            Customer customer = customerRepository.findCustomerByEmail(email);
-            model.addAttribute("customer", customer);
-
-            List<Booking> bookings = searchRepository.findBookingsByCarId(carId);
-            Booking foundBooking = null;
-            for (Booking booking : bookings) {
-                if (booking.getId() != 0) {
-                    foundBooking = booking;
-                    break;
-                }
-            }
-
-            if (foundBooking == null) {
-                throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
-            }
-
-            IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
-                    .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
-
-            long numberOfDays = ChronoUnit.DAYS.between(idealCar.getPickupDateTime().toLocalDate(), idealCar.getDropOffDateTime().toLocalDate()) + 1;
-
-            Car car = foundBooking.getCar();
-            BigDecimal basePrice = car.getBasePrice();
-            BigDecimal deposit = car.getDeposit();
-            BigDecimal total = basePrice.multiply(BigDecimal.valueOf(numberOfDays)).setScale(2, RoundingMode.HALF_UP);
-
-            if (deposit.compareTo(total) > 0) {
-                // Refund excess amount to wallet
-                BigDecimal excessAmount = deposit.subtract(total);
-                customer.setWallet(customer.getWallet().add(excessAmount));
-                car.setDeposit(total);
-            } else {
-                // Handle payment via selected method
-                if (paymentMethod == PaymentMethod.My_Wallet) {
-                    if (customer.getWallet().compareTo(total) >= 0) {
-                        // Deduct total amount from wallet
-                        customer.setWallet(customer.getWallet().subtract(total));
-                        foundBooking.setStatus(BookingStatus.Confirmed);
-                    } else {
-                        model.addAttribute("error", "Insufficient balance. Please top up your wallet.");
-                        return "redirect:/BookingPayment?carId=" + carId;
-                    }
-                } else {
-                    // For Cash and Bank Transfer, set status to "Pending deposit"
-                    foundBooking.setStatus(BookingStatus.Pending_Deposit);
-                }
-            }
-
-            // Set the payment method
-            foundBooking.setPaymentMethod(paymentMethod);
-
-            // Save the updated booking and customer
-            bookingRepository.save(foundBooking);
-            customerRepository.save(customer);
-
-            model.addAttribute("message", "Payment processed successfully");
-
-            String carName = foundBooking.getCar().getName();
-            String bookingDate = foundBooking.getStartDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-
-            // Send the email
-            emailService.sendSimpleMailMessage(carName, bookingDate, email);
-            model.addAttribute("messageEmail", "We've sent a notification to your email");
-        } catch (Exception e) {
-            model.addAttribute("error", "Your email was not found");
-            e.printStackTrace();
-        }
-        return "redirect:/bookingSuccess?carId=" + carId;
-    }
-
-    @GetMapping("/bookingSuccess")
-    public String bookingSuccess(@RequestParam("carId") Integer carId,
-                                 Principal principal,
-                                 Model model
     ) {
         String email = principal.getName();
         Customer customer = customerRepository.findCustomerByEmail(email);
         model.addAttribute("customer", customer);
 
-        Car car = carRepository.findById(carId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id: " + carId));
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid booking Id: " + bookingId));
 
-        List<Booking> bookings = searchRepository.findBookingsByCarId(carId);
-        Booking foundBooking = null;
-        for (Booking booking : bookings) {
-            if (booking.getId() != 0) {
-                foundBooking = booking;
-                break;
+        IdealCar idealCar = idealCarRepository.findById(booking.getIdealCar().getId())
+                .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
+
+        long numberOfDays = ChronoUnit.DAYS.between(idealCar.getPickupDateTime().toLocalDate(), idealCar.getDropOffDateTime().toLocalDate()) + 1;
+
+        Car car = booking.getCar();
+        BigDecimal basePrice = car.getBasePrice();
+        BigDecimal deposit = car.getDeposit();
+        BigDecimal total = basePrice.multiply(BigDecimal.valueOf(numberOfDays)).setScale(2, RoundingMode.HALF_UP);
+
+        if (deposit.compareTo(total) > 0) {
+            // Refund excess amount to wallet
+            BigDecimal excessAmount = deposit.subtract(total);
+            customer.setWallet(customer.getWallet().add(excessAmount));
+            car.setDeposit(total);
+        } else {
+            // Handle payment via selected method
+            if (paymentMethod == PaymentMethod.My_Wallet) {
+                if (customer.getWallet().compareTo(total) >= 0) {
+                    // Deduct total amount from wallet
+                    customer.setWallet(customer.getWallet().subtract(total));
+                    booking.setStatus(BookingStatus.Confirmed);
+                } else {
+                    model.addAttribute("error", "Insufficient balance. Please top up your wallet.");
+                    return "redirect:" + UriComponentsBuilder.fromPath("/BookingPayment")
+                            .queryParam("carId", carId)
+                            .queryParam("bookingId", booking.getId())
+                            .build().toUriString();
+                }
+            } else {
+                // For Cash and Bank Transfer, set status to "Pending deposit"
+                booking.setStatus(BookingStatus.Pending_Deposit);
             }
         }
 
-        if (foundBooking == null) {
-            throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
+        // Set the payment method
+        booking.setPaymentMethod(paymentMethod);
+
+        // Save the updated booking and customer
+        bookingRepository.save(booking);
+        customerRepository.save(customer);
+
+        model.addAttribute("message", "Payment processed successfully");
+
+        String carName = booking.getCar().getName();
+        String bookingDate = booking.getIdealCar().getPickupDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm"));
+
+        // Send the email
+        try {
+            emailService.sendSimpleMailMessage(carName, bookingDate, email);
+            model.addAttribute("messageEmail", "We've sent a notification to your email");
+        } catch (Exception e) {
+            model.addAttribute("errorEmail", "Failed to send email notification. Please try again later.");
+            return "redirect:" + UriComponentsBuilder.fromPath("/BookingPayment")
+                    .queryParam("carId", carId)
+                    .queryParam("bookingId", booking.getId())
+                    .build().toUriString();
+        }
+        return "redirect:" + UriComponentsBuilder.fromPath("/bookingSuccess")
+                .queryParam("carId", carId)
+                .queryParam("bookingId", booking.getId())
+                .build().toUriString();
+    }
+
+    @PostMapping("/myWallet")
+    public String topUpWallet(@RequestParam("amount") BigDecimal amount,
+                              Principal principal,
+                              Model model) {
+        // Get customer information from principal
+        String email = principal.getName();
+        Customer customer = customerRepository.findCustomerByEmail(email);
+
+        // Ensure the top-up amount is valid
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            model.addAttribute("errorMessage", "Please enter a valid amount.");
+            return "layout/customer/edit/MyWallet";
         }
 
-        IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
+        // Top-up the wallet
+        customer.setWallet(customer.getWallet().add(amount));
+        customerRepository.save(customer);
+
+        // Set success message
+        model.addAttribute("customer", customer);
+        model.addAttribute("successMessage", "Wallet top-up successful. Your new balance is " + customer.getWallet());
+
+        return "redirect:/myWallet";
+    }
+
+    @GetMapping("/myWallet")
+    public String viewWallet(Principal principal, Model model) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        // Fetch customer by email
+        String email = principal.getName();
+        Customer customer = customerRepository.findCustomerByEmail(email);
+        model.addAttribute("customer", customer);
+
+        return "layout/customer/edit/MyWallet";
+    }
+
+    @GetMapping("/bookingSuccess")
+    public String bookingSuccess(@RequestParam("carId") Integer carId,
+                                 @RequestParam("bookingId") Integer bookingId, // Add bookingId param
+                                 Principal principal,
+                                 Model model) {
+        String email = principal.getName();
+        Customer customer = customerRepository.findCustomerByEmail(email);
+        model.addAttribute("customer", customer);
+
+        // Retrieve the booking using the bookingId
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid booking Id: " + bookingId));
+
+        IdealCar idealCar = idealCarRepository.findById(booking.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
+
+        Car car = booking.getCar();
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
@@ -570,16 +604,91 @@ public class CustomerController {
 
         model.addAttribute("car", car);
         model.addAttribute("numberOfDays", numberOfDays);
-        model.addAttribute("booking", foundBooking);
+        model.addAttribute("booking", booking);
         model.addAttribute("pickupDate", idealCar.getPickupDateTime().toLocalDate().format(dateFormatter));
-        model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(timeFormatter));  // Định dạng giờ có AM/PM
+        model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(timeFormatter));
         model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));
-        model.addAttribute("dropoffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));  // Định dạng giờ có AM/PM
+        model.addAttribute("dropoffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));
         model.addAttribute("idealCar", idealCar);
 
         return "layout/customer/FinishPayment";
     }
 
+    @Transactional
+    @RequestMapping(value = "/booking-view", method = {RequestMethod.POST, RequestMethod.GET})
+    public String viewBookings(
+            Principal principal,
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
+            @RequestParam(value = "size", defaultValue = "1") int pageSize,
+            @RequestParam(value = "sortOption", defaultValue = "newest") String sortOption,
+            @RequestParam(value = "displayType", defaultValue = "1") String displayType,
+            Model model
+    ) {
+        String email = principal.getName();
+        Customer customer = customerRepository.findCustomerByEmail(email);
+        model.addAttribute("customer", customer);
+
+        // Retrieve the list of bookings for the logged-in customer
+        List<Booking> bookings = bookingRepository.findByCustomer(customer);
+
+        int bookingOnGoings = 0;
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+
+        for (Booking booking : bookings) {
+            if (booking.getStatus().equals(BookingStatus.Completed)) {
+                bookingOnGoings++;
+            }
+            Car car = booking.getCar();
+            if (car != null && car.getId() != 0) {
+                model.addAttribute("carId", car.getId());
+            } else {
+                model.addAttribute("messageHasError", "Please try booking again.");
+            }
+
+            IdealCar idealCar = idealCarRepository.findById(booking.getIdealCar().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
+
+            long numberOfDays = ChronoUnit.DAYS.between(idealCar.getPickupDateTime().toLocalDate(), idealCar.getDropOffDateTime().toLocalDate()) + 1;
+            model.addAttribute("car", car);
+            model.addAttribute("numberOfDays", numberOfDays);
+            model.addAttribute("booking", booking);
+            model.addAttribute("idealCar", idealCar);
+            model.addAttribute("pickupDate", idealCar.getPickupDateTime().toLocalDate().format(dateFormatter));
+            model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(timeFormatter));
+            model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));
+            model.addAttribute("dropoffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));
+        }
+
+        Sort sort = getSortOption(sortOption);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        Page<Booking> page = bookingRepository.findByCustomer(customer, pageable);
+
+        // Calculate list page numbers
+        int totalPages = page.getTotalPages();
+        List<Integer> pageNums = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+
+        // Set model attributes for view
+        model.addAttribute("bookings", page.getContent());
+        model.addAttribute("bookingOnGoings", bookingOnGoings);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("pageNums", pageNums);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("sortOption", sortOption);
+        model.addAttribute("displayType", displayType);
+        model.addAttribute("totalPages", totalPages);
+
+        return "layout/customer/BookingView";
+    }
+
+    public Sort getSortOption(String sortOption) {
+        return switch (sortOption) {
+            case "oldest" -> Sort.by(Sort.Direction.ASC, "startDateTime");
+            case "priceLowHigh" -> Sort.by(Sort.Direction.ASC, "car.basePrice");
+            case "priceHighLow" -> Sort.by(Sort.Direction.DESC, "car.basePrice");
+            default -> Sort.by(Sort.Direction.DESC, "startDateTime");
+        };
+    }
 
     private String saveFile(MultipartFile file) {
         try {

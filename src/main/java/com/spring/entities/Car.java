@@ -21,49 +21,49 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "Name", nullable = false)
+    @Column(name = "Name")
     private String name;
 
-    @Column(name = "License_Plate", nullable = false)
+    @Column(name = "License_Plate")
     private String licensePlate;
 
-    @Column(name = "Brand", nullable = false)
+    @Column(name = "Brand")
     private String brand;
 
-    @Column(name = "Model", nullable = false)
+    @Column(name = "Model")
     private String model;
 
-    @Column(name = "Color", nullable = false)
+    @Column(name = "Color")
     private String color;
 
-    @Column(name = "Number_Of_Seats", nullable = false)
+    @Column(name = "Number_Of_Seats")
     private int numberOfSeats;
 
-    @Column(name = "Production_Years", nullable = false)
+    @Column(name = "Production_Years")
     private int productionYears;
 
-    @Column(name = "Transmission_Type", nullable = false)
+    @Column(name = "Transmission_Type")
     private String transmissionType;
 
-    @Column(name = "Fuel_Type", nullable = false)
+    @Column(name = "Fuel_Type")
     private String fuelType;
 
-    @Column(name = "Mileage", precision = 18, scale = 2, nullable = false)
+    @Column(name = "Mileage", precision = 18, scale = 2)
     private BigDecimal mileage;
 
-    @Column(name = "Fuel_Consumption", precision = 18, scale = 3, nullable = false)
+    @Column(name = "Fuel_Consumption", precision = 18, scale = 3)
     private BigDecimal fuelConsumption;
 
-    @Column(name = "Base_Price", precision = 18, scale = 3, nullable = false)
+    @Column(name = "Base_Price", precision = 18, scale = 3)
     private BigDecimal basePrice;
 
-    @Column(name = "Deposit", precision = 18, scale = 3, nullable = false)
+    @Column(name = "Deposit", precision = 18, scale = 3)
     private BigDecimal deposit;
 
-    @Column(name = "Address", nullable = false)
+    @Column(name = "Address")
     private String address;
 
-    @Column(name = "Description", nullable = false)
+    @Column(name = "Description")
     private String description;
 
     @ElementCollection(targetClass = AdditionalFunctions.class)
@@ -81,12 +81,12 @@ public class Car {
     @Column(name = "Images", columnDefinition = "VARCHAR(600) NOT NULL")
     private String images;
 
-    @Column(name = "Status", nullable = false)
+    @Column(name = "Status")
     @Enumerated(EnumType.STRING)
     private CarStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "car_owner_id", nullable = false)
+    @JoinColumn(name = "car_owner_id")
     private CarOwner carOwner;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "car")

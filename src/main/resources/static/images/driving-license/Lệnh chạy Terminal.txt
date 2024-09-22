@@ -1,0 +1,63 @@
+\--	C
+PS D:\Code> pwd
+PS D:\Code> cd '.\File Code (trừ Java ra)\'
+PS D:\Code\File Code (trừ Java ra)> ls
+PS D:\Code\File Code (trừ Java ra)> cd C
+PS D:\Code\File Code (trừ Java ra)> 
+PS D:\Code\File Code (trừ Java ra)> cd '.\2. C\'
+PS D:\Code\File Code (trừ Java ra)\2. C> ls
+PS D:\Code\File Code (trừ Java ra)\2. C> gcc sum-of-series.c
+PS D:\Code\File Code (trừ Java ra)\2. C> ./a
+
+\--	Html
+PS D:\Code\File Code (trừ Java ra)\2. C> cd ..
+PS D:\Code\File Code (trừ Java ra)> cd '.\1. Html\'    
+PS D:\Code\File Code (trừ Java ra)\1. Html> ls
+PS D:\Code\File Code (trừ Java ra)\1. Html> cd Assignment
+PS D:\Code\File Code (trừ Java ra)\1. Html\Assignment> start Assignment_1.html
+PS D:\Code\File Code (trừ Java ra)\1. Html\Assignment> 
+
+
+\--	GitHub
+echo "# text" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Kinhart822/text.git
+git push -u origin main
+
+// Kéo dự án có sẵn xuống
+git clone link_https
+
+- Tạo 1 project trên GitHub (dự án rỗng chưa có gì cả - main)
+1. Tạo 1 github repository (folder) - nơi chứa code
+2. Clone project nay: 
+		git clone link_your_repo
+3. Viết code
+		git status ( kiểm tra trạng thái files)
+		git add. (thêm files)
+		git commit -m "your_message" (tạo nội dung commit)
+		git push origin main
+
+- Tạo project local và đấy lên GitHub (dự án ko rỗng, có nhiều thứ ở trong - master)
+1. Tao 1 github repo
+2. 		git init
+3. Viết code
+		git status
+		git add.
+		git commit -m "your message"
+		git remote add origin https://....
+		git push origin master
+
+// Https vs SSH: hiểu đơn giản thì điểm chung của Https và SSH là giúp xác thực bạn là ai, nhưng điểm riêng là Https cần password còn SSH thì cần configure
+
+// Làm việc nhóm
+	git pull = git fetch + git merge
+	git merge
+	git conflict
+	git checkout branch/commit
+
+	git checkout -b branch_name (tạo 1 nhánh branch mới)
+	git checkout branch_name (check code tại 1 branch đã tạo)
+

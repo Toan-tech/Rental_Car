@@ -22,15 +22,15 @@ public class IdealCar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "Location", nullable = false)
+    @Column(name = "Location")
     private String location;
 
-    @Column(name = "Pickup_Date_Time", nullable = false)
+    @Column(name = "Pickup_Date_Time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull(message = "Please enter pick up date and time")
     private LocalDateTime pickupDateTime;
 
-    @Column(name = "Drop_Off_Date_Time", nullable = false)
+    @Column(name = "Drop_Off_Date_Time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull(message = "Please enter drop-off date and time")
     private LocalDateTime dropOffDateTime;

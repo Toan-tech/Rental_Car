@@ -27,23 +27,23 @@
                             </div>
                         </div>
                         <ul class="options">
-                            <li class="option" data-value="#">
+                            <li class="option">
                                     <span class="option-text">
                                         <a th:href="@{/my-profile}" style="color: black">My Profile</a>
                                     </span>
                             </li>
-                            <li class="option" data-value="#">
+                            <li class="option">
                                     <span class="option-text">
-                                        <a href="#" style="color: black">My Bookings</a>
+                                        <a th:href="@{booking-view}" style="color: black">My Bookings</a>
                                     </span>
                             </li>
-                            <li class="option" data-value="#">
+                            <li class="option">
                                     <span class="option-text">
-                                        <a href="#" style="color: black">My Wallet</a>
+                                        <a th:href="@{/myWallet}" style="color: black">My Wallet</a>
                                     </span>
                             </li>
                             <hr>
-                            <li class="option" data-value="login.html">
+                            <li class="option">
                                     <span class="option-text">
                                         <a th:href="@{/logout}" style="color: black">Logout</a>
                                     </span>
@@ -68,8 +68,8 @@
         <div class="footer-section">
             <h3>CUSTOMER ACCESS</h3>
             <ul>
-                <li><a href="#"><span style="font-size: 1.4em">Manage My Booking</span></a></li>
-                <li><a href="#"><span style="font-size: 1.4em">My Wallet</span></a></li>
+                <li><a th:href="@{booking-view}"><span style="font-size: 1.4em">Manage My Booking</span></a></li>
+                <li><a th:href="@{/myWallet}"><span style="font-size: 1.4em">My Wallet</span></a></li>
                 <li><a href="#"><span style="font-size: 1.4em">My Car</span></a></li>
                 <li><a th:href="@{/login}"><span style="font-size: 1.4em">Log In</span></a></li>
             </ul>

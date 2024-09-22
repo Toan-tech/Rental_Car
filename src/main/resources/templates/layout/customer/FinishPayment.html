@@ -70,11 +70,11 @@
                 <a class="nav-link disabled" th:href="@{/Overview(carId=${car.id})}"><span style="font-size: 1.2em">Step 1: Booking Information</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" th:href="@{/BookingPayment(carId=${car.id})}"><span
+                <a class="nav-link disabled" th:href="@{/BookingPayment(carId=${car.id}, bookingId=${booking.id})}"><span
                         style="font-size: 1.2em">Step 2: Payment</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" th:href="@{/bookingSuccess(carId=${car.id})}"><span style="font-size: 1.2em">Step 3: Finish</span></a>
+                <a class="nav-link active" th:href="@{/bookingSuccess(carId=${car.id}, bookingId=${booking.id})}"><span style="font-size: 1.2em">Step 3: Finish</span></a>
             </li>
         </ul>
         <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
@@ -183,7 +183,7 @@
                                         dropOffDateTime=${idealCar.dropOffDateTime})}" onchange="updateUrl()" class="btn btn-secondary">
                                 <span style="font-size: 20px; padding: 5px">Book another car</span>
                             </a>
-                            <a href="#" class="btn btn-primary" style="margin-left: 20px"><span
+                            <a th:href="@{booking-view}" class="btn btn-primary" style="margin-left: 20px"><span
                                     style="font-size: 20px; padding: 5px">View Booking</span></a>
                         </div>
                     </div>

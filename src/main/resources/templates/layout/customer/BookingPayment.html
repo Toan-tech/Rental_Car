@@ -64,7 +64,7 @@
         </nav>
     </section>
     <div style="background-color: #333333; padding: 30px; color: white">
-        <form th:action="@{/BookingPayment(carId=${car.id})}" method="get">
+        <form th:action="@{/BookingPayment(carId=${car.id}, bookingId=${booking.id})}" method="get">
             <div class="card-body">
                 <h1 class="card-title" style="margin-bottom: 40px">Booking Details</h1>
                 <div class="d-flex justify-content-between align-items-start">
@@ -110,10 +110,10 @@
                 <a class="nav-link disabled" th:href="@{/Overview(carId=${car.id})}"><span style="font-size: 1.2em">Step 1: Booking Information</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" th:href="@{/BookingPayment(carId=${car.id})}"><span style="font-size: 1.2em">Step 2: Payment</span></a>
+                <a class="nav-link active" th:href="@{/BookingPayment(carId=${car.id}, bookingId=${booking.id})}"><span style="font-size: 1.2em">Step 2: Payment</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" th:href="@{/bookingSuccess(carId=${car.id})}"><span style="font-size: 1.2em">Step 3: Finish</span></a>
+                <a class="nav-link disabled" th:href="@{/bookingSuccess(carId=${car.id}, bookingId=${booking.id})}"><span style="font-size: 1.2em">Step 3: Finish</span></a>
             </li>
         </ul>
         <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
@@ -205,7 +205,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h1 style="margin-bottom: 20px">Please select your payment method</h1>
-                        <form th:action="@{/BookingPayment(carId=${car.id})}" method="post" style="margin-left: 50px">
+                        <form th:action="@{/BookingPayment(carId=${car.id}, bookingId=${booking.id})}" method="post" style="margin-left: 50px">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="paymentMethod" id="wallet" value="My_Wallet"
                                        style="margin-top: 15px" required>
@@ -213,20 +213,21 @@
                                     My wallet
                                 </label>
                                 <div class="ml-4">
-                                    <div id="sufficientWalletBalance" style="font-size: 20px; margin-left: 20px"
+                                    <div style="font-size: 20px; margin-left: 20px"
                                          th:if="${customer.wallet} >= ${car.deposit}">
                                         <span>Current Balance:</span>
-                                        <span style="color: green; margin-left: 10px" th:text="${customer.wallet} + ' ' + 'VND'"></span>
+                                        <span id="sufficientWalletBalance" style="color: green; margin-left: 10px" th:text="${customer.wallet} + ' ' + 'VND'"></span>
                                     </div>
-                                    <div id="insufficientWalletBalance" style="font-size: 20px; margin-left: 20px"
+                                    <div style="font-size: 20px; margin-left: 20px"
                                          th:unless="${customer.wallet} >= ${car.deposit}">
                                         <span>Current Balance:</span>
-                                        <span style="color: red; margin-left: 10px" th:text="${customer.wallet} + ' ' + 'VND'"></span>
+                                        <span id="insufficientWalletBalance" style="color: red; margin-left: 10px" th:text="${customer.wallet} + ' ' + 'VND'"></span>
                                         <span style="color: red; margin-left: 30px">(Insufficient)</span>
                                         <div style="margin-top: 5px">
                                             <span>Please go to My wallet to top-up and try again</span>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -312,11 +313,18 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-        const sufficientBalance = document.getElementById('sufficientWalletBalance').textContent.replace('.', '').replace(',', '.');
-        const insufficientBalance = document.getElementById('insufficientWalletBalance').textContent.replace('.', '').replace(',', '.');
+        const sufficientBalanceElem = document.getElementById('sufficientWalletBalance');
+        const insufficientBalanceElem = document.getElementById('insufficientWalletBalance');
 
-        document.getElementById('sufficientWalletBalance').textContent = formatCurrency(sufficientBalance)
-        document.getElementById('insufficientWalletBalance').textContent = formatCurrency(insufficientBalance);
+        if (sufficientBalanceElem) {
+            const sufficientBalance = parseFloat(sufficientBalanceElem.textContent.replace(/\./g, '').replace(',', '.'));
+            sufficientBalanceElem.textContent = formatCurrency(sufficientBalance);
+        }
+
+        if (insufficientBalanceElem) {
+            const insufficientBalance = parseFloat(insufficientBalanceElem.textContent.replace(/\./g, '').replace(',', '.'));
+            insufficientBalanceElem.textContent = formatCurrency(insufficientBalance);
+        }
     });
 
     // Handle the payment logic based on selected payment method

@@ -112,10 +112,10 @@
                 <a class="nav-link active" th:href="@{/Overview(carId=${car.id})}"><span style="font-size: 1.2em">Step 1: Booking Information</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" th:href="@{/BookingPayment(carId=${car.id})}"><span style="font-size: 1.2em">Step 2: Payment</span></a>
+                <a class="nav-link disabled" th:href="@{/BookingPayment(carId=${car.id}, bookingId=${booking.id})}"><span style="font-size: 1.2em">Step 2: Payment</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" th:href="@{/bookingSuccess(carId=${car.id})}"><span style="font-size: 1.2em">Step 3: Finish</span></a>
+                <a class="nav-link disabled" th:href="@{/bookingSuccess(carId=${car.id}, bookingId=${booking.id})}"><span style="font-size: 1.2em">Step 3: Finish</span></a>
             </li>
         </ul>
         <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
@@ -270,7 +270,7 @@
                                    style="margin-right: 10px; padding: 5px; margin-top: 10px">
                                     <span style="font-size: 20px; margin-left: 10px; margin-right: 10px" onclick="confirmCancel()">Cancel</span>
                                 </a>
-                                <a th:href="@{/BookingPayment(carId=${car.id})}"
+                                <a th:href="@{/BookingPayment(carId=${car.id}, bookingId=${booking.id})}"
                                    class="btn btn-primary"
                                    style="margin-right: 10px; padding: 5px; margin-top: 10px">
                                     <span style="font-size: 20px; margin-left: 10px; margin-right: 10px">Next</span>

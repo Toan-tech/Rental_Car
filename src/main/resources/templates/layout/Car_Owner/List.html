@@ -73,8 +73,7 @@
                     <td>
                         <i th:data-star="${car.getRatingAvgStar()}"></i>
                         <div>
-                            <small th:each="booking : ${car.bookings}"
-                                   th:if="${booking.feedback == null || booking.feedback.ratings == null}">(No ratings yet)</small>
+                            <small th:if="${!hasRates[sts.index]}">No rating yet</small>
                         </div>
                     </td>
                 </tr>

@@ -18,7 +18,7 @@ public class FeedBack {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "Ratings", nullable = false)
+    @Column(name = "Ratings")
     @Enumerated(EnumType.STRING)
     private RatingStar ratings;
 

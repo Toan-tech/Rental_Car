@@ -47,6 +47,6 @@ public class Booking {
     private Customer customer;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "feedback_id", nullable = true)
+    @JoinColumn(name = "feedback_id")
     private FeedBack feedback;
 }

@@ -1,9 +1,9 @@
 package com.spring.entities;
 
 public enum RatingStar {
-    five_stars,
-    four_stars,
-    three_stars,
+    one_star,
     two_stars,
-    one_star;
+    three_stars,
+    four_stars,
+    five_stars;
 }

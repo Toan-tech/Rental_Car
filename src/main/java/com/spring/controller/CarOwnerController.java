@@ -64,13 +64,22 @@ public class CarOwnerController {
 
         List<Integer> numberOfRides = new ArrayList<>();
         List<Booking> bookings = new ArrayList<>();
+        List<Boolean> hasRates = new ArrayList<>();
 
         for (Car car : carPage) {
             Integer numberOfRide = bookingRepository.countByCarAndStatus(car, BookingStatus.Completed);
             numberOfRides.add(numberOfRide);
 
-            Booking booking = booking(car);
+            Booking booking = bookCar(car);
             bookings.add(booking);
+
+            Boolean hasRate = checkRate(car);
+            hasRates.add(hasRate);
+
+            if (car.getId() == 10){
+                car.getRatingAvgStar();
+                System.out.println(car.getRatingAvgStar());
+            }
         }
 
         int totalPages = carPage.getTotalPages();
@@ -85,6 +94,7 @@ public class CarOwnerController {
         model.addAttribute("sort", sort);
         model.addAttribute("numberOfRides", numberOfRides);
         model.addAttribute("bookings", bookings);
+        model.addAttribute("hasRates", hasRates);
 
         return "layout/Car_Owner/List";
     }
@@ -99,11 +109,14 @@ public class CarOwnerController {
         } else {
             Car car = carRepository.findById(carId).orElse(null);
             Integer numberOfRide = bookingRepository.countByCarAndStatus(car, BookingStatus.Completed);
-            Booking booking = booking(car);
+            Booking booking = bookCar(car);
+            Boolean hasRate = checkRate(car);
 
             model.addAttribute("car", car);
             model.addAttribute("numberOfRide", numberOfRide);
             model.addAttribute("booking", booking);
+            model.addAttribute("hasRate", hasRate);
+
             return "layout/Car_Owner/Edit";
         }
     }
@@ -139,7 +152,7 @@ public class CarOwnerController {
         }
     }
 
-    private Booking booking(Car car) {
+    private Booking bookCar(Car car) {
         List<Booking> bookingList = bookingRepository.findAllByCar(car);
         Booking booking = new Booking();
         booking.setStatus(BookingStatus.In_Progress);
@@ -174,6 +187,19 @@ public class CarOwnerController {
         Booking booking = bookingRepository.findById(bookingId).orElse(null);
         booking.setStatus(bookingStatus);
         bookingRepository.save(booking);
+    }
+
+    private boolean checkRate (Car car){
+        Boolean hasRating = false;
+        for (Booking carBooking : car.getBookings()){
+            if (carBooking.getFeedback() == null){
+                continue;
+            } else if (carBooking.getFeedback().getRatings() != null ){
+                hasRating = true;
+                break;
+            }
+        }
+        return hasRating;
     }
 }
 

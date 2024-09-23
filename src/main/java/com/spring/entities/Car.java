@@ -85,13 +85,15 @@ public class Car {
 
     public double getRatingAvgStar() {
         int star = 0;
+        int rateNum = 0;
         for (Booking booking : bookings) {
-            if (booking.getFeedback().getRatings() == null) {
+            if (booking.getFeedback() == null || booking.getFeedback().getRatings() == null) {
                 star += 0;
             } else {
                 star += booking.getFeedback().getRatings().ordinal() + 1;
+                rateNum += 1;
             }
         }
-        return (double) star / (double)bookings.size();
+        return (double) star / (double)rateNum;
     }
 }

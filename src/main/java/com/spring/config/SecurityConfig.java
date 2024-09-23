@@ -31,6 +31,7 @@ public class SecurityConfig {
                         .requestMatchers(PERMIT_ALL_LINK).permitAll()
                         .anyRequest().authenticated()
                 )
+                .httpBasic(Customizer.withDefaults())
                 .formLogin(
                         loginForm -> loginForm.loginPage("/login")
                                 .usernameParameter("email")
@@ -60,7 +61,7 @@ public class SecurityConfig {
                     .getAuthority();
 
             if (role.equals("Customer")) {
-                response.sendRedirect("/customer");
+                response.sendRedirect("/Homepage");
             } else if (role.equals("Car_Owner")) {
                 response.sendRedirect("/car-owner");
             } else {

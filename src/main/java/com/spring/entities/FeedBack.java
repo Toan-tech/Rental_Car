@@ -22,10 +22,10 @@ public class FeedBack {
     @Enumerated(EnumType.STRING)
     private RatingStar ratings;
 
-    @Column(name = "Content", nullable = false)
+    @Column(name = "Content")
     private String content;
 
-    @Column(name = "Date_Time", nullable = false)
+    @Column(name = "Date_Time")
     private LocalDateTime dateTime;
 
     @OneToOne(mappedBy = "feedback", fetch = FetchType.LAZY)

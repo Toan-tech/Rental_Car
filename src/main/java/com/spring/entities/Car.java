@@ -6,6 +6,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -48,13 +49,13 @@ public class Car {
     @Column(name = "Mileage", precision = 18, scale = 2, nullable = false)
     private BigDecimal mileage;
 
-    @Column(name = "Fuel_Consumption", precision = 18, scale = 2)
+    @Column(name = "Fuel_Consumption", precision = 18, scale = 3)
     private BigDecimal fuelConsumption;
 
-    @Column(name = "Base_Price", precision = 18, scale = 2, nullable = false)
+    @Column(name = "Base_Price", precision = 18, scale = 3)
     private BigDecimal basePrice;
 
-    @Column(name = "Deposit", precision = 18, scale = 2, nullable = false)
+    @Column(name = "Deposit", precision = 18, scale = 3)
     private BigDecimal deposit;
 
     @Column(name = "Address", nullable = false)

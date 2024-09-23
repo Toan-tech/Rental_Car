@@ -59,7 +59,7 @@ public class HomeController {
 
     @GetMapping("/car-owner")
     public String homePageAsCarOwner() {
-        return "home/Homepage_CarOwner.html";
+        return "home/Homepage_CarOwner";
     }
 
     @RequestMapping("/home")

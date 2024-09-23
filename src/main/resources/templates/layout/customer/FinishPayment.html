@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent a Car</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.rawgit.com/westonganger/bootstrap-directional-buttons/master/dist/bootstrap-directional-buttons.css"
+          rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{css/rating.css}">
+    <link rel="stylesheet" th:href="@{css/header.css}">
+    <style>
+        .input-wrapper i {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #333;
+        }
+
+        .form-control {
+            padding-right: 40px;
+        }
+
+        h5 {
+            font-weight: bold;
+            margin-top: 25px;
+        }
+
+        p {
+            font-size: 20px;
+            color: #6c757d;
+        }
+
+        label {
+            padding-left: 5px;
+            font-size: 25px;
+            margin-bottom: 15px;
+        }
+
+        .option:hover {
+            background-color: #f2f2f2;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+<!-- Include Header Fragment -->
+<div th:replace="fragments/fragment :: header"></div>
+
+<main style="margin-bottom: 30px">
+    <section>
+        <nav aria-label="breadcrumb" style="padding: 10px;">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Book car</li>
+            </ol>
+        </nav>
+    </section>
+    <section class="container mt-4" style="margin-top: 10px; margin-bottom: 10px">
+        <!-- Tabs for navigation -->
+        <ul class="nav nav-tabs" id="carDetailsTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link disabled" th:href="@{/Overview(carId=${car.id})}"><span style="font-size: 1.2em">Step 1: Booking Information</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" th:href="@{/BookingPayment(carId=${car.id}, bookingId=${booking.id})}"><span
+                        style="font-size: 1.2em">Step 2: Payment</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" th:href="@{/bookingSuccess(carId=${car.id}, bookingId=${booking.id})}"><span style="font-size: 1.2em">Step 3: Finish</span></a>
+            </li>
+        </ul>
+        <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
+            <div class="tab-pane fade show active" id="basic-info" role="tabpanel" aria-labelledby="details-tab">
+                <div class="row">
+                    <!-- Car Information -->
+                    <div class="col-md-6 d-flex">
+                        <div class="card w-100">
+                            <div class="row g-0">
+                                <div>
+                                    <img src="https://s3.cloud.cmctelecom.vn/nhattao1/2017/03/8062309_9889e4939ea64ed184fcc96158b76133.jpg"
+                                         class="d-block w-100 img-custom" alt="Image 1"
+                                         style="max-width: 90%; margin-left:16px; margin-top:20px; margin-right:10px">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <strong class="card-title" style=" font-size: 45px"
+                                                th:text="${car.name}">Car Name</strong>
+                                        <span style="font-size: 28px"
+                                              th:text="'(' + ${car.brand} + ' - ' + ${car.model} + ')'">CarBranch - CarModel</span>
+                                        <div style="font-size: 18px; margin-top: 15px; margin-bottom: 10px">
+                                            <div id="rating-star">
+                                                <i th:data-star="${car.getRatingAvgStar()}"></i>
+                                                <div>
+                                                    <span th:each="booking : ${car.bookings}"
+                                                          class="no-ratings-text"
+                                                          th:if="${booking.feedback == null || booking.feedback.ratings == null}">(No ratings yet)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-text">
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">No. of rides: </strong>
+                                                <span th:text="${car.bookings.size()}"
+                                                      style="margin-left: 10px; font-size: 20px">0</span><br>
+                                            </div>
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">Price: </strong>
+                                                <span th:text="${car.basePrice} + '/day'"
+                                                      style="margin-left: 10px; font-size: 20px">N/A</span><br>
+                                            </div>
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">Locations: </strong>
+                                                <span th:if="${car.bookings.size() > 0}"
+                                                      th:text="${car.bookings.get(0).driverInfo}"
+                                                      style="margin-left: 10px; font-size: 20px">Unknown</span><br>
+                                            </div>
+                                            <div style="margin-bottom: 10px">
+                                                <strong style="font-size: 20px; color: #6c757d">Status: </strong>
+                                                <span class="text-success" th:text="${car.status}"
+                                                      style="margin-left: 10px; font-size: 20px">Status</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Booking Summary -->
+                    <div class="col-md-6 d-flex">
+                        <div class="card w-100">
+                            <div class="card-body">
+                                <h3 class="card-title" style="margin-bottom: 20px">Booking Summary</h3>
+                                <p class="card-text">
+                                    <strong>Number of days:</strong>
+                                    <span id="numberOfDays" th:text="${numberOfDays}">0</span>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Price per day:</strong>
+                                    <span id="basePrice" th:text="${car.basePrice}">0</span>/day
+                                </p>
+                                <hr>
+                                <p class="card-text">
+                                    <strong>Total:</strong>
+                                    <span id="total">N/A</span>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Deposit:</strong>
+                                    <span id="deposit" th:text="${car.deposit}">0</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p style="font-size: 20px; color: black"><strong>You've successfully booked <strong
+                                th:text="${car.name} + ' '+'(' + ${car.brand} + ' - ' + ${car.model} + ')'"></strong>
+                            from <strong th:text="${pickupDate} + ' - ' + ${pickupTime}"></strong>
+                            to <strong th:text="${dropoffDate} + ' - ' + ${dropoffTime}"></strong>.</strong></p>
+                        <p style="font-size: 20px; color: black">Your booking number is: <strong
+                                th:text="${booking.bookingNo}"></strong></p>
+                        <p style="font-size: 20px; color: black">Our operator will contact you with further guidance
+                            about pickup.</p>
+
+                        <div class="mt-4">
+                            <a th:href="@{/Homepage}" class="btn btn-link" style="text-decoration: underline"><span
+                                    style="font-size: 20px; padding: 5px">Go to homepage</span></a>
+                            <a th:href="@{/result-search(location=${idealCar.location},
+                                        pickupDateTime=${idealCar.pickupDateTime},
+                                        dropOffDateTime=${idealCar.dropOffDateTime})}" onchange="updateUrl()" class="btn btn-secondary">
+                                <span style="font-size: 20px; padding: 5px">Book another car</span>
+                            </a>
+                            <a th:href="@{booking-view}" class="btn btn-primary" style="margin-left: 20px"><span
+                                    style="font-size: 20px; padding: 5px">View Booking</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- Include Footer Fragment -->
+<div th:replace="fragments/fragment :: footer"></div>
+
+<script>
+    const optionMenu = document.querySelector(".select-menu"),
+        selectBtn = optionMenu.querySelector(".select-btn"),
+        options = optionMenu.querySelectorAll(".option"),
+        sBtn_text = optionMenu.querySelector(".sBtn-text");
+
+    selectBtn.addEventListener("click", () => optionMenu.classList.toggle("active"));
+
+    options.forEach(option => {
+        option.addEventListener("click", () => {
+            sBtn_text.innerText = option.querySelector(".option-text").innerText;
+
+            let value = option.getAttribute("data-value");
+            if (value) {
+                location.href = value;
+            }
+
+            optionMenu.classList.remove("active");
+        });
+    });
+</script>
+<script>
+    const optionElements = document.querySelectorAll(".option");
+
+    optionElements.forEach(option => {
+        option.addEventListener("click", () => {
+            let value = option.getAttribute("data-value");
+            if (value) {
+                location.href = value;
+            }
+            option.classList.toggle("active");
+        });
+    });
+</script>
+<script>
+    function updateUrl() {
+        const currentUrl = window.location.href;
+        const newUrl = new URL(currentUrl);
+
+        const location = document.getElementById('pickupLocation')?.value || '';
+        const pickupDateTime = document.getElementById('startDateTime')?.value || '';
+        const dropOffDateTime = document.getElementById('endDateTime')?.value || '';
+
+        newUrl.searchParams.set('location', location);
+        newUrl.searchParams.set('pickupDateTime', pickupDateTime);
+        newUrl.searchParams.set('dropOffDateTime', dropOffDateTime);
+
+        window.location.href = newUrl.toString();
+    }
+</script>
+<script>
+    function formatCurrency(value) {
+        return value.toLocaleString('vi-VN', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }) + ' VND';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const numberOfDays = parseFloat(document.getElementById('numberOfDays').textContent);
+        const basePrice = parseFloat(document.getElementById('basePrice').textContent.replace('.', '').replace(',', '.'));
+        const deposit = parseFloat(document.getElementById('deposit').textContent.replace('.', '').replace(',', '.'));
+
+        const total = numberOfDays * basePrice;
+        document.getElementById('total').textContent = formatCurrency(total);
+        document.getElementById('deposit').textContent = formatCurrency(deposit);
+    });
+</script>
+</body>
+</html>

@@ -21,28 +21,28 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "Name", nullable = false)
+    @Column(name = "Name")
     private String name;
 
-    @Column(name = "Date_Of_Birth", nullable = false)
+    @Column(name = "Date_Of_Birth")
     private LocalDate dateOfBirth;
 
-    @Column(name = "National_ID_No", nullable = false)
+    @Column(name = "National_ID_No")
     private String nationalIdNo;
 
-    @Column(name = "Phone_No", nullable = false)
+    @Column(name = "Phone_No")
     private String phoneNo;
 
-    @Column(name = "Email", nullable = false)
+    @Column(name = "Email")
     private String email;
 
-    @Column(name = "Address", nullable = false)
+    @Column(name = "Address")
     private String address;
 
-    @Column(name = "Driving_License", nullable = false)
+    @Column(name = "Driving_License")
     private String drivingLicense;
 
-    @Column(name = "Wallet", precision = 18, scale = 2, nullable = false)
+    @Column(name = "Wallet", precision = 18, scale = 3)
     private BigDecimal wallet;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")

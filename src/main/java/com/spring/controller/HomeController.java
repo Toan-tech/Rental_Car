@@ -54,7 +54,7 @@ public class HomeController {
 
     @GetMapping("/customer")
     public String homePageAsCustomer() {
-        return "home/home-page-as-customer";
+        return "layout/customer/Homepage";
     }
 
     @GetMapping("/car-owner")

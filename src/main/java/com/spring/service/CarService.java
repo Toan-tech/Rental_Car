@@ -33,7 +33,7 @@ public class CarService {
     public List<Car> extractDistinctAvailableCars(List<Booking> bookingList) {
         return bookingList.stream()
                 .map(Booking::getCar)
-                .filter(car -> CarStatus.Available.equals(car.getStatus()))
+                .filter(car -> CarStatus.Available.equals(car.getCarStatus()))
                 .distinct()
                 .collect(Collectors.toList());
     }

@@ -31,9 +31,6 @@ public class CarOwnerController {
     private BookingRepository bookingRepository;
 
     @Autowired
-    private FeedBackRepository feedBackRepository;
-
-    @Autowired
     private CarOwnerServiceImpl carOwnerServiceImpl;
 
     @GetMapping(value = "/car-owner/mycar/add")

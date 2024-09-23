@@ -66,6 +66,11 @@ public class UsersServiceImpl implements UsersService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
+    @Override
+    public boolean emailExists(String email) {
+        return usersRepository.existsByEmail(email);
+    }
+
     private void saveCustomer(UsersDTO usersDTO) {
         Customer customer = new Customer();
         customer.setName(usersDTO.getName());

@@ -21,7 +21,11 @@ public class SecurityConfig {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    private static final String[] PERMIT_ALL_LINK = {"/home-page", "/login", "/auth", "/login-check", "/register", "/images/**", "/css/**", "/js/**", "/forgot-password", "/reset-password"};
+    private static final String[] PERMIT_ALL_LINK = {"/home-page", "/login", "/auth",
+            "/login-check", "/register",
+            "/check-email/**",
+            "/check-email",
+            "/images/**", "/css/**", "/js/**", "/forgot-password", "/reset-password"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -31,7 +35,7 @@ public class SecurityConfig {
                         .requestMatchers(PERMIT_ALL_LINK).permitAll()
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())
+//                .httpBasic(Customizer.withDefaults())
                 .formLogin(
                         loginForm -> loginForm.loginPage("/login")
                                 .usernameParameter("email")
@@ -61,7 +65,7 @@ public class SecurityConfig {
                     .getAuthority();
 
             if (role.equals("Customer")) {
-                response.sendRedirect("/Homepage");
+                response.sendRedirect("/customer");
             } else if (role.equals("Car_Owner")) {
                 response.sendRedirect("/car-owner");
             } else {

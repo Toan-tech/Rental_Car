@@ -179,7 +179,6 @@
             align-items: center;
         }
 
-<<<<<<<< HEAD:src/main/resources/templates/auth/auth-page.html
         .flex-container {
             display: flex;
             justify-content: space-between;
@@ -191,8 +190,6 @@
             align-items: center;
         }
 
-========
->>>>>>>> origin/customer:src/main/resources/templates/layout/auth/auth-page.html
         .flex-item p {
             margin: 0;
             white-space: nowrap;
@@ -280,62 +277,39 @@
 
         <div class="signup">
             <h2>NOT A MEMBER YET?</h2>
-<<<<<<<< HEAD:src/main/resources/templates/auth/auth-page.html
             <form th:action="@{/auth}" method="post" th:object="${users}" id="registerForm">
                 <div class="form-group">
                     <label for="name"></label>
                     <input type="text" id="name" name="name" placeholder="Your name" th:field="*{name}" required>
                     <small id="nameError" class="text-danger"></small>
-========
-            <form th:action="@{/auth}" method="post" th:object="${users}">
-                <div class="form-group">
-                    <label for="name"></label>
-                    <input type="text" id="name" name="name" placeholder="Your name" th:field="*{name}" required >
->>>>>>>> origin/customer:src/main/resources/templates/layout/auth/auth-page.html
                 </div>
 
                 <div class="form-group">
                     <label for="signup-email"></label>
-<<<<<<<< HEAD:src/main/resources/templates/auth/auth-page.html
                     <input type="text" id="signup-email" name="email" placeholder="Your email address"
                            th:field="*{email}" required>
                     <small id="emailError" class="text-danger"></small>
-========
-                    <input type="email" id="signup-email" name="email" placeholder="Your email address" th:field="*{email}" required>
->>>>>>>> origin/customer:src/main/resources/templates/layout/auth/auth-page.html
                 </div>
 
                 <div class="form-group">
                     <label for="phone"></label>
-<<<<<<<< HEAD:src/main/resources/templates/auth/auth-page.html
                     <input type="tel" id="phone" name="phone" placeholder="Your phone number" th:field="*{phone}"
                            required>
                     <small id="phoneError" class="text-danger"></small>
-========
-                    <input type="tel" id="phone" name="phone" placeholder="Your phone number" th:field="*{phone}" required>
->>>>>>>> origin/customer:src/main/resources/templates/layout/auth/auth-page.html
                 </div>
 
                 <div class="form-group">
                     <label for="password1"></label>
-<<<<<<<< HEAD:src/main/resources/templates/auth/auth-page.html
                     <input type="password" id="password1" name="password" placeholder="Pick a password"
                            th:field="*{password}" required>
                     <small id="passwordError" class="text-danger"></small>
-========
-                    <input type="password" id="password1" name="password" placeholder="Pick a password" th:field="*{password}" required>
->>>>>>>> origin/customer:src/main/resources/templates/layout/auth/auth-page.html
                 </div>
 
                 <div class="form-group">
                     <label for="confirm-password"></label>
-<<<<<<<< HEAD:src/main/resources/templates/auth/auth-page.html
                     <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirm password"
                            required>
                     <small id="confirmPasswordError" class="text-danger"></small>
-========
-                    <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirm password" required>
->>>>>>>> origin/customer:src/main/resources/templates/layout/auth/auth-page.html
                 </div>
 
                 <div class="form-group radio-options">
@@ -356,12 +330,8 @@
                     <p>I have read and agree with the</p>
                     <a href="#" class="terms">Terms and Conditions</a>
                 </div>
-<<<<<<<< HEAD:src/main/resources/templates/auth/auth-page.html
 
                 <button type="submit" id="sign-up-btn" class="btn">
-========
-                <button type="submit" id="sign-up-btn" class="btn" disabled>
->>>>>>>> origin/customer:src/main/resources/templates/layout/auth/auth-page.html
                     <i class='bx bxs-user-plus' style="font-size: 1.5em"></i>SIGN UP
                 </button>
             </form>
@@ -373,7 +343,6 @@
 </div>
 
 <script>
-<<<<<<<< HEAD:src/main/resources/templates/auth/auth-page.html
     document.getElementById('registerForm').addEventListener('submit', function (event) {
         let isValid = true;
 
@@ -420,33 +389,67 @@
         if (!isValid) {
             event.preventDefault();
         }
-========
-    function validateForm() {
+    });
+</script>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function (event) {
+        let isValid = true;
 
         const name = document.getElementById('name').value;
+        if (name.length < 10) {
+            document.getElementById('nameError').innerText = "Name must be at least 10 characters";
+            isValid = false;
+        } else {
+            document.getElementById('nameError').innerText = "";
+        }
+
         const email = document.getElementById('signup-email').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            document.getElementById('emailError').innerText = "Invalid email format";
+            isValid = false;
+        } else {
+            document.getElementById('emailError').innerText = "";
+        }
+
         const phone = document.getElementById('phone').value;
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(phone)) {
+            document.getElementById('phoneError').innerText = "Phone number must be 10 digits";
+            isValid = false;
+        } else {
+            document.getElementById('phoneError').innerText = "";
+        }
+
         const password = document.getElementById('password1').value;
         const confirmPassword = document.getElementById('confirm-password').value;
-        const role = document.querySelector('input[name="role"]:checked');
-        const terms = document.getElementById('terms').checked;
+        if (password !== confirmPassword) {
+            document.getElementById('confirmPasswordError').innerText = "Passwords do not match";
+            isValid = false;
+        } else {
+            document.getElementById('confirmPasswordError').innerText = "";
+        }
 
+        if (isValid) {
+            event.preventDefault();
 
-        const allFieldsFilled = name && email && phone && password && confirmPassword && role && terms;
-        const passwordsMatch = password === confirmPassword;
-
-
-        document.getElementById('sign-up-btn').disabled = !(allFieldsFilled && passwordsMatch);
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-
-        document.querySelectorAll('.form-group input').forEach(function(input) {
-            input.addEventListener('input', validateForm);
-        });
-
-        document.getElementById('terms').addEventListener('change', validateForm);
->>>>>>>> origin/customer:src/main/resources/templates/layout/auth/auth-page.html
+            fetch(`/check-email?email=${encodeURIComponent(email)}`)
+                .then(response => response.json())
+                .then(emailExists => {
+                    if (emailExists) {
+                        document.getElementById('emailError').innerText = "Email already exists. Please choose another email.";
+                    } else {
+                        document.getElementById('registerForm').submit();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking email:', error);
+                    document.getElementById('emailError').innerText = "An error occurred while checking the email.";
+                });
+        } else {
+            event.preventDefault();
+        }
     });
 </script>
 

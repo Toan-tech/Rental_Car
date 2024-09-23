@@ -15,5 +15,5 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     List<Car> findAllByCarOwner(CarOwner carOwner);
     Page<Car> findAllByCarOwner(CarOwner carOwner, Pageable pageable);
 
-    List<Car> findByStatus(CarStatus carStatus);
+    List<Car> findByCarStatus(CarStatus carStatus);
 }

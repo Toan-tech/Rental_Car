@@ -30,7 +30,7 @@ public interface SearchRepository extends JpaRepository<Booking, Integer> {
             "WHERE k.location LIKE %:driverInfo% " +
             "AND k.pickupDateTime >= :startDate " +
             "AND k.dropOffDateTime <= :endDate " +
-            "AND p.status = 'Available'")
+            "AND p.carStatus = 'Available'")
     Page<Booking> findBookingsByIdealCarAndAvailableStatus(
             @Param("driverInfo") String driverInfo,
             @Param("startDate") LocalDateTime startDate,

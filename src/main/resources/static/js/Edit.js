@@ -223,13 +223,13 @@ jQuery(document).ready(function () {
     removeImageButton.each(function (index) {
         jQuery(this).click(function () {
             if (index == 0) {
-                data.set("file4", undefined);
+                data.set("file3", undefined);
             } else if (index == 1) {
-                data.set("file5", undefined);
+                data.set("file4", undefined);
             } else if (index == 2) {
-                data.set("file6", undefined);
+                data.set("file5", undefined);
             } else if (index == 3) {
-                data.set("file7", undefined);
+                data.set("file6", undefined);
             }
 
             jQuery(this).css("display", "none");
@@ -265,13 +265,13 @@ jQuery(document).ready(function () {
                 // Lấy tệp được kéo và thả
                 var files = event.originalEvent.dataTransfer.files;
                 if (index == 0) {
-                    data.set("file4", files[0]);
+                    data.set("file3", files[0]);
                 } else if (index == 1) {
-                    data.set("file5", files[0]);
+                    data.set("file4", files[0]);
                 } else if (index == 2) {
-                    data.set("file6", files[0]);
+                    data.set("file5", files[0]);
                 } else if (index == 3) {
-                    data.set("file7", files[0]);
+                    data.set("file6", files[0]);
                 }
 
                 var fileType = files[0].type; // Lấy kiểu MIME của file

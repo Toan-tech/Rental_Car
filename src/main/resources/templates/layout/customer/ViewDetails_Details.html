@@ -90,11 +90,19 @@
 <main>
     <section>
         <nav aria-label="breadcrumb" style="padding: 10px;">
+<!--            <ol class="breadcrumb">-->
+<!--                <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>-->
+<!--                <li class="breadcrumb-item"><a th:href="@{/result-search(location=${idealCar.location},-->
+<!--                        pickupDateTime=${idealCar.pickupDateTime},-->
+<!--                        dropOffDateTime=${idealCar.dropOffDateTime})}" onchange="updateUrl()">Search Results</a>-->
+<!--                </li>-->
+<!--                <li class="breadcrumb-item"><a th:href="@{/details(carId=${car.id})}">Car Details</a></li>-->
+<!--            </ol>-->
+
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/result-search(location=${idealCar.location},
-                        pickupDateTime=${idealCar.pickupDateTime},
-                        dropOffDateTime=${idealCar.dropOffDateTime})}" onchange="updateUrl()">Search Results</a>
+                <li class="breadcrumb-item">
+                    <a href="#">Search Results</a>
                 </li>
                 <li class="breadcrumb-item"><a th:href="@{/details(carId=${car.id})}">Car Details</a></li>
             </ol>
@@ -174,17 +182,17 @@
                                 </div>
                                 <div style="margin-bottom: 10px; margin-left: 20px">
                                     <strong style="font-size: 20px; color: #6c757d">Status: </strong>
-                                    <span class="text-success" th:text="${car.status}"
+                                    <span class="text-success" th:text="${car.carStatus}"
                                           style="margin-left: 10px; font-size: 20px">Status</span>
                                 </div>
                             </div>
-                            <div th:if="${car.status.toString() == 'Booked'}">
+                            <div th:if="${car.carStatus.toString() == 'Booked'}">
                                 <a href="javascript:void(0);" class="btn btn disabled"
                                    style="padding: 10px; margin: 10px 10px 10px 20px;"><span
                                         style="font-size: 19px; color: black">Already Booked</span>
                                 </a>
                             </div>
-                            <div th:unless="${car.status.toString() == 'Booked'}">
+                            <div th:unless="${car.carStatus.toString() == 'Booked'}">
                                 <a th:href="${loggedIn} ? '/Overview?carId=' + ${car.id} : '/login'"
                                    class="btn btn-primary"
                                    style="padding: 10px; margin: 10px 10px 10px 20px;"><span
@@ -235,10 +243,10 @@
                     <div class="row mt-3">
                         <div class="col-12">
                             <h4>Address:</h4>
-                            <p th:if="${car.status.toString() == 'Booked'}">
+                            <p th:if="${car.carStatus.toString() == 'Booked'}">
                                 <span th:text="${car.address}">Full address</span>
                             </p>
-                            <p th:unless="${car.status.toString() == 'Booked'}">
+                            <p th:unless="${car.carStatus.toString() == 'Booked'}">
                                 Note: Full address will be available after you've paid the deposit to rent.
                             </p>
                         </div>
@@ -253,68 +261,53 @@
                     </div>
 
                     <div style="margin-top: 15px">
+                        <input type="hidden" th:value="${car.additionalFunctions}" class="show-add-function" id="additional-function">
                         <h4>Additional functions:</h4>
                         <div class="row" style="margin-top: 20px">
                             <div class="col-md-4">
                                 <div class="form-check">
                                     <i class='bx bx-bluetooth'></i>
                                     <span class="form-check-label" for="bluetooth">Bluetooth</span>
-                                    <input class="form-check-input" type="checkbox" id="bluetooth"
-                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).Bluetooth)}"
-                                           style="margin-left: 130px">
+                                    <input class="form-check-input" type="checkbox" id="bluetooth" value="Bluetooth" name="function" style="margin-left: 130px">
                                 </div>
                                 <div class="form-check">
                                     <i class='bx bx-map-alt'></i>
                                     <label class="form-check-label" for="gps">GPS</label>
-                                    <input class="form-check-input" type="checkbox" id="gps"
-                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).GPS)}"
-                                           style="margin-left: 130px">
+                                    <input class="form-check-input" type="checkbox" id="gps" value="GPS" name="function" style="margin-left: 130px">
                                 </div>
                                 <div class="form-check">
                                     <i class='bx bx-camera'></i>
                                     <label class="form-check-label" for="camera">Camera</label>
-                                    <input class="form-check-input" type="checkbox" id="camera"
-                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).Camera)}"
-                                           style="margin-left: 130px">
+                                    <input class="form-check-input" type="checkbox" id="camera" value="Camera" name="function" style="margin-left: 130px">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-check">
                                     <i class='bx bx-sun'></i>
                                     <label class="form-check-label" for="sunroof">Sun roof</label>
-                                    <input class="form-check-input" type="checkbox" id="sunroof"
-                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).Sun_Roof)}"
-                                           style="margin-left: 135px">
+                                    <input class="form-check-input" type="checkbox" id="sunroof" value="Sun roof" name="function" style="margin-left: 130px">
                                 </div>
                                 <div class="form-check">
                                     <i class='bx bx-lock-open-alt'></i>
                                     <label class="form-check-label" for="childlock">Child lock</label>
-                                    <input class="form-check-input" type="checkbox" id="childlock"
-                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).Child_Lock)}"
-                                           style="margin-left: 135px">
+                                    <input class="form-check-input" type="checkbox" id="childlock" value="Child lock" name="function" style="margin-left: 130px">
                                 </div>
                                 <div class="form-check">
                                     <i class="fa-solid fa-child-reaching"></i>
                                     <label class="form-check-label" for="childseat">Child seat</label>
-                                    <input class="form-check-input" type="checkbox" id="childseat"
-                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).Child_Seat)}"
-                                           style="margin-left: 135px">
+                                    <input class="form-check-input" type="checkbox" id="childseat" value="Child seat" name="function" style="margin-left: 130px">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-check">
                                     <i class='bx bx-disc'></i>
                                     <label class="form-check-label" for="dvd">DVD</label>
-                                    <input class="form-check-input" type="checkbox" id="dvd"
-                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).DVD)}"
-                                           style="margin-left: 100px">
+                                    <input class="form-check-input" type="checkbox" id="dvd" value="DVD" name="function" style="margin-left: 130px">
                                 </div>
                                 <div class="form-check">
                                     <i class="fa-brands fa-usb"></i>
                                     <label class="form-check-label" for="usb">USB</label>
-                                    <input class="form-check-input" type="checkbox" id="usb"
-                                           th:checked="${car.additionalFunctions.contains(T(com.spring.entities.AdditionalFunctions).USB)}"
-                                           style="margin-left: 100px">
+                                    <input class="form-check-input" type="checkbox" id="usb" value="USB" name="function" style="margin-left: 130px">
                                 </div>
                             </div>
                         </div>
@@ -366,6 +359,17 @@
             optionMenu.classList.remove("active");
         });
     });
+</script>
+<script>
+    //Checkbox additional function
+    var additionalFunction = jQuery(".show-add-function");
+    var selectedFunctions = additionalFunction.val().split(", ");
+    jQuery("input[name='function']").each(function () {
+        var checkboxValue = jQuery(this).val();
+        if (selectedFunctions.includes(checkboxValue)) {
+            jQuery(this).prop("checked", true);
+        }
+    })
 </script>
 <script th:src="@{/js/fragment.js}"></script>
 </body>

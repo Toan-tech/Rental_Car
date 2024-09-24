@@ -110,7 +110,7 @@ public class CustomerController {
         return "layout/customer/ViewDetails_BasicInformation";
     }
 
-    @GetMapping("/details")
+    @GetMapping("/customer/details")
     public String viewDetails(@RequestParam("carId") Integer carId, Model model, Principal principal) {
         if (principal != null) {
             String email = principal.getName();
@@ -137,21 +137,21 @@ public class CustomerController {
             }
         }
 
-        if (foundBooking == null) {
-            throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
-        }
+//        if (foundBooking == null) {
+//            throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
+//        }
 
-        IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
-                .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
+//        IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
+//                .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
         model.addAttribute("car", car);
         model.addAttribute("booking", foundBooking);
-        model.addAttribute("idealCar", idealCar);
+//        model.addAttribute("idealCar", idealCar);
 
         return "layout/customer/ViewDetails_Details";
     }
 
-    @GetMapping("/term")
+    @GetMapping("/customer/term")
     public String termView(@RequestParam("carId") Integer carId, Model model, Principal principal) {
         if (principal != null) {
             String email = principal.getName();
@@ -178,16 +178,16 @@ public class CustomerController {
             }
         }
 
-        if (foundBooking == null) {
-            throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
-        }
-
-        IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
-                .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
+//        if (foundBooking == null) {
+//            throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
+//        }
+//
+//        IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
+//                .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
         model.addAttribute("car", car);
         model.addAttribute("booking", foundBooking);
-        model.addAttribute("idealCar", idealCar);
+//        model.addAttribute("idealCar", idealCar);
 
         return "layout/customer/ViewDetails_Term";
     }

@@ -78,11 +78,18 @@
 <main>
     <section>
         <nav aria-label="breadcrumb" style="padding: 10px;">
+<!--            <ol class="breadcrumb">-->
+<!--                <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>-->
+<!--                <li class="breadcrumb-item"><a th:href="@{/result-search(location=${idealCar.location},-->
+<!--                        pickupDateTime=${idealCar.pickupDateTime},-->
+<!--                        dropOffDateTime=${idealCar.dropOffDateTime})}" onchange="updateUrl()">Search Results</a></li>-->
+<!--                <li class="breadcrumb-item"><a th:href="@{/details(carId=${car.id})}">Car Details</a></li>-->
+<!--            </ol>-->
+
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/result-search(location=${idealCar.location},
-                        pickupDateTime=${idealCar.pickupDateTime},
-                        dropOffDateTime=${idealCar.dropOffDateTime})}" onchange="updateUrl()">Search Results</a></li>
+                <li class="breadcrumb-item">
+                    <a href="#">Search Results</a></li>
                 <li class="breadcrumb-item"><a th:href="@{/details(carId=${car.id})}">Car Details</a></li>
             </ol>
         </nav>
@@ -160,17 +167,17 @@
                                 </div>
                                 <div style="margin-bottom: 10px; margin-left: 20px">
                                     <strong style="font-size: 20px; color: #6c757d">Status: </strong>
-                                    <span class="text-success" th:text="${car.status}"
+                                    <span class="text-success" th:text="${car.carStatus}"
                                           style="margin-left: 10px; font-size: 20px">Status</span>
                                 </div>
                             </div>
-                            <div th:if="${car.status.toString() == 'Booked'}">
+                            <div th:if="${car.carStatus.toString() == 'Booked'}">
                                 <a href="javascript:void(0);" class="btn btn disabled"
                                    style="padding: 10px; margin: 10px 10px 10px 20px;"><span
                                         style="font-size: 19px; color: black">Already Booked</span>
                                 </a>
                             </div>
-                            <div th:unless="${car.status.toString() == 'Booked'}">
+                            <div th:unless="${car.carStatus.toString() == 'Booked'}">
                                 <<a th:href="${loggedIn} ? '/Overview?carId=' + ${car.id} : '/login'"
                                     class="btn btn-primary"
                                     style="padding: 10px; margin: 10px 10px 10px 20px;"><span
@@ -231,37 +238,32 @@
 
                     <div class="row">
                         <div class="col-md-12 d-flex justify-content-left" style="margin-top: 20px">
+                            <input type="hidden" th:value="${car.termsOfUse}" class="term-of-use" id="term-of-use">
                             <label class="form-label" style="font-size: 1.5rem; font-weight: bold;">Terms of
                                 use:</label>
                             <div class="form-check" style="margin-left: 50px; margin-bottom: 20px; margin-top: 40px">
-                                <input class="form-check-input" type="checkbox" id="noSmoking"
-                                       th:checked="${car.termsOfUse.contains(T(com.spring.entities.TermOfUse).No_Smoking)}"
-                                       style="transform: scale(1.5); margin-top: 9px">
+                                <input class="form-check-input term" type="checkbox" id="noSmoking" value="1" style="transform: scale(1.5); margin-top: 9px">
                                 <span class="form-check-label" for="noSmoking"
                                       style="font-size: 1.25rem; margin-left: 5px">No smoking</span>
                             </div>
                             <div class="form-check" style="margin-left: 50px; margin-bottom: 20px; margin-top: 40px">
-                                <input class="form-check-input" type="checkbox" id="noPet"
-                                       th:checked="${car.termsOfUse.contains(T(com.spring.entities.TermOfUse).No_pet)}"
-                                       style="transform: scale(1.5); margin-top: 10px">
+                                <input class="form-check-input term" type="checkbox" id="noPet" value="2" style="transform: scale(1.5); margin-top: 10px">
                                 <span class="form-check-label" for="noPet" style="font-size: 1.25rem; margin-left: 5px">No pet</span>
                             </div>
                             <div class="form-check" style="margin-left: 50px; margin-bottom: 20px; margin-top: 40px">
-                                <input class="form-check-input" type="checkbox" id="noFood"
-                                       th:checked="${car.termsOfUse.contains(T(com.spring.entities.TermOfUse).No_Food_In_Cars)}"
-                                       style="transform: scale(1.5); margin-top: 9px">
+                                <input class="form-check-input term" type="checkbox" id="noFood" value="3" style="transform: scale(1.5); margin-top: 9px">
                                 <span class="form-check-label" for="noFood"
                                       style="font-size: 1.25rem; margin-left: 5px">No food in car</span>
                             </div>
                             <div class="form-check" style="margin-left: 50px; margin-top: 40px">
-                                <input class="form-check-input" type="checkbox" id="other"
-                                       th:checked="${car.termsOfUse.contains(T(com.spring.entities.TermOfUse).Other)}"
-                                       style="transform: scale(1.5); margin-top: 9px">
+                                <input class="form-check-input specify-check term" type="checkbox" id="other" value="4" style="transform: scale(1.5); margin-top: 9px">
                                 <span class="form-check-label" for="other" style="font-size: 1.25rem; margin-left: 5px">Other</span>
+                                <div class="specify" style="display: none">
+                                    <textarea class="form-control" rows="5" cols="30" id="comment" name="otherterm" maxlength="200"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -309,6 +311,34 @@
             optionMenu.classList.remove("active");
         });
     });
+</script>
+<script>
+    var specifyCheck = jQuery(".specify-check");
+    var specify = jQuery(".specify");
+    var otherSpecify = jQuery(".specify textarea");
+    var termOfUse = jQuery(".term-of-use");
+    var termOfUseStr;
+
+    if (termOfUse.val().length > 10) {
+        termOfUseStr = termOfUse.val().split("_")[0];
+        otherSpecify.val(termOfUse.val().substring(11));
+    } else {
+        termOfUseStr = termOfUse.val();
+    }
+
+    var termOfUseArray = termOfUseStr.split(", ");
+    jQuery(".term").each(function () {
+        var checkboxValue = jQuery(this).val();
+        if (termOfUseArray.includes(checkboxValue)) {
+            jQuery(this).prop("checked", true);
+        }
+    });
+
+    if (specifyCheck.is(":checked")) {
+        specify.css("display", "block");
+    } else {
+        specify.css("display", "none");
+    }
 </script>
 <script th:src="@{/js/fragment.js}"></script>
 </body>

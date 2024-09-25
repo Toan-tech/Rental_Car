@@ -36,5 +36,5 @@ public class IdealCar {
     private LocalDateTime dropOffDateTime;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "idealCar")
-    private List<Booking> bookings = new ArrayList<>();
+    private List<Car> cars = new ArrayList<>();
 }

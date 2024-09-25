@@ -73,7 +73,7 @@
                         <ul style="margin-left: 20px">
                             <li>
                                 <strong style="font-size: x-large">Pick-up location: </strong>
-                                <span th:text="${booking?.idealCar.location ?: 'N/A'}"
+                                <span th:text="${idealCar.location ?: 'N/A'}"
                                       style="font-size: 1.2em; margin-left: 100px">Location</span>
                             </li>
                             <li style="margin-top: 20px">
@@ -83,7 +83,7 @@
                             </li>
                             <li style="margin-top: 20px">
                                 <strong style="font-size: x-large">Return date and time: </strong>
-                                <span th:text="${dropoffDate} + ' - ' + ${dropoffTime}"
+                                <span th:text="${dropOffDate} + ' - ' + ${dropOffTime}"
                                       style="font-size: 1.2em;  margin-left: 40px">dd/mm/yyyy - HH:mm AM/PM</span>
                             </li>
                         </ul>
@@ -163,7 +163,7 @@
                                             </div>
                                             <div style="margin-bottom: 10px">
                                                 <strong style="font-size: 20px; color: #6c757d">Status: </strong>
-                                                <span class="text-success" th:text="${car.status}"
+                                                <span class="text-success" th:text="${car.carStatus}"
                                                       style="margin-left: 10px; font-size: 20px">Status</span>
                                             </div>
                                         </div>

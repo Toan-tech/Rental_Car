@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +22,7 @@
             right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            pointer-events: none; /* Prevent the icon from interfering with input */
+            pointer-events: none;
             color: #333;
         }
 
@@ -42,7 +42,7 @@
         }
 
         .card {
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         h5 {
@@ -56,11 +56,11 @@
         }
 
         .box-shadow {
-            border: 1px solid #ddd;  /* Viền mỏng xung quanh mỗi khung */
-            padding: 15px;           /* Khoảng cách giữa nội dung và viền */
-            border-radius: 8px;      /* Làm tròn góc khung */
-            background-color: #f9f9f9; /* Màu nền nhạt */
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .location-box img {
@@ -95,13 +95,13 @@
         <div style="display: flex;">
             <div class="col-md-6 bg-dark text-white p-4" style="flex: 1;">
                 <h2>Looking for a vehicle? You’re at the right place.</h2>
-                <p style="padding: 10px; color: white">We have a large selection of locally owned cars available for you to choose from. Rental plans are
-                    customised to suit your needs.</p>
-                <p style="padding: 10px; color: white">With over 300 cars located nationwide we will have something for you.</p>
+                <p style="padding: 10px; color: white">We have a large range of locally owned cars available for you to choose from.
+                    Rental plans are customized to suit your needs.</p>
+                <p style="padding: 10px; color: white">With over 300 cars located nationwide, we will have something for you.</p>
             </div>
             <div class="col-md-6 bg-light p-4" style="flex: 1; margin: 20px">
                 <h3>Find the ideal car rental for your trip</h3>
-                <form id="contentForm" th:action="@{/result-search}" method="post" th:object="${idealCar}">
+                <form id="contentForm" th:action="@{/result-search}" method="post">
                     <!-- Error Message -->
                     <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
                         <span th:text="${errorMessage}"></span>
@@ -118,9 +118,11 @@
                             <div class="input-wrapper" style="flex: 1">
                                 <input class="form-control" type="date" id="pickupDate" name="pickupDate" required>
                             </div>
-                            <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" type="time" id="pickupTime" name="pickupTime" required>
-                            </div>
+                            <label for="pickupTime">
+                                <div class="input-wrapper" style="flex: 1">
+                                    <input class="form-control" type="time" id="pickupTime" name="pickupTime" required>
+                                </div>
+                            </label>
                         </div>
                         <!-- Hidden input for startDateTime -->
                         <input type="hidden" name="pickupDateTime" id="startDateTime">
@@ -128,14 +130,16 @@
 
                     <!-- Drop-off Date and Time -->
                     <div class="form-group">
-                        <label for="dropoffDate">Drop-off Date and Time</label>
+                        <label for="dropOffDate">Drop-off Date and Time</label>
                         <div style="display: flex; gap: 10px;">
                             <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" type="date" id="dropoffDate" name="dropoffDate" required>
+                                <input class="form-control" type="date" id="dropOffDate" name="dropOffDate" required>
                             </div>
-                            <div class="input-wrapper" style="flex: 1">
-                                <input class="form-control" type="time" id="dropoffTime" name="dropoffTime" required>
-                            </div>
+                            <label for="dropOffTime">
+                                <div class="input-wrapper" style="flex: 1">
+                                    <input class="form-control" type="time" id="dropOffTime" name="dropOffTime" required>
+                                </div>
+                            </label>
                         </div>
                         <!-- Hidden input for endDateTime -->
                         <input type="hidden" name="dropOffDateTime" id="endDateTime">
@@ -167,7 +171,7 @@
                         <i class='bx bx-car' style="font-size: 48px;"></i>
                     </div>
                     <h5>Convenient</h5>
-                    <p>We have a large selection of privately owned cars to suit your needs throughout the country.</p>
+                    <p>We have a large range of privately owned cars to suit your needs throughout the country.</p>
                 </div>
             </div>
             <div class="col-md-3 d-flex">
@@ -250,42 +254,42 @@
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="location-box text-center box-shadow">
-                    <img src="../../../static/images/location/khue-van-cac.jpg" class="img-fluid" alt="Hanoi">
+                    <img src="../../static/images/khue-van-cac.jpg" class="img-fluid" alt="Hanoi">
                     <h4>Hanoi</h4>
                     <p>80+ cars</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="location-box text-center box-shadow">
-                    <img src="../../../static/images/location/landmark.jpg" class="img-fluid" alt="Ho Chi Minh City">
+                    <img src="../../static/images/landmark.jpg" class="img-fluid" alt="Ho Chi Minh City">
                     <h4>Ho Chi Minh City</h4>
                     <p>100+ cars</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="location-box text-center box-shadow">
-                    <img src="../../../static/images/location/da-nang.jpg" class="img-fluid" alt="Da Nang - Hoi An">
+                    <img src="../../static/images/da-nang.jpg" class="img-fluid" alt="Da Nang - Hoi An">
                     <h4>Da Nang - Hoi An</h4>
                     <p>90+ cars</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="location-box text-center box-shadow">
-                    <img src="../../../static/images/location/nha-trang.jpg" class="img-fluid" alt="Nha Trang">
+                    <img src="../../static/images/nha-trang.jpg" class="img-fluid" alt="Nha Trang">
                     <h4>Nha Trang</h4>
                     <p>50+ cars</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="location-box text-center box-shadow">
-                    <img src="../../../static/images/location/da-lat.jpg" class="img-fluid" alt="Da Lat">
+                    <img src="../../static/images/da-lat.jpg" class="img-fluid" alt="Da Lat">
                     <h4>Da Lat</h4>
                     <p>80+ cars</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="location-box text-center box-shadow">
-                    <img src="../../../static/images/location/quang-ninh.jpg" class="img-fluid" alt="Quang Ninh">
+                    <img src="../../static/images/quang-ninh.jpg" class="img-fluid" alt="Quang Ninh">
                     <h4>Quang Ninh</h4>
                     <p>70+ cars</p>
                 </div>
@@ -306,26 +310,26 @@
         // Combine into startDateTime in the correct format (yyyy-MM-ddTHH:mm)
         document.getElementById('startDateTime').value = pickupDate + 'T' + pickupTime;
 
-        // Get dropoff date and time
-        const dropoffDate = document.getElementById('dropoffDate').value;
-        const dropoffTime = document.getElementById('dropoffTime').value;
+        // Get dropOff date and time
+        const dropOffDate = document.getElementById('dropOffDate').value;
+        const dropOffTime = document.getElementById('dropOffTime').value;
 
         // Combine into endDateTime in the correct format (yyyy-MM-ddTHH:mm)
-        document.getElementById('endDateTime').value = dropoffDate + 'T' + dropoffTime;
+        document.getElementById('endDateTime').value = dropOffDate + 'T' + dropOffTime;
     }
 
     function validateForm() {
         // Get values from inputs
         const pickupDate = document.getElementById('pickupDate').value;
         const pickupTime = document.getElementById('pickupTime').value;
-        const dropoffDate = document.getElementById('dropoffDate').value;
-        const dropoffTime = document.getElementById('dropoffTime').value;
+        const dropOffDate = document.getElementById('dropOffDate').value;
+        const dropOffTime = document.getElementById('dropOffTime').value;
 
         // Error message element
         const errorMessage = document.getElementById('errorMessage');
 
         // Check if any fields are empty
-        if (!pickupDate || !pickupTime || !dropoffDate || !dropoffTime) {
+        if (!pickupDate || !pickupTime || !dropOffDate || !dropOffTime) {
             errorMessage.innerHTML = "Please fill in all fields !";
             errorMessage.style.display = "block";
             return false;

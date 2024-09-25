@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,7 @@
         }
 
         .card {
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         h5 {
@@ -239,7 +239,7 @@
                         <div class="col-md-4">
                             <div class="form-check" style="margin-bottom: 20px">
                                 <i class='bx bx-bluetooth' style="font-size: 24px; margin-right: 10px;"></i>
-                                <span class="form-check-label" for="bluetooth" style="font-size: 20px;">Bluetooth</span>
+                                <label class="form-check-label" for="bluetooth" style="font-size: 20px;">Bluetooth</label>
                                 <input class="form-check-input" type="checkbox" id="bluetooth" value="Bluetooth"
                                        style="margin-left: 20px; margin-top: 9px; transform: scale(1.5);">
                             </div>
@@ -300,34 +300,44 @@
                     <div class="col-md-12 d-flex">
                         <div class="col-md-6">
                             <div class="form-check" style="margin-left: 50px; margin-bottom: 20px">
-                                <input class="form-check-input" type="checkbox" id="noSmoking" value="1"
-                                       style="transform: scale(1.5); margin-top: 9px">
-                                <span class="form-check-label" for="noSmoking"
-                                      style="font-size: 1.25rem; margin-left: 20px">No smoking</span>
+                                <label for="noSmoking">
+                                    <input class="form-check-input" type="checkbox" id="noSmoking" value="1"
+                                           style="transform: scale(1.5); margin-top: 9px">
+                                    <span class="form-check-label" for="noSmoking"
+                                          style="font-size: 1.25rem; margin-left: 20px">No smoking</span>
+                                </label>
                             </div>
                             <div class="form-check" style="margin-left: 50px; margin-bottom: 20px">
-                                <input class="form-check-input" type="checkbox" id="noPet" value="2"
-                                       style="transform: scale(1.5); margin-top: 10px">
-                                <span class="form-check-label" for="noPet"
-                                      style="font-size: 1.25rem; margin-left: 20px">No pet</span>
+                                <label for="noPet">
+                                    <input class="form-check-input" type="checkbox" id="noPet" value="2"
+                                           style="transform: scale(1.5); margin-top: 10px">
+                                    <span class="form-check-label" for="noPet"
+                                          style="font-size: 1.25rem; margin-left: 20px">No pet</span>
+                                </label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-check" style="margin-left: 50px; margin-bottom: 20px">
-                                <input class="form-check-input" type="checkbox" id="noFood" value="3"
-                                       style="transform: scale(1.5); margin-top: 9px">
-                                <span class="form-check-label" for="noFood"
-                                      style="font-size: 1.25rem; margin-left: 20px">No food in car</span>
+                                <label for="noFood">
+                                    <input class="form-check-input" type="checkbox" id="noFood" value="3"
+                                           style="transform: scale(1.5); margin-top: 9px">
+                                    <span class="form-check-label" for="noFood"
+                                          style="font-size: 1.25rem; margin-left: 20px">No food in car</span>
+                                </label>
                             </div>
                             <div class="form-check" style="margin-left: 50px;">
-                                <input class="form-check-input" type="checkbox" id="other" value="4"
-                                       style="transform: scale(1.5); margin-top: 9px">
-                                <span class="form-check-label" for="other"
-                                      style="font-size: 1.25rem; margin-left: 20px">Other</span>
+                                <label for="other">
+                                    <input class="form-check-input" type="checkbox" id="other" value="4"
+                                           style="transform: scale(1.5); margin-top: 9px">
+                                    <span class="form-check-label" for="other"
+                                          style="font-size: 1.25rem; margin-left: 20px">Other</span>
+                                </label>
                             </div>
                             <div class="specify" style="display: none">
                                 <p class="mb-2 mt-2">Please specify</p>
-                                <textarea class="form-control" rows="5" id="comment" name="otherterm" maxlength="200"></textarea>
+                                <label for="comment">
+                                    <textarea class="form-control" rows="5" id="comment" name="otherterm" maxlength="200"></textarea>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -348,8 +358,7 @@
 
     options.forEach(option => {
         option.addEventListener("click", () => {
-            let selectedOption = option.querySelector(".option-text").innerText;
-            sBtn_text.innerText = selectedOption;
+            sBtn_text.innerText = option.querySelector(".option-text").innerText;
 
             // Change the page location based on the selected option
             let value = option.getAttribute("data-value");

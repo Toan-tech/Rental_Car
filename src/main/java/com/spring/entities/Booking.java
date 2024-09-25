@@ -58,8 +58,4 @@ public class Booking {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "feedback_id", nullable = true)
     private FeedBack feedback;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idealCar_id", nullable = true)
-    private IdealCar idealCar;
 }

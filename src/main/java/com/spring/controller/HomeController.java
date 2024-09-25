@@ -54,7 +54,7 @@ public class HomeController {
 
     @GetMapping("/customer")
     public String homePageAsCustomer() {
-        return "layout/customer/Homepage";
+        return "home/Homepage_Customer";
     }
 
     @GetMapping("/car-owner")
@@ -226,14 +226,14 @@ public class HomeController {
 
     private String saveFile(MultipartFile file) {
         try {
-            String uploadDir = new File("src/main/resources/static/images/driving-license").getAbsolutePath();
+            String uploadDir = new File("src/main/resources/static/images/documents").getAbsolutePath();
 
             String fileName = file.getOriginalFilename();
             File destinationFile = new File(uploadDir + File.separator + fileName);
 
             file.transferTo(destinationFile);
 
-            return "images/driving-license/" + fileName;
+            return "images/documents/" + fileName;
 
         } catch (IOException e) {
             e.printStackTrace();

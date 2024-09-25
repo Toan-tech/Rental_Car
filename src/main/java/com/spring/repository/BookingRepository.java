@@ -13,12 +13,10 @@ import java.util.List;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
+    Page<Booking> findAll(Pageable pageable);
     Integer countByCarAndStatus(Car car, BookingStatus bookingStatus);
     List<Booking> findAllByCar(Car car);
     List<Booking> findByCustomer(Customer customer);
-
-    Page<Booking> findAll(Pageable pageable);
-
     Page<Booking> findByCustomer(Customer customer, Pageable pageable);
-
+    List<Booking> findBookingsByCarId(Integer carId);
 }

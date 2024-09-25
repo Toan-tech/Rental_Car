@@ -84,6 +84,10 @@ public class Car {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "car")
     private List<Booking> bookings = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idealCar_id", nullable = true)
+    private IdealCar idealCar;
+
     public double getRatingAvgStar() {
         int star = 0;
         int rateNum = 0;

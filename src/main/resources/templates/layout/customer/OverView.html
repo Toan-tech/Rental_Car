@@ -74,7 +74,7 @@
                         <ul style="margin-left: 20px">
                             <li>
                                 <strong style="font-size: x-large">Pick-up location: </strong>
-                                <span th:text="${booking?.idealCar.location ?: 'N/A'}"
+                                <span th:text="${idealCar.location ?: 'N/A'}"
                                       style="font-size: 1.2em; margin-left: 100px">Location</span>
                             </li>
                             <li style="margin-top: 20px">
@@ -84,7 +84,7 @@
                             </li>
                             <li style="margin-top: 20px">
                                 <strong style="font-size: x-large">Return date and time: </strong>
-                                <span th:text="${dropoffDate} + ' - ' + ${dropoffTime}"
+                                <span th:text="${dropOffDate} + ' - ' + ${dropOffTime}"
                                       style="font-size: 1.2em;  margin-left: 40px">dd/mm/yyyy - HH:mm AM/PM</span>
                             </li>
                         </ul>
@@ -112,10 +112,14 @@
                 <a class="nav-link active" th:href="@{/Overview(carId=${car.id})}"><span style="font-size: 1.2em">Step 1: Booking Information</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" th:href="@{/BookingPayment(carId=${car.id}, bookingId=${booking.id})}"><span style="font-size: 1.2em">Step 2: Payment</span></a>
+                <a class="nav-link disabled"
+                   th:href="@{/BookingPayment(carId=${car.id})}"><span
+                        style="font-size: 1.2em">Step 2: Payment</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" th:href="@{/bookingSuccess(carId=${car.id}, bookingId=${booking.id})}"><span style="font-size: 1.2em">Step 3: Finish</span></a>
+                <a class="nav-link disabled"
+                   th:href="@{/bookingSuccess(carId=${car.id})}"><span
+                        style="font-size: 1.2em">Step 3: Finish</span></a>
             </li>
         </ul>
         <div class="tab-content p-3 border border-top-0" id="carDetailsTabContent">
@@ -165,7 +169,7 @@
                                             </div>
                                             <div style="margin-bottom: 10px">
                                                 <strong style="font-size: 20px; color: #6c757d">Status: </strong>
-                                                <span class="text-success" th:text="${car.status}"
+                                                <span class="text-success" th:text="${car.carStatus}"
                                                       style="margin-left: 10px; font-size: 20px">Status</span>
                                             </div>
                                         </div>
@@ -175,7 +179,7 @@
                         </div>
                     </div>
 
-<!--                     Booking Summary -->
+                    <!--                     Booking Summary -->
                     <div class="col-md-6 d-flex">
                         <div class="card w-100">
                             <div class="card-body">
@@ -250,17 +254,28 @@
                             </div>
                             <div class="form-group col-md-6" style="margin-top: 30px">
                                 <label>Address:</label>
-                                <select id="renterCitySelect" name="city" class="form-control mt-2 mb-3">
-                                    <option value="">City/Province</option>
-                                </select>
-                                <select id="renterDistrictSelect" name="district" class="form-control mb-2 mb-3">
-                                    <option value="">District</option>
-                                </select>
-                                <select id="renterWardSelect" name="ward" class="form-control mb-2 mb-3" >
-                                    <option value="">Ward</option>
-                                </select>
-                                <input type="text" id="renterHouseNumber" name="houseNumber" class="form-control"
-                                       placeholder="House number, Street" th:value="${houseNumber}">
+                                <label for="renterCitySelect">
+                                    <select id="renterCitySelect" name="city" class="form-control mt-2 mb-3">
+                                        <option value="">City/Province</option>
+                                    </select>
+                                </label>
+                                <label for="renterDistrictSelect">
+                                    <select id="renterDistrictSelect" name="district" class="form-control mb-2 mb-3">
+                                        <option value="">District</option>
+                                    </select>
+                                </label>
+                                <label for="renterWardSelect">
+                                    <select id="renterWardSelect" name="ward" class="form-control mb-2 mb-3">
+                                        <option value="">Ward</option>
+                                    </select>
+                                </label>
+                                <label for="renterHouseNumber">
+                                    <input type="text" id="renterHouseNumber"
+                                           name="houseNumber" class="form-control"
+                                           placeholder="House number, Street"
+                                           th:value="${houseNumber}">
+                                </label>
+
                             </div>
                         </form>
                         <!-- Buttons -->
@@ -268,9 +283,10 @@
                             <div class="col-md-12 text-right" style="margin-top: 10px">
                                 <a href="#" class="btn btn-secondary"
                                    style="margin-right: 10px; padding: 5px; margin-top: 10px">
-                                    <span style="font-size: 20px; margin-left: 10px; margin-right: 10px" onclick="confirmCancel()">Cancel</span>
+                                    <span style="font-size: 20px; margin-left: 10px; margin-right: 10px"
+                                          onclick="confirmCancel()">Cancel</span>
                                 </a>
-                                <a th:href="@{/BookingPayment(carId=${car.id}, bookingId=${booking.id})}"
+                                <a th:href="@{/BookingPayment(carId=${car.id})}"
                                    class="btn btn-primary"
                                    style="margin-right: 10px; padding: 5px; margin-top: 10px">
                                     <span style="font-size: 20px; margin-left: 10px; margin-right: 10px">Next</span>
@@ -355,6 +371,7 @@
                 }
             });
         }
+
         populateCitySelect(renterCitySelect);
         handleCityChange(renterCitySelect, renterDistrictSelect, renterWardSelect);
         handleDistrictChange(renterDistrictSelect, renterWardSelect);

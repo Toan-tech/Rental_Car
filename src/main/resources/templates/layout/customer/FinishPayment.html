@@ -124,7 +124,7 @@
                                             </div>
                                             <div style="margin-bottom: 10px">
                                                 <strong style="font-size: 20px; color: #6c757d">Status: </strong>
-                                                <span class="text-success" th:text="${car.status}"
+                                                <span class="text-success" th:text="${car.carStatus}"
                                                       style="margin-left: 10px; font-size: 20px">Status</span>
                                             </div>
                                         </div>
@@ -169,7 +169,7 @@
                         <p style="font-size: 20px; color: black"><strong>You've successfully booked <strong
                                 th:text="${car.name} + ' '+'(' + ${car.brand} + ' - ' + ${car.model} + ')'"></strong>
                             from <strong th:text="${pickupDate} + ' - ' + ${pickupTime}"></strong>
-                            to <strong th:text="${dropoffDate} + ' - ' + ${dropoffTime}"></strong>.</strong></p>
+                            to <strong th:text="${dropOffDate} + ' - ' + ${dropOffTime}"></strong>.</strong></p>
                         <p style="font-size: 20px; color: black">Your booking number is: <strong
                                 th:text="${booking.bookingNo}"></strong></p>
                         <p style="font-size: 20px; color: black">Our operator will contact you with further guidance

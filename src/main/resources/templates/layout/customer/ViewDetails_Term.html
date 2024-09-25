@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
-          rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/rating.css}">
     <link rel="stylesheet" th:href="@{/css/fragment.css}">
     <style>
@@ -22,12 +18,12 @@
             right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            pointer-events: none; /* Prevent the icon from interfering with input */
+            pointer-events: none;
             color: #333;
         }
 
         .card {
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         h5 {
@@ -78,19 +74,12 @@
 <main>
     <section>
         <nav aria-label="breadcrumb" style="padding: 10px;">
-<!--            <ol class="breadcrumb">-->
-<!--                <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>-->
-<!--                <li class="breadcrumb-item"><a th:href="@{/result-search(location=${idealCar.location},-->
-<!--                        pickupDateTime=${idealCar.pickupDateTime},-->
-<!--                        dropOffDateTime=${idealCar.dropOffDateTime})}" onchange="updateUrl()">Search Results</a></li>-->
-<!--                <li class="breadcrumb-item"><a th:href="@{/details(carId=${car.id})}">Car Details</a></li>-->
-<!--            </ol>-->
-
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>
-                <li class="breadcrumb-item">
-                    <a href="#">Search Results</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/details(carId=${car.id})}">Car Details</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/result-search(location=${idealCar.location})}"
+                     onchange="updateUrl()">Search Results</a>
+                </li>
+                <li class="breadcrumb-item"><a th:href="@{/viewDetails(carId=${car.id})}">Car Details</a></li>
             </ol>
         </nav>
         <h1 style="padding-left: 20px;">Car Details</h1>
@@ -130,7 +119,6 @@
                 </div>
                 <form th:action="@{/details(carId=${car.id})}" method="get" id="card-view">
                     <input type="hidden" name="carId" th:value="${car.id}"/>
-                    <input type="hidden" name="bookingId" th:if="${booking != null}" th:value="${booking.id}"/>
                     <div id="booking-container" th:field="car">
                         <div class="col-md-12">
                             <div class="card-body">
@@ -162,7 +150,7 @@
                                 </div>
                                 <div style="margin-bottom: 10px; margin-left: 20px">
                                     <strong style="font-size: 20px; color: #6c757d">Locations: </strong>
-                                    <span th:if="${booking != null}" th:text="${booking.driverInfo}"
+                                    <span th:if="${idealCar != null}" th:text="${idealCar.location}"
                                           style="margin-left: 10px; font-size: 20px">Unknown</span><br>
                                 </div>
                                 <div style="margin-bottom: 10px; margin-left: 20px">
@@ -242,25 +230,36 @@
                             <label class="form-label" style="font-size: 1.5rem; font-weight: bold;">Terms of
                                 use:</label>
                             <div class="form-check" style="margin-left: 50px; margin-bottom: 20px; margin-top: 40px">
-                                <input class="form-check-input term" type="checkbox" id="noSmoking" value="1" style="transform: scale(1.5); margin-top: 9px">
-                                <span class="form-check-label" for="noSmoking"
-                                      style="font-size: 1.25rem; margin-left: 5px">No smoking</span>
+                                <label for="noSmoking">
+                                    <input class="form-check-input term" type="checkbox" id="noSmoking" value="1" style="transform: scale(1.5); margin-top: 9px">
+                                    <span class="form-check-label" for="noSmoking"
+                                          style="font-size: 1.25rem; margin-left: 5px">No smoking</span>
+                                </label>
                             </div>
                             <div class="form-check" style="margin-left: 50px; margin-bottom: 20px; margin-top: 40px">
-                                <input class="form-check-input term" type="checkbox" id="noPet" value="2" style="transform: scale(1.5); margin-top: 10px">
-                                <span class="form-check-label" for="noPet" style="font-size: 1.25rem; margin-left: 5px">No pet</span>
+                                <label for="noPet">
+                                    <input class="form-check-input term" type="checkbox" id="noPet" value="2" style="transform: scale(1.5); margin-top: 10px">
+                                    <span class="form-check-label" for="noPet" style="font-size: 1.25rem; margin-left: 5px">No pet</span>
+                                </label>
                             </div>
                             <div class="form-check" style="margin-left: 50px; margin-bottom: 20px; margin-top: 40px">
-                                <input class="form-check-input term" type="checkbox" id="noFood" value="3" style="transform: scale(1.5); margin-top: 9px">
-                                <span class="form-check-label" for="noFood"
-                                      style="font-size: 1.25rem; margin-left: 5px">No food in car</span>
+                                <label for="noFood">
+                                    <input class="form-check-input term" type="checkbox" id="noFood" value="3" style="transform: scale(1.5); margin-top: 9px">
+                                    <span class="form-check-label" for="noFood"
+                                          style="font-size: 1.25rem; margin-left: 5px">No food in car</span>
+                                </label>
                             </div>
                             <div class="form-check" style="margin-left: 50px; margin-top: 40px">
-                                <input class="form-check-input specify-check term" type="checkbox" id="other" value="4" style="transform: scale(1.5); margin-top: 9px">
-                                <span class="form-check-label" for="other" style="font-size: 1.25rem; margin-left: 5px">Other</span>
-                                <div class="specify" style="display: none">
-                                    <textarea class="form-control" rows="5" cols="30" id="comment" name="otherterm" maxlength="200"></textarea>
-                                </div>
+                                <label for="other">
+                                    <input class="form-check-input specify-check term" type="checkbox" id="other" value="4" style="transform: scale(1.5); margin-top: 9px">
+                                    <span class="form-check-label" for="other" style="font-size: 1.25rem; margin-left: 5px">Other</span>
+                                </label>
+                                <label for="comment">
+                                    <div class="specify" style="display: none">
+                                        <textarea class="form-control" rows="5" cols="30" id="comment" name="otherTerm" maxlength="200"></textarea>
+                                    </div>
+                                </label>
+
                             </div>
                         </div>
                     </div>
@@ -299,8 +298,7 @@
 
     options.forEach(option => {
         option.addEventListener("click", () => {
-            let selectedOption = option.querySelector(".option-text").innerText;
-            sBtn_text.innerText = selectedOption;
+            sBtn_text.innerText = option.querySelector(".option-text").innerText;
 
             // Change the page location based on the selected option
             let value = option.getAttribute("data-value");

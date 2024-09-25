@@ -187,7 +187,7 @@ public class CarOwnerController {
     }
 
     private boolean checkRate (Car car){
-        Boolean hasRating = false;
+        boolean hasRating = false;
         for (Booking carBooking : car.getBookings()){
             if (carBooking.getFeedback() == null){
                 continue;

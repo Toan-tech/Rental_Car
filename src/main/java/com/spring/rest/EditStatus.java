@@ -2,7 +2,6 @@ package com.spring.rest;
 
 import com.spring.entities.*;
 import com.spring.repository.BookingRepository;
-import com.spring.repository.CarOwnerRepository;
 import com.spring.repository.CarRepository;
 import com.spring.service.CarOwnerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +26,8 @@ import java.util.stream.Collectors;
 
 @RestController
 public class EditStatus {
-    private static final String UPLOAD_IMAGES = "D:\\FPT Soft Learning\\IT_Java_FullStack\\JWD\\Assignment\\Mock Project\\Toan\\src\\main\\resources\\static\\images\\car-owner";
-    private static final String UPLOAD_FILE = "D:\\FPT Soft Learning\\IT_Java_FullStack\\JWD\\Assignment\\Mock Project\\Toan\\src\\main\\resources\\static\\documents\\car-owner";
-
-    @Autowired
-    private CarOwnerRepository carOwnerRepository;
+    private static final String UPLOAD_IMAGES = "D:\\Code\\MockProject-toan\\src\\main\\resources\\static\\images\\car_owner";
+    private static final String UPLOAD_FILE = "D:\\Code\\MockProject-toan\\src\\main\\resources\\static\\documents\\car_owner";
 
     @Autowired
     private CarRepository carRepository;
@@ -99,7 +95,7 @@ public class EditStatus {
             BigDecimal carBasePrice = new BigDecimal(basePrice);
             BigDecimal carDeposit = new BigDecimal(deposit);
             BigDecimal carFuelConsumption = null;
-            if (!fuelConsumption.equals("")) {
+            if (!fuelConsumption.isEmpty()) {
                 carFuelConsumption = new BigDecimal(fuelConsumption);
             }
             MultipartFile[] files = {file3, file4, file5, file6};
@@ -169,14 +165,14 @@ public class EditStatus {
                          @RequestParam(value = "otherterm", required = false) String otherTerm
     ) {
         String address = city + ", " + district + ", " + ward;
-        if (!homeNumber.equals("")) {
+        if (!homeNumber.isEmpty()) {
             address += ", " + homeNumber;
         }
         String carName = brand + " " + model;
 
         String carFunction = "";
         if (functions != null) {
-            carFunction = functions.stream().collect(Collectors.joining(", "));
+            carFunction = String.join(", ", functions);
         }
 
         String carTerm = "";
@@ -190,42 +186,41 @@ public class EditStatus {
                     }
                 }
             }
-            String termString = Arrays.stream(termArray)
+            carTerm = Arrays.stream(termArray)
                     .map(String::valueOf)
                     .collect(Collectors.joining(", "));
-            carTerm = termString;
         }
 
-        if (!otherTerm.equals("")) {
+        if (!otherTerm.isEmpty()) {
             carTerm += "_" + otherTerm;
         }
 
         BigDecimal carMileage = new BigDecimal(mileage);
 
         BigDecimal carFuelConsumption = null;
-        if (!fuelConsumption.equals("")) {
+        if (!fuelConsumption.isEmpty()) {
             carFuelConsumption = new BigDecimal(fuelConsumption);
         }
 
         BigDecimal carBasePrice = null;
-        if (!basePrice.equals("")) {
+        if (!basePrice.isEmpty()) {
             carBasePrice = new BigDecimal(basePrice);
         }
 
         BigDecimal carDeposit = null;
-        if (!deposit.equals("")) {
+        if (!deposit.isEmpty()) {
             carDeposit = new BigDecimal(deposit);
         }
 
-        String carImages = "";
+        StringBuilder carImages = new StringBuilder();
         MultipartFile[] files = {file0, file1, file2, file3, file4, file5, file6};
         for (int i = 0; i < files.length; i++) {
             if (i <= 2) {
-                carImages = carImages + upFiles(files[i]) + ", ";
+                carImages.append(upFiles(files[i])).append(", ");
             } else if (i < 6) {
-                carImages = carImages + upImages(files[i]) + ", ";
+                carImages.append(upImages(files[i])).append(", ");
             } else {
-                carImages = carImages + upImages(files[i]);
+                carImages.append(upImages(files[i]));
             }
         }
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -248,7 +243,7 @@ public class EditStatus {
                 .productionYears(productionYear)
                 .termsOfUse(carTerm)
                 .transmissionType(transmission)
-                .images(carImages)
+                .images(carImages.toString())
                 .carStatus(CarStatus.Available)
                 .carOwner(carOwner)
                 .build();
@@ -279,11 +274,10 @@ public class EditStatus {
 
     private String upImages(MultipartFile file) {
         try {
-            // Lưu tệp vào thư mục chỉ định
-            String uniqueFileName = UUID.randomUUID() + "_" + file.getOriginalFilename(); //unique name
+            String uniqueFileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
             String uploadFilePath = UPLOAD_IMAGES + File.separator + uniqueFileName;
             file.transferTo(new File(uploadFilePath));
-            return "/static/images/car-owner/" + uniqueFileName;
+            return "/static/images/car_owner/" + uniqueFileName;
         } catch (IOException e) {
             e.printStackTrace();
             return "";
@@ -292,11 +286,10 @@ public class EditStatus {
 
     private String upFiles(MultipartFile file) {
         try {
-            // Lưu tệp vào thư mục chỉ định
-            String uniqueFileName = UUID.randomUUID() + "_" + file.getOriginalFilename(); //unique name
+            String uniqueFileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
             String uploadFilePath = UPLOAD_FILE + File.separator + uniqueFileName;
             file.transferTo(new File(uploadFilePath));
-            return "/static/documents/car-owner/" + uniqueFileName;
+            return "/static/documents/car_owner/" + uniqueFileName;
         } catch (IOException e) {
             e.printStackTrace();
             return "";

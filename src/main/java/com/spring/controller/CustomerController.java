@@ -1,21 +1,22 @@
-package com.spring.controller.customer;
+package com.spring.controller;
 
 import com.spring.entities.*;
-import com.spring.repository.*;
+import com.spring.repository.BookingRepository;
+import com.spring.repository.CarRepository;
+import com.spring.repository.CustomerRepository;
+import com.spring.repository.IdealCarRepository;
 import com.spring.service.BookingService;
-import com.spring.service.CarService;
 import com.spring.service.EmailService;
+import com.spring.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -31,15 +32,12 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Controller
 public class CustomerController {
-
-    @Autowired
-    private SearchRepository searchRepository;
 
     @Autowired
     private CarRepository carRepository;
@@ -51,16 +49,16 @@ public class CustomerController {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private CarService carService;
-
-    @Autowired
     private BookingRepository bookingRepository;
 
     @Autowired
-    private BookingService bookingService;
+    private EmailService emailService;
 
     @Autowired
-    private EmailService emailService;
+    private SearchService searchService;
+
+    @Autowired
+    private BookingService bookingService;
 
     @GetMapping("/ResultView")
     public String showResultView(Model model) {
@@ -69,126 +67,40 @@ public class CustomerController {
         return "layout/customer/ResultView";
     }
 
-    @GetMapping("/viewDetails")
-    public String viewBookingDetails(@RequestParam("carId") Integer carId, Model model, Principal principal) {
+    private void populateModelWithCarDetails(Integer carId, Model model, Principal principal) {
         if (principal != null) {
             String email = principal.getName();
-
             Customer customer = customerRepository.findCustomerByEmail(email);
-
-            if (customer != null) {
-                model.addAttribute("loggedIn", true);
-            } else {
-                model.addAttribute("loggedIn", false);
-            }
+            model.addAttribute("loggedIn", customer != null);
+        } else {
+            model.addAttribute("loggedIn", false);
         }
 
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid car Id: " + carId));
 
-        List<Booking> bookings = searchRepository.findBookingsByCarId(carId);
-
-        Booking foundBooking = null;
-        for (Booking booking : bookings) {
-            if (booking.getId() != 0) {
-                foundBooking = booking;
-                break;
-            }
-        }
-
-        if (foundBooking == null) {
-            throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
-        }
-
-        IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
+        IdealCar idealCar = idealCarRepository.findById(car.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
         model.addAttribute("car", car);
-        model.addAttribute("booking", foundBooking);
         model.addAttribute("idealCar", idealCar);
+    }
 
+    @GetMapping("/viewDetails")
+    public String viewBookingDetails(@RequestParam("carId") Integer carId, Model model, Principal principal) {
+        populateModelWithCarDetails(carId, model, principal);
         return "layout/customer/ViewDetails_BasicInformation";
     }
 
-    @GetMapping("/customer/details")
+    @GetMapping("/details")
     public String viewDetails(@RequestParam("carId") Integer carId, Model model, Principal principal) {
-        if (principal != null) {
-            String email = principal.getName();
-
-            Customer customer = customerRepository.findCustomerByEmail(email);
-
-            if (customer != null) {
-                model.addAttribute("loggedIn", true);
-            } else {
-                model.addAttribute("loggedIn", false);
-            }
-        }
-
-        Car car = carRepository.findById(carId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id:" + carId));
-
-        List<Booking> bookings = searchRepository.findBookingsByCarId(carId);
-
-        Booking foundBooking = null;
-        for (Booking booking : bookings) {
-            if (booking.getId() != 0) {  // Ensuring booking has a valid ID
-                foundBooking = booking;
-                break;  // Exit loop once a booking is found
-            }
-        }
-
-//        if (foundBooking == null) {
-//            throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
-//        }
-
-//        IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
-//                .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
-
-        model.addAttribute("car", car);
-        model.addAttribute("booking", foundBooking);
-//        model.addAttribute("idealCar", idealCar);
-
+        populateModelWithCarDetails(carId, model, principal);
         return "layout/customer/ViewDetails_Details";
     }
 
-    @GetMapping("/customer/term")
+    @GetMapping("/term")
     public String termView(@RequestParam("carId") Integer carId, Model model, Principal principal) {
-        if (principal != null) {
-            String email = principal.getName();
-
-            Customer customer = customerRepository.findCustomerByEmail(email);
-
-            if (customer != null) {
-                model.addAttribute("loggedIn", true);
-            } else {
-                model.addAttribute("loggedIn", false);
-            }
-        }
-
-        Car car = carRepository.findById(carId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id:" + carId));
-
-        List<Booking> bookings = searchRepository.findBookingsByCarId(carId);
-
-        Booking foundBooking = null;
-        for (Booking booking : bookings) {
-            if (booking.getId() != 0) {
-                foundBooking = booking;
-                break;
-            }
-        }
-
-//        if (foundBooking == null) {
-//            throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
-//        }
-//
-//        IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
-//                .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
-
-        model.addAttribute("car", car);
-        model.addAttribute("booking", foundBooking);
-//        model.addAttribute("idealCar", idealCar);
-
+        populateModelWithCarDetails(carId, model, principal);
         return "layout/customer/ViewDetails_Term";
     }
 
@@ -199,20 +111,7 @@ public class CustomerController {
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid car Id: " + carId));
 
-        List<Booking> bookings = searchRepository.findBookingsByCarId(carId);
-        Booking foundBooking = null;
-        for (Booking booking : bookings) {
-            if (booking.getId() != 0) {
-                foundBooking = booking;
-                break;
-            }
-        }
-
-        if (foundBooking == null) {
-            throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
-        }
-
-        IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
+        IdealCar idealCar = idealCarRepository.findById(car.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -236,11 +135,10 @@ public class CustomerController {
 
         model.addAttribute("car", car);
         model.addAttribute("numberOfDays", numberOfDays);
-        model.addAttribute("booking", foundBooking);
         model.addAttribute("pickupDate", idealCar.getPickupDateTime().toLocalDate().format(dateFormatter));
-        model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(timeFormatter));  // Định dạng giờ có AM/PM
-        model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));
-        model.addAttribute("dropoffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));  // Định dạng giờ có AM/PM
+        model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(timeFormatter));
+        model.addAttribute("dropOffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));
+        model.addAttribute("dropOffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));
         model.addAttribute("idealCar", idealCar);
         model.addAttribute("customerBookingInformation", customer);
 
@@ -253,29 +151,14 @@ public class CustomerController {
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid car Id: " + carId));
 
-        List<Booking> bookings = searchRepository.findBookingsByCarId(carId);
-
-        Booking foundBooking = null;
-        for (Booking booking : bookings) {
-            if (booking.getId() != 0) {  // Ensuring booking has a valid ID
-                foundBooking = booking;
-                break;  // Exit loop once a booking is found
-            }
-        }
-
-        if (foundBooking == null) {
-            throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
-        }
-
-        IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
+        IdealCar idealCar = idealCarRepository.findById(car.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
         model.addAttribute("car", car);
-        model.addAttribute("booking", foundBooking);
         model.addAttribute("pickupDate", idealCar.getPickupDateTime().toLocalDate());
         model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime());
-        model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate());
-        model.addAttribute("dropoffTime", idealCar.getDropOffDateTime().toLocalTime());
+        model.addAttribute("dropOffDate", idealCar.getDropOffDateTime().toLocalDate());
+        model.addAttribute("dropOffTime", idealCar.getDropOffDateTime().toLocalTime());
         model.addAttribute("idealCar", idealCar);
 
         return "layout/customer/edit/EditBooking";
@@ -286,44 +169,31 @@ public class CustomerController {
                                 @RequestParam("pickupLocation") String pickupLocation,
                                 @RequestParam("pickupDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate pickupDate,
                                 @RequestParam("pickupTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime pickupTime,
-                                @RequestParam("dropoffDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dropoffDate,
-                                @RequestParam("dropoffTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime dropoffTime,
+                                @RequestParam("dropOffDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dropOffDate,
+                                @RequestParam("dropOffTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime dropOffTime,
                                 RedirectAttributes redirectAttributes,
                                 Model model) {
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid car Id: " + carId));
 
-        List<Booking> bookings = searchRepository.findBookingsByCarId(carId);
-
-        Booking foundBooking = null;
-        for (Booking booking : bookings) {
-            if (booking.getId() != 0) {  // Ensuring booking has a valid ID
-                foundBooking = booking;
-                break;  // Exit loop once a booking is found
-            }
-        }
-
-        if (foundBooking == null) {
-            throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
-        }
-
-        IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
+        IdealCar idealCar = idealCarRepository.findById(car.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
+        if (dropOffDate.isBefore(pickupDate)) {
+            model.addAttribute("errorMessage", "Drop-off date must be later than pick-up date, please try again.");
+            return "layout/customer/edit/EditBooking";
+        }
+
         model.addAttribute("car", car);
-        model.addAttribute("booking", foundBooking);
         model.addAttribute("pickupDate", idealCar.getPickupDateTime().toLocalDate());
         model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime());
-        model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate());
-        model.addAttribute("dropoffTime", idealCar.getDropOffDateTime().toLocalTime());
+        model.addAttribute("dropOffDate", idealCar.getDropOffDateTime().toLocalDate());
+        model.addAttribute("dropOffTime", idealCar.getDropOffDateTime().toLocalTime());
         model.addAttribute("idealCar", idealCar);
 
-        // Check car availability
-        boolean isCarAvailable = carService.isCarAvailable(carId, pickupLocation, pickupDate, pickupTime, dropoffDate, dropoffTime);
+        boolean isCarAvailable = searchService.isCarAvailable(carId, pickupLocation, pickupDate, pickupTime, dropOffDate, dropOffTime);
 
-        if (isCarAvailable) {
-            model.addAttribute("carNotAvailable", false);
-        } else {
+        if (!isCarAvailable) {
             model.addAttribute("carNotAvailable", true);
             model.addAttribute("carId", carId);
             return "layout/customer/edit/EditBooking";
@@ -331,7 +201,7 @@ public class CustomerController {
 
         idealCar.setLocation(pickupLocation);
         idealCar.setPickupDateTime(LocalDateTime.of(pickupDate, pickupTime));
-        idealCar.setDropOffDateTime(LocalDateTime.of(dropoffDate, dropoffTime));
+        idealCar.setDropOffDateTime(LocalDateTime.of(dropOffDate, dropOffTime));
 
         idealCarRepository.save(idealCar);
 
@@ -341,7 +211,6 @@ public class CustomerController {
                 .queryParam("carId", carId)
                 .build().toUriString();
     }
-
 
     @PostMapping("/Overview")
     public String updateRenterInformation(Principal principal,
@@ -383,21 +252,7 @@ public class CustomerController {
                 Car car = carRepository.findById(carId)
                         .orElseThrow(() -> new IllegalArgumentException("Invalid car Id: " + carId));
 
-                List<Booking> bookings = searchRepository.findBookingsByCarId(carId);
-
-                Booking foundBooking = null;
-                for (Booking booking : bookings) {
-                    if (booking.getId() != 0) {
-                        foundBooking = booking;
-                        break;
-                    }
-                }
-
-                if (foundBooking == null) {
-                    throw new IllegalArgumentException("No valid booking found for car Id: " + carId);
-                }
-
-                IdealCar idealCar = idealCarRepository.findById(foundBooking.getIdealCar().getId())
+                IdealCar idealCar = idealCarRepository.findById(car.getIdealCar().getId())
                         .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
                 // Create a new Booking
@@ -407,7 +262,6 @@ public class CustomerController {
                 booking.setEndDateTime(idealCar.getDropOffDateTime());
                 booking.setCar(car);
                 booking.setCustomer(customer);
-                booking.setIdealCar(idealCar);
                 bookingService.createBooking(booking);
 
                 // Save the booking
@@ -416,7 +270,6 @@ public class CustomerController {
                 // Redirect to Booking Payment page with bookingId and carId
                 return "redirect:" + UriComponentsBuilder.fromPath("/BookingPayment")
                         .queryParam("carId", carId)
-                        .queryParam("bookingId", booking.getId())
                         .build().toUriString();
             }
         }
@@ -428,21 +281,22 @@ public class CustomerController {
 
     @GetMapping("/BookingPayment")
     public String bookingPayment(@RequestParam("carId") Integer carId,
-                                 @RequestParam("bookingId") Integer bookingId,
+                                 @RequestParam(value = "bookingId") Integer bookingId,
                                  Principal principal,
                                  Model model) {
         String email = principal.getName();
         Customer customer = customerRepository.findCustomerByEmail(email);
         model.addAttribute("customer", customer);
 
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id: " + carId));
+
         // Retrieve the booking using the bookingId passed from the Overview method
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid booking Id: " + bookingId));
 
-        IdealCar idealCar = idealCarRepository.findById(booking.getIdealCar().getId())
+        IdealCar idealCar = idealCarRepository.findById(car.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
-
-        Car car = booking.getCar();
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
@@ -454,8 +308,8 @@ public class CustomerController {
         model.addAttribute("booking", booking);
         model.addAttribute("pickupDate", idealCar.getPickupDateTime().toLocalDate().format(dateFormatter));
         model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(timeFormatter));
-        model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));
-        model.addAttribute("dropoffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));
+        model.addAttribute("dropOffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));
+        model.addAttribute("dropOffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));
         model.addAttribute("idealCar", idealCar);
 
         return "layout/customer/BookingPayment";
@@ -464,7 +318,7 @@ public class CustomerController {
 
     @PostMapping("/BookingPayment")
     public String submitBookingPayment(@RequestParam("carId") Integer carId,
-                                       @RequestParam("bookingId") Integer bookingId,
+                                       @RequestParam(value = "bookingId") Integer bookingId,
                                        @RequestParam("paymentMethod") PaymentMethod paymentMethod,
                                        Principal principal,
                                        Model model
@@ -473,15 +327,17 @@ public class CustomerController {
         Customer customer = customerRepository.findCustomerByEmail(email);
         model.addAttribute("customer", customer);
 
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id: " + carId));
+
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid booking Id: " + bookingId));
 
-        IdealCar idealCar = idealCarRepository.findById(booking.getIdealCar().getId())
+        IdealCar idealCar = idealCarRepository.findById(car.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
         long numberOfDays = ChronoUnit.DAYS.between(idealCar.getPickupDateTime().toLocalDate(), idealCar.getDropOffDateTime().toLocalDate()) + 1;
 
-        Car car = booking.getCar();
         BigDecimal basePrice = car.getBasePrice();
         BigDecimal deposit = car.getDeposit();
         BigDecimal total = basePrice.multiply(BigDecimal.valueOf(numberOfDays)).setScale(2, RoundingMode.HALF_UP);
@@ -520,8 +376,8 @@ public class CustomerController {
 
         model.addAttribute("message", "Payment processed successfully");
 
-        String carName = booking.getCar().getName();
-        String bookingDate = booking.getIdealCar().getPickupDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm"));
+        String carName = car.getName();
+        String bookingDate = car.getIdealCar().getPickupDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm"));
 
         // Send the email
         try {
@@ -581,21 +437,21 @@ public class CustomerController {
 
     @GetMapping("/bookingSuccess")
     public String bookingSuccess(@RequestParam("carId") Integer carId,
-                                 @RequestParam("bookingId") Integer bookingId, // Add bookingId param
+                                 @RequestParam(value = "bookingId") Integer bookingId,
                                  Principal principal,
                                  Model model) {
         String email = principal.getName();
         Customer customer = customerRepository.findCustomerByEmail(email);
         model.addAttribute("customer", customer);
 
-        // Retrieve the booking using the bookingId
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id: " + carId));
+
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid booking Id: " + bookingId));
 
-        IdealCar idealCar = idealCarRepository.findById(booking.getIdealCar().getId())
+        IdealCar idealCar = idealCarRepository.findById(car.getIdealCar().getId())
                 .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
-
-        Car car = booking.getCar();
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
@@ -607,12 +463,13 @@ public class CustomerController {
         model.addAttribute("booking", booking);
         model.addAttribute("pickupDate", idealCar.getPickupDateTime().toLocalDate().format(dateFormatter));
         model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(timeFormatter));
-        model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));
-        model.addAttribute("dropoffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));
+        model.addAttribute("dropOffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));
+        model.addAttribute("dropOffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));
         model.addAttribute("idealCar", idealCar);
 
         return "layout/customer/FinishPayment";
     }
+
     @Transactional
     @RequestMapping(value = "/booking-view", method = {RequestMethod.POST, RequestMethod.GET})
     public String viewBookings(
@@ -627,7 +484,6 @@ public class CustomerController {
         Customer customer = customerRepository.findCustomerByEmail(email);
         model.addAttribute("customer", customer);
 
-        // Retrieve the list of bookings for the logged-in customer
         List<Booking> bookings = bookingRepository.findByCustomer(customer);
 
         int bookingOnGoings = 0;
@@ -645,7 +501,7 @@ public class CustomerController {
                 model.addAttribute("messageHasError", "Please try booking again.");
             }
 
-            IdealCar idealCar = idealCarRepository.findById(booking.getIdealCar().getId())
+            IdealCar idealCar = idealCarRepository.findById(car.getIdealCar().getId())
                     .orElseThrow(() -> new IllegalArgumentException("IdealCar not found"));
 
             long numberOfDays = ChronoUnit.DAYS.between(idealCar.getPickupDateTime().toLocalDate(), idealCar.getDropOffDateTime().toLocalDate()) + 1;
@@ -655,8 +511,8 @@ public class CustomerController {
             model.addAttribute("idealCar", idealCar);
             model.addAttribute("pickupDate", idealCar.getPickupDateTime().toLocalDate().format(dateFormatter));
             model.addAttribute("pickupTime", idealCar.getPickupDateTime().toLocalTime().format(timeFormatter));
-            model.addAttribute("dropoffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));
-            model.addAttribute("dropoffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));
+            model.addAttribute("dropOffDate", idealCar.getDropOffDateTime().toLocalDate().format(dateFormatter));
+            model.addAttribute("dropOffTime", idealCar.getDropOffDateTime().toLocalTime().format(timeFormatter));
         }
 
         Sort sort = getSortOption(sortOption);
@@ -691,7 +547,7 @@ public class CustomerController {
 
     private String saveFile(MultipartFile file) {
         try {
-            String uploadDir = new File("src/main/resources/static/images/driving-license").getAbsolutePath();
+            String uploadDir = new File("src/main/resources/static/documents/customer").getAbsolutePath();
 
             String fileName = file.getOriginalFilename();
             File destinationFile = new File(uploadDir + File.separator + fileName);
@@ -708,7 +564,7 @@ public class CustomerController {
 
     private void deleteFile(String filePath) {
         try {
-            String absolutePath = new File("src/main/resources/static/" + filePath).getAbsolutePath();
+            String absolutePath = new File("src/main/resources/static/documents/customer" + filePath).getAbsolutePath();
             File file = new File(absolutePath);
 
             if (file.exists()) {

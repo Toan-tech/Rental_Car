@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
-          rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/rating.css}">
     <link rel="stylesheet" th:href="@{/css/fragment.css}">
     <style>
@@ -22,12 +18,12 @@
             right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            pointer-events: none; /* Prevent the icon from interfering with input */
+            pointer-events: none;
             color: #333;
         }
 
         .card {
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         h5 {
@@ -80,9 +76,8 @@
         <nav aria-label="breadcrumb" style="padding: 10px;">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/Homepage}">Home</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/result-search(location=${idealCar.location},
-                        pickupDateTime=${idealCar.pickupDateTime},
-                        dropOffDateTime=${idealCar.dropOffDateTime})}" onchange="updateUrl()">Search Results</a>
+                <li class="breadcrumb-item"><a th:href="@{/result-search(location=${idealCar.location})}"
+                    onchange="updateUrl()">Search Results</a>
                 </li>
                 <li class="breadcrumb-item"><a th:href="@{/viewDetails(carId=${car.id})}">Car Details</a></li>
             </ol>
@@ -125,7 +120,6 @@
                 </div>
                 <form th:action="@{/viewDetails}" method="get" id="card-view">
                     <input type="hidden" name="carId" th:value="${car.id}"/>
-                    <input type="hidden" name="bookingId" th:if="${booking != null}" th:value="${booking.id}"/>
                     <div id="booking-container" th:field="car">
                         <div class="col-md-12">
                             <div class="card-body" style="margin-right: 10px">
@@ -157,22 +151,22 @@
                                 </div>
                                 <div style="margin-bottom: 10px; margin-left: 20px">
                                     <strong style="font-size: 20px; color: #6c757d">Locations: </strong>
-                                    <span th:if="${booking != null}" th:text="${booking.driverInfo}"
+                                    <span th:if="${car.idealCar != null}" th:text="${car.idealCar.location}"
                                           style="margin-left: 10px; font-size: 20px">Unknown</span><br>
                                 </div>
                                 <div style="margin-bottom: 10px; margin-left: 20px">
                                     <strong style="font-size: 20px; color: #6c757d">Status: </strong>
-                                    <span class="text-success" th:text="${car.status}"
+                                    <span class="text-success" th:text="${car.carStatus}"
                                           style="margin-left: 10px; font-size: 20px">Status</span>
                                 </div>
                             </div>
-                            <div th:if="${car.status.toString() == 'Booked'}">
+                            <div th:if="${car.carStatus.toString() == 'Booked'}">
                                 <a href="javascript:void(0);" class="btn btn disabled"
                                    style="padding: 10px; margin: 10px 10px 10px 20px;"><span
                                         style="font-size: 19px; color: black">Already Booked</span>
                                 </a>
                             </div>
-                            <div th:unless="${car.status.toString() == 'Booked'}">
+                            <div th:unless="${car.carStatus.toString() == 'Booked'}">
                                 <a th:href="${loggedIn} ? '/Overview?carId=' + ${car.id} : '/login'"
                                    class="btn btn-primary"
                                    style="padding: 10px; margin: 10px 10px 10px 20px;"><span
@@ -259,30 +253,30 @@
                         <tr>
                             <td>1</td>
                             <td>Registration paper</td>
-                            <td th:if="${car.status.toString() == 'Booked'}">
+                            <td th:if="${car.carStatus.toString() == 'Booked'}">
                                 <a href="#" target="_blank">Download</a>
                             </td>
-                            <td th:unless="${car.status.toString() == 'Booked'}">
+                            <td th:unless="${car.carStatus.toString() == 'Booked'}">
                                 Verified
                             </td>
                         </tr>
                         <tr>
                             <td>2</td>
                             <td>Certificate of Inspection</td>
-                            <td th:if="${car.status.toString() == 'Booked'}">
+                            <td th:if="${car.carStatus.toString() == 'Booked'}">
                                 <a href="#" target="_blank">Download</a>
                             </td>
-                            <td th:unless="${car.status.toString() == 'Booked'}">
+                            <td th:unless="${car.carStatus.toString() == 'Booked'}">
                                 Verified
                             </td>
                         </tr>
                         <tr>
                             <td>3</td>
                             <td>Insurance</td>
-                            <td th:if="${car.status.toString() == 'Booked'}">
+                            <td th:if="${car.carStatus.toString() == 'Booked'}">
                                 <a href="#" target="_blank">Download</a>
                             </td>
-                            <td th:unless="${car.status.toString() == 'Booked'}">
+                            <td th:unless="${car.carStatus.toString() == 'Booked'}">
                                 Not available
                             </td>
                         </tr>
@@ -290,17 +284,10 @@
                     </table>
 
                     <!-- Note Section -->
-                    <p th:unless="${car.status.toString() == 'Booked'}"><small>Note: Documents will be available for
+                    <p th:unless="${car.carStatus.toString() == 'Booked'}"><small>Note: Documents will be available for
                         viewing after you've paid the
                         deposit to rent.</small></p>
                 </form>
-            </div>
-            <!-- Other tabs content can go here -->
-            <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
-                <!-- Details content -->
-            </div>
-            <div class="tab-pane fade" id="terms" role="tabpanel" aria-labelledby="terms-tab">
-                <!-- Terms of use content -->
             </div>
         </div>
     </section>
@@ -315,12 +302,8 @@
         const newUrl = new URL(currentUrl);
 
         const location = document.getElementById('pickupLocation')?.value || '';
-        const pickupDateTime = document.getElementById('startDateTime')?.value || '';
-        const dropOffDateTime = document.getElementById('endDateTime')?.value || '';
 
         newUrl.searchParams.set('location', location);
-        newUrl.searchParams.set('pickupDateTime', pickupDateTime);
-        newUrl.searchParams.set('dropOffDateTime', dropOffDateTime);
 
         window.location.href = newUrl.toString();
     }
@@ -335,8 +318,7 @@
 
     options.forEach(option => {
         option.addEventListener("click", () => {
-            let selectedOption = option.querySelector(".option-text").innerText;
-            sBtn_text.innerText = selectedOption;
+            sBtn_text.innerText = option.querySelector(".option-text").innerText;
 
             // Change the page location based on the selected option
             let value = option.getAttribute("data-value");

@@ -95,7 +95,7 @@
     <div style="background-color: #343a40; padding: 30px 0;">
         <!-- Form Section -->
         <section class="container bg-dark text-light p-4" style="border-radius: 8px;">
-            <form th:action="@{/result-search}" method="post" th:object="${idealCar}">
+            <form th:action="@{/result-search}" method="post">
                 <!-- Error Message -->
                 <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
                     <span th:text="${errorMessage}"></span>
@@ -112,26 +112,30 @@
                             <input class="form-control" type="date" id="pickupDate" name="pickupDate"
                                    th:value="${pickupDate}" required>
                         </div>
-                        <div class="input-wrapper" style="flex: 1">
-                            <input class="form-control" type="time" id="pickupTime" name="pickupTime"
-                                   th:value="${pickupTime}" required>
-                        </div>
+                        <label for="pickupTime">
+                            <div class="input-wrapper" style="flex: 1">
+                                <input class="form-control" type="time" id="pickupTime" name="pickupTime"
+                                       th:value="${pickupTime}" required>
+                            </div>
+                        </label>
                     </div>
                     <!-- Hidden input for startDateTime -->
                     <input type="hidden" name="pickupDateTime" th:field="*{pickupDateTime}" id="startDateTime">
                 </div>
 
                 <div class="form-group">
-                    <label for="dropoffDate">Drop-off Date and Time</label>
+                    <label for="dropOffDate">Drop-off Date and Time</label>
                     <div style="display: flex; gap: 10px;">
                         <div class="input-wrapper" style="flex: 1">
-                            <input class="form-control" type="date" id="dropoffDate" name="dropoffDate"
-                                   th:value="${dropoffDate}" required>
+                            <input class="form-control" type="date" id="dropOffDate" name="dropOffDate"
+                                   th:value="${dropOffDate}" required>
                         </div>
-                        <div class="input-wrapper" style="flex: 1">
-                            <input class="form-control" type="time" id="dropoffTime" name="dropoffTime"
-                                   th:value="${dropoffTime}" required>
-                        </div>
+                        <label for="dropOffTime">
+                            <div class="input-wrapper" style="flex: 1">
+                                <input class="form-control" type="time" id="dropOffTime" name="dropOffTime"
+                                       th:value="${dropOffTime}" required>
+                            </div>
+                        </label>
                     </div>
                     <!-- Hidden input for endDateTime -->
                     <input type="hidden" th:field="*{dropOffDateTime}" id="endDateTime">
@@ -149,7 +153,7 @@
     <section class="container mt-4">
         <h2>Search Results</h2>
         <div class="d-flex justify-content-between align-items-center">
-            <p class="mb-0" th:text="'There are ' + ${CarAvailable} + ' cars that are available for you!'"></p>
+            <p class="mb-0" th:text="'There are ' + ${carsAvailable} + ' cars that are available for you!'"></p>
             <div>
                 <div class="d-flex">
                     <a th:href="@{/result-search(location=${location}, pickupDateTime=${pickupDateTime}, dropOffDateTime=${dropOffDateTime}, displayType=1)}">
@@ -172,7 +176,7 @@
                 </select>
             </div>
         </div>
-        <div th:if="${displayType == '1'}" class="card mb-4" th:each="car : ${cars}">
+        <div th:if="${displayType == '1'}" class="card mb-4" th:each="car: ${cars}">
             <div class="row no-gutters">
                 <!-- Carousel -->
                 <div id="imageCarousel" class="carousel slide col-md-6 d-flex align-items-center" data-ride="carousel"
@@ -205,6 +209,7 @@
                         <li data-target="#imageCarousel" data-slide-to="2"></li>
                     </ol>
                 </div>
+
                 <form th:action="@{/result-search}" method="get" id="card-view">
                     <div id="booking-container">
                         <div class="col-md-12">
@@ -242,18 +247,21 @@
                                     </div>
                                     <div style="margin-bottom: 10px">
                                         <strong style="font-size: 20px; color: #6c757d">Status: </strong>
-                                        <span class="text-success" th:text="${car.status}"
+                                        <span class="text-success" th:text="${car.carStatus}"
                                               style="margin-left: 10px; font-size: 20px">Status</span>
                                     </div>
                                 </div>
-                                <a th:href="${loggedIn} ? '/Overview?carId=' + ${car.id} : '/login'"
-                                   class="btn btn-primary"
+                                <a th:href="@{/Overview(carId=${car.id})}" class="btn btn-primary"
                                    style="margin-right: 10px; padding: 10px; margin-top: 10px">
-                                    <span style="font-size: 19px">Rent now</span>
+                                    <span style="font-size: 19px">
+                                        Rent now
+                                    </span>
                                 </a>
                                 <a th:href="@{/viewDetails(carId=${car.id})}" class="btn btn-primary"
                                    style="padding: 10px; margin-top: 10px">
-                                    <span style="font-size: 19px">View details</span>
+                                    <span style="font-size: 19px">
+                                        View details
+                                    </span>
                                 </a>
                             </div>
                         </div>
@@ -303,11 +311,11 @@
                             th:if="${car.bookings.size() > 0}"
                             th:text="${car.bookings.get(0).driverInfo}">Location
                         </td>
-                        <td class="border border-dark" th:text="${car.status}">Status</td>
+                        <td class="border border-dark" th:text="${car.carStatus}">Status</td>
                         <td class="border border-dark">
                             <div class="d-grid gap-2">
                                 <a class="btn btn-primary btn-sm" style="margin-bottom: 10px"
-                                   th:href="${loggedIn ? '/Overview?carId=' + ${car.id} : '/login'}">Rent now
+                                   th:href="@{/Overview(carId=${car.id})}">Rent now
                                 </a>
                                 <a class="btn btn-primary btn-sm" th:href="@{/viewDetails(carId=${car.id})}">View
                                     details</a>
@@ -412,12 +420,12 @@
         // Combine into startDateTime
         document.getElementById('startDateTime').value = pickupDate + 'T' + pickupTime;
 
-        // Get dropoff date and time
-        const dropoffDate = document.getElementById('dropoffDate').value;
-        const dropoffTime = document.getElementById('dropoffTime').value;
+        // Get dropOff date and time
+        const dropOffDate = document.getElementById('dropOffDate').value;
+        const dropOffTime = document.getElementById('dropOffTime').value;
 
         // Combine into endDateTime
-        document.getElementById('endDateTime').value = dropoffDate + 'T' + dropoffTime;
+        document.getElementById('endDateTime').value = dropOffDate + 'T' + dropOffTime;
     }
 </script>
 <script>

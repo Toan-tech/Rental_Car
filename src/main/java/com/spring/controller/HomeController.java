@@ -50,7 +50,7 @@ public class HomeController {
     PasswordEncoder passwordEncoder;
 
 
-    @GetMapping("/home-page")
+    @GetMapping("/")
     public String homePage(Model model) {
         return "home/home-page-as-guest";
     }
